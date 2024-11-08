@@ -60,8 +60,11 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 const Signup = () => {
-    const [username, setUsername] = useState('');
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [admin, setAdmin] = useState(false); // Optional field, defaults to false
     const [error, setError] = useState('');
     const navigate = useNavigate();
 
@@ -69,9 +72,15 @@ const Signup = () => {
         e.preventDefault();
         setError(''); // Reset error
 
+        // Validate that passwords match
+        if (password !== confirmPassword) {
+            setError('Passwords do not match');
+            return;
+        }
+
         try {
             // Update to include the backend URL
-            const response = await axios.post('http://localhost:5000/signup', { username, password });
+            const response = await axios.post('http://localhost:4000/api/authentication/signup', { name, email, password, admin, confirmPassword });
             alert(response.data.message); // Alert success message
             navigate('/'); // Redirect to login page after signup
         } catch (err) {
@@ -84,11 +93,20 @@ const Signup = () => {
             <h2>Signup</h2>
             <form onSubmit={handleSignup}>
                 <div>
-                    <label>Username:</label>
+                    <label>Name:</label>
                     <input
                         type="text"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        required
+                    />
+                </div>
+                <div>
+                    <label>Email:</label>
+                    <input
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
                         required
                     />
                 </div>
@@ -99,6 +117,23 @@ const Signup = () => {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
+                    />
+                </div>
+                <div>
+                    <label>Confirm Password:</label>
+                    <input
+                        type="password"
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        required
+                    />
+                </div>
+                <div>
+                    <label>Admin:</label>
+                    <input
+                        type="checkbox"
+                        checked={admin}
+                        onChange={(e) => setAdmin(e.target.checked)}
                     />
                 </div>
                 {error && <p style={{ color: 'red' }}>{error}</p>}
