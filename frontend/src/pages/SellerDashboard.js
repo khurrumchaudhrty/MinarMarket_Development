@@ -78,7 +78,8 @@
 
 import SellerDashboardNavbar from "../components/SellerDashboardNavbar";
 import SellerSidebar from "../components/SellerSidebar";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { getUserDetails } from "../components/SessionManager";
 import { ChevronRight, ChevronDown } from 'lucide-react';
 
 // Previous SellerDashboardNavbar and SellerSidebar components remain the same...
@@ -91,6 +92,16 @@ const SellerDashboard = () => {
     { id: '#A1DA59', date: '23/09/2024', title: 'Laptop', status: 'Approved' },
     { id: '#A1DA58', date: '23/09/2024', title: 'Camera', status: 'Pending' },
   ]);
+
+  useEffect(() => {
+    // Call getUserDetails to log and store user details
+    const userDetails = getUserDetails();
+    if (userDetails) {
+      console.log("User Name:", userDetails.name);
+      console.log("User Email:", userDetails.email);
+    }
+  }, []);
+
 
   // Handle individual checkbox selection
   const handleCheckboxChange = (itemId) => {

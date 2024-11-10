@@ -3,7 +3,7 @@ const ProductListing = require('../models/ProductListing'); // Import the Produc
 // Controller to handle adding a new product listing
 exports.addProductListing = async (req, res) => {
     try {
-        const { title, description, price, category, images } = req.body;
+        const { title, description, price, category, images, userId } = req.body;
 
         // Validate required fields
         if (!title || !description || !price || !category || !images || images.length === 0) {
@@ -28,6 +28,7 @@ exports.addProductListing = async (req, res) => {
             price,
             category,
             images,
+            listerId: userId
         });
 
         // Save to the database

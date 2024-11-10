@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Upload, X } from "lucide-react";
+import { getUserDetails } from "../components/SessionManager";
 
 const ListingForm = () => {
   const [formData, setFormData] = useState({
@@ -12,6 +13,16 @@ const ListingForm = () => {
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [uploading, setUploading] = useState(false);
   const [message, setMessage] = useState("");
+  const [userDetails, setUserDetails] = useState(null);
+
+  useEffect(() => {
+    // Call getUserDetails to log and store user details
+    const tempuserDetails = getUserDetails();
+    if (tempuserDetails) {
+      console.log(tempuserDetails);
+      setUserDetails(tempuserDetails);
+    }
+  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -59,35 +70,7 @@ const ListingForm = () => {
     return data.secure_url;
   };
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   setUploading(true);
 
-  //   try {
-  //     const uploadedUrls = await Promise.all(
-  //       uploadedFiles.map((fileObj) =>
-  //         uploadToCloudinary(fileObj.file).then((url) => ({
-  //           name: fileObj.name,
-  //           url,
-  //         }))
-  //       )
-  //     );
-
-  //     setUploading(false);
-
-  //     // Form data with Cloudinary URLs
-  //     const finalFormData = {
-  //       ...formData,
-  //       images: uploadedUrls,
-  //     };
-
-  //     console.log("Form Data to send to backend:", finalFormData);
-
-  //   } catch (error) {
-  //     console.error("Error uploading images to Cloudinary:", error);
-  //     setUploading(false);
-  //   }
-  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -109,6 +92,7 @@ const ListingForm = () => {
       const finalFormData = {
         ...formData,
         images: uploadedUrls,
+        userId: userDetails.userId
       };
 
       console.log("Form Data to send to backend:", finalFormData);
