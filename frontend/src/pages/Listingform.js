@@ -1,61 +1,163 @@
-import React, { useState } from 'react';
-import { Upload, X } from 'lucide-react';
+import React, { useState } from "react";
+import { Upload, X } from "lucide-react";
 
 const ListingForm = () => {
   const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    price: '',
-    category: 'Electronics'
+    title: "",
+    description: "",
+    price: "",
+    category: "Electronics",
   });
 
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [uploading, setUploading] = useState(false);
+  const [message, setMessage] = useState("");
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
   const handleFileUpload = (e) => {
     const files = Array.from(e.target.files);
-    setUploading(true);
+    if (uploadedFiles.length + files.length > 6) {
+      alert("You can only upload a maximum of 6 photos.");
+      return;
+    }
 
-    // Simulate upload process
-    setTimeout(() => {
-      const newFiles = files.map(file => ({
-        name: file.name,
-        status: 'uploaded'
-      }));
-      setUploadedFiles(prev => [...prev, ...newFiles]);
-      setUploading(false);
-    }, 1000);
+    setUploading(true);
+    const newFiles = files.map((file) => ({
+      file,
+      name: file.name,
+      status: "pending",
+    }));
+    setUploadedFiles((prev) => [...prev, ...newFiles]);
+    setUploading(false);
   };
 
   const removeFile = (fileName) => {
-    setUploadedFiles(prev => prev.filter(file => file.name !== fileName));
+    setUploadedFiles((prev) => prev.filter((file) => file.name !== fileName));
   };
 
-  const handleSubmit = (e) => {
+  const uploadToCloudinary = async (file) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "xxy7dsyf");
+
+    const response = await fetch(
+      `https://api.cloudinary.com/v1_1/dm56xy1oj/image/upload`,
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
+
+    const data = await response.json();
+    return data.secure_url;
+  };
+
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   setUploading(true);
+
+  //   try {
+  //     const uploadedUrls = await Promise.all(
+  //       uploadedFiles.map((fileObj) =>
+  //         uploadToCloudinary(fileObj.file).then((url) => ({
+  //           name: fileObj.name,
+  //           url,
+  //         }))
+  //       )
+  //     );
+
+  //     setUploading(false);
+
+  //     // Form data with Cloudinary URLs
+  //     const finalFormData = {
+  //       ...formData,
+  //       images: uploadedUrls,
+  //     };
+
+  //     console.log("Form Data to send to backend:", finalFormData);
+
+  //   } catch (error) {
+  //     console.error("Error uploading images to Cloudinary:", error);
+  //     setUploading(false);
+  //   }
+  // };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission
-    console.log('Form Data:', formData);
-    console.log('Uploaded Files:', uploadedFiles);
+    setUploading(true);
+    setMessage("");
+
+    try {
+      const uploadedUrls = await Promise.all(
+        uploadedFiles.map((fileObj) =>
+          uploadToCloudinary(fileObj.file).then((url) => ({
+            name: fileObj.name,
+            url,
+          }))
+        )
+      );
+
+      setUploading(false);
+
+      const finalFormData = {
+        ...formData,
+        images: uploadedUrls,
+      };
+
+      console.log("Form Data to send to backend:", finalFormData);
+
+      const response = await fetch("http://localhost:4000/addProductListing", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(finalFormData),
+      });
+
+      if (response.ok) {
+        setMessage(
+          "Product has been successfully sent to the admin for approval."
+        );
+      } else {
+        const errorData = await response
+          .json()
+          .catch(() => ({ message: "Server Error" }));
+        setMessage(
+          `Error adding product listing: ${
+            errorData.message || "Unknown error"
+          }`
+        );
+      }
+    } catch (error) {
+      console.error(
+        "Error uploading images to Cloudinary or adding product:",
+        error
+      );
+      setMessage("An error occurred. Please try again.");
+      setUploading(false);
+    }
   };
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
       <header className="border-b bg-white">
         <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
           <div className="flex items-center space-x-4">
             <div className="w-8 h-8 bg-gray-200 rounded-full"></div>
             <nav className="flex space-x-4">
-              <a href="#" className="font-medium text-gray-900">Home</a>
-              <a href="#" className="text-gray-500">Profile</a>
+              <a href="#" className="font-medium text-gray-900">
+                Home
+              </a>
+              <a href="#" className="text-gray-500">
+                Profile
+              </a>
             </nav>
           </div>
           <button className="px-4 py-2 text-gray-600 border rounded-md hover:bg-gray-50">
@@ -64,18 +166,16 @@ const ListingForm = () => {
         </div>
       </header>
 
-      {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 py-8">
         <div className="bg-white rounded-lg shadow-sm p-6">
-          {/* Product Form Header */}
           <div className="flex items-center space-x-3 mb-6">
             <div className="w-8 h-8 bg-gray-200 rounded-full"></div>
             <h1 className="text-xl font-medium">List Your Product</h1>
           </div>
 
           <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-8">
-            {/* Left Column - Form Fields */}
             <div className="space-y-6">
+              {/* Form fields */}
               <div>
                 <label className="block text-sm text-gray-600 mb-2">
                   Product Title
@@ -85,25 +185,23 @@ const ListingForm = () => {
                   name="title"
                   value={formData.title}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
                   required
                 />
               </div>
-
               <div>
                 <label className="block text-sm text-gray-600 mb-2">
-                  Product Description (Max. 200 words)
+                  Product Description
                 </label>
                 <textarea
                   name="description"
                   value={formData.description}
                   onChange={handleInputChange}
                   rows="4"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
                   required
                 />
               </div>
-
               <div>
                 <label className="block text-sm text-gray-600 mb-2">
                   Price
@@ -113,11 +211,10 @@ const ListingForm = () => {
                   name="price"
                   value={formData.price}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
                   required
                 />
               </div>
-
               <div>
                 <label className="block text-sm text-gray-600 mb-2">
                   Category
@@ -126,7 +223,7 @@ const ListingForm = () => {
                   name="category"
                   value={formData.category}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
                 >
                   <option value="Electronics">Electronics</option>
                   <option value="Clothing">Clothing</option>
@@ -136,7 +233,6 @@ const ListingForm = () => {
               </div>
             </div>
 
-            {/* Right Column - Image Upload */}
             <div>
               <label className="block text-sm text-gray-600 mb-2">
                 Upload Images
@@ -149,26 +245,21 @@ const ListingForm = () => {
                   className="hidden"
                   id="file-upload"
                 />
-                <label
-                  htmlFor="file-upload"
-                  className="cursor-pointer"
-                >
+                <label htmlFor="file-upload" className="cursor-pointer">
                   <Upload className="w-8 h-8 text-blue-500 mx-auto mb-2" />
                   <p className="text-sm text-gray-600">
-                    Drag & drop files or <span className="text-blue-500">Browse</span>
+                    Drag & drop files or{" "}
+                    <span className="text-blue-500">Browse</span>
                   </p>
                   <p className="text-xs text-gray-500 mt-1">
-                    Supported formats: JPG, PNG
+                    Max 6 files. JPG, PNG
                   </p>
                 </label>
               </div>
 
-              {/* Uploaded Files List */}
               <div className="mt-4 space-y-2">
                 {uploading && (
-                  <div className="text-sm text-gray-600">
-                    Uploading - 0% files
-                  </div>
+                  <div className="text-sm text-gray-600">Uploading...</div>
                 )}
                 {uploadedFiles.map((file, index) => (
                   <div
@@ -186,29 +277,21 @@ const ListingForm = () => {
                   </div>
                 ))}
               </div>
+
+              <div className="mt-8 flex justify-end">
+                <button
+                  type="submit"
+                  className="px-6 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition-colors"
+                >
+                  Submit for Approval
+                </button>
+              </div>
+              {/* Display success or error message */}
+              {message && <p>{message}</p>}
             </div>
           </form>
-
-          {/* Submit Button */}
-          <div className="mt-8 flex justify-end">
-            <button
-              type="submit"
-              className="px-6 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition-colors"
-            >
-              Submit for Approval
-            </button>
-          </div>
         </div>
       </main>
-
-      {/* Footer */}
-      <div className="w-full h-px bg-gray-200 my-6"></div>
-
-      <div className="mt-4 mb-4 flex justify-center items-center space-x-6 text-sm text-gray-500">
-      <a href="#" className="hover:text-gray-700">Help Center</a>
-      <a href="#" className="hover:text-gray-700">Terms of Service</a>
-      <a href="#" className="hover:text-gray-700">Privacy Policy</a>
-      </div>
     </div>
   );
 };
