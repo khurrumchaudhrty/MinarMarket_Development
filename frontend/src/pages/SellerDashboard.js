@@ -4,7 +4,7 @@ const SellerDashboard = () => {
 
     return (
         <>
-           {/* <SellerDashboardNavbar/>  */}
+           <SellerDashboardNavbar/> 
            <SellerSidebar/>
         </>
     );
