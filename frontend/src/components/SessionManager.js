@@ -1,0 +1,44 @@
+// sessionManager.js
+
+// Decode the JWT to get the payload data
+const decodeToken = (token) => {
+    try {
+        return JSON.parse(atob(token.split('.')[1])); // Decode the payload of JWT
+    } catch (error) {
+        console.error("Invalid token", error);
+        return null;
+    }
+};
+
+// Function to check if the session is still valid
+export const isSessionValid = () => {
+    const token = localStorage.getItem('token');
+    if (!token) return false;
+
+    const decoded = decodeToken(token);
+    // Check if the token has expired
+    return decoded && decoded.exp * 1000 > Date.now();
+};
+
+// Function to initialize session management after login
+export const initializeSession = (token) => {
+    // Store the token in localStorage
+    localStorage.setItem('token', token);
+
+    // Set a timeout to automatically clear the session when the token expires
+    const decoded = decodeToken(token);
+    if (decoded) {
+        const expirationTime = decoded.exp * 1000 - Date.now(); // Time in ms
+        setTimeout(() => {
+            // Log out user after token expiration
+            clearSession();
+            alert("Session expired. Please log in again.");
+            window.location.reload(); // Optional: redirect to login page
+        }, expirationTime);
+    }
+};
+
+// Function to clear the session (for logout or token expiration)
+export const clearSession = () => {
+    localStorage.removeItem('token');
+};

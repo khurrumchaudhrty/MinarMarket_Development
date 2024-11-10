@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const ConnectDB = async (retries = 5, delay = 8000) => {
     for (let i = 0; i < retries; i++) {
         try {
-            await mongoose.connect(process.env.DB_URL, { dbName: 'vacationPlanner' });
+            await mongoose.connect(process.env.DB_URL, { dbName: 'MinarMarket' });
             console.log('DB CONNECTED');
             return;
         } catch (err) {

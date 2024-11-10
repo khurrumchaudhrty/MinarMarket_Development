@@ -98,7 +98,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
-import { Eye, EyeOff } from 'lucide-react';
+// import { Eye, EyeOff } from 'lucide-react';
 
 const Signup = () => {
     const [name, setName] = useState('');
