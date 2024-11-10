@@ -150,7 +150,7 @@ const Login = () => {
       setMessage('Already logged in. Redirecting...');
       // Redirect to home page or dashboard
       setTimeout(() => {
-        window.location.href = '/sellerdashboard'; // Adjust the redirect path as needed
+        window.location.href = '/seller-dashboard'; // Adjust the redirect path as needed
       }, 1000);
     }
   }, []);
