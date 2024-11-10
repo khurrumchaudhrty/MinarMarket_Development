@@ -50,16 +50,100 @@
 
 
 
-import React, { useState } from 'react';
-import { ChevronRight, ChevronDown } from 'lucide-react';
+// import React, { useState } from 'react';
+// import { ChevronRight, ChevronDown } from 'lucide-react';
 
-// Navbar Component
+// // Navbar Component
+// const SellerDashboardNavbar = () => {
+//   return (
+//     <nav className="bg-white border-b border-gray-200">
+//       <div className="max-w-screen-xl flex items-center justify-between mx-auto p-4">
+//         {/* Left side with logo and navigation */}
+//         <div className="flex items-center space-x-4">
+//           <div className="w-8 h-8 bg-gray-200 rounded-full"></div>
+//           <ul className="flex space-x-4">
+//             <li>
+//               <a href="#" className="text-black hover:text-gray-600">
+//                 Home
+//               </a>
+//             </li>
+//             <li>
+//               <a href="#" className="text-gray-500 hover:text-gray-600">
+//                 Profile
+//               </a>
+//             </li>
+//           </ul>
+//         </div>
+
+//         {/* Right side buttons */}
+//         <div className="flex space-x-2">
+//           <button className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">
+//             List Product
+//           </button>
+//           <button className="px-4 py-2 border border-gray-300 text-gray-700 rounded hover:bg-gray-50">
+//             Log out
+//           </button>
+//         </div>
+//       </div>
+//     </nav>
+//   );
+// };
+
+
+// export default SellerDashboardNavbar;
+
+
+
+
+// import React from 'react';
+
+// const SellerDashboardNavbar = () => {
+//   return (
+//     <nav className="bg-white border-b border-gray-200">
+//       <div className="flex items-center justify-between p-4">
+//         {/* Left side - Logo, Home, Profile */}
+//         <div className="flex items-center space-x-4 pl-4">
+//           <div className="w-8 h-8 bg-gray-200 rounded-full"></div>
+//           <ul className="flex space-x-4">
+//             <li>
+//               <a href="#" className="text-black hover:text-gray-600">
+//                 Home
+//               </a>
+//             </li>
+//             <li>
+//               <a href="#" className="text-gray-500 hover:text-gray-600">
+//                 Profile
+//               </a>
+//             </li>
+//           </ul>
+//         </div>
+
+//         {/* Right side - moved to the right edge */}
+//         <div className="flex space-x-2 ml-auto">
+//           <button className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">
+//             List Product
+//           </button>
+//           <button className="px-4 py-2 border border-gray-300 text-gray-700 rounded hover:bg-gray-50">
+//             Log out
+//           </button>
+//         </div>
+//       </div>
+//     </nav>
+//   );
+// };
+
+// export default SellerDashboardNavbar;
+
+
+
+import React from 'react';
+
 const SellerDashboardNavbar = () => {
   return (
     <nav className="bg-white border-b border-gray-200">
-      <div className="max-w-screen-xl flex items-center justify-between mx-auto p-4">
-        {/* Left side with logo and navigation */}
-        <div className="flex items-center space-x-4">
+      <div className="flex items-center justify-between p-4">
+        {/* Left side - Logo, Home, Profile */}
+        <div className="flex items-center space-x-4 pl-4">
           <div className="w-8 h-8 bg-gray-200 rounded-full"></div>
           <ul className="flex space-x-4">
             <li>
@@ -75,8 +159,8 @@ const SellerDashboardNavbar = () => {
           </ul>
         </div>
 
-        {/* Right side buttons */}
-        <div className="flex space-x-2">
+        {/* Right side - with increased spacing */}
+        <div className="flex space-x-6 mr-4"> {/* Changed space-x-2 to space-x-6 and added mr-4 */}
           <button className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">
             List Product
           </button>
@@ -88,6 +172,5 @@ const SellerDashboardNavbar = () => {
     </nav>
   );
 };
-
 
 export default SellerDashboardNavbar;
