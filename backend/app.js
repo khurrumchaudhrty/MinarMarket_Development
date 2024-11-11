@@ -9,6 +9,7 @@ const AddProductListing = require('./routes/ProductListingRoutes');
 const SellerListing = require('./routes/SellerListingRoutes')
 // const { verifyAPIRequest } = require('./middleware/authAPIRequest');
 
+
 const app = express();
 
 app.use(cors());
@@ -28,6 +29,7 @@ app.use(cookieParser());
 app.use('/api/authentication',  UserAuthRoutes);
 app.use('/addProductListing', AddProductListing);
 app.use('/seller-listings', SellerListing); // Add this line
+app.use('/delete-seller-listings', SellerListing)
 
 
 

@@ -90,17 +90,43 @@ const SellerDashboard = () => {
     }
   };
 
-  // Handle approve action
-  const handleApprove = () => {
-    // Add your approve logic here
-    console.log("Approving items:", selectedItems);
-  };
+  // // Handle approve action
+  // const handleApprove = () => {
+  //   // Add your approve logic here
+  //   console.log("Approving items:", selectedItems);
+  // };
 
   // Handle decline action
-  const handleDecline = () => {
-    // Add your decline logic here
-    console.log("Declining items:", selectedItems);
-  };
+  // Handle decline (delete) action
+const handleDelete = async () => {
+  // Ensure there are selected items
+  if (selectedItems.length === 0) {
+    return; // Optionally show a message that no items are selected.
+  }
+
+  try {
+    // Send the selected item IDs to the backend to delete
+    const response = await fetch(`http://localhost:4000/delete-seller-listings`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ itemIds: selectedItems }), // Send selected item IDs
+    });
+
+    // If the response is ok, re-fetch the seller listings
+    if (response.ok) {
+      console.log('Selected items deleted successfully.');
+      // Call the getSellerListing to refresh the data
+      getSellerListing();
+    } else {
+      console.error('Failed to delete selected items:', response.status);
+    }
+  } catch (error) {
+    console.error('Error deleting selected items:', error);
+  }
+};
+
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -111,19 +137,9 @@ const SellerDashboard = () => {
           <div className="flex justify-between items-center mb-4">
             <h1 className="text-xl font-semibold">Products</h1>
             <div className="space-x-2">
+              
               <button
-                onClick={handleApprove}
-                disabled={selectedItems.length === 0}
-                className={`px-4 py-2 rounded ${
-                  selectedItems.length === 0
-                    ? "bg-gray-300 cursor-not-allowed"
-                    : "bg-green-500 text-white hover:bg-green-600"
-                }`}
-              >
-                Approve Selected
-              </button>
-              <button
-                onClick={handleDecline}
+                onClick={handleDelete}
                 disabled={selectedItems.length === 0}
                 className={`px-4 py-2 rounded ${
                   selectedItems.length === 0
@@ -131,7 +147,7 @@ const SellerDashboard = () => {
                     : "bg-red-500 text-white hover:bg-red-600"
                 }`}
               >
-                Decline Selected
+                Delete Selected
               </button>
             </div>
           </div>
