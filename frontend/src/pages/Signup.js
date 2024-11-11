@@ -201,7 +201,7 @@ const Signup = () => {
                             />
                         </div>
 
-                        <div>
+                        {/* <div>
                             <label className="block text-sm text-gray-600 mb-1">
                                 Role
                             </label>
@@ -214,7 +214,7 @@ const Signup = () => {
                                 <option value="Admin">Admin</option>
                                 <option value="User">User</option>
                             </select>
-                        </div>
+                        </div> */}
 
                         <div className="grid grid-cols-2 gap-4">
                             <div>

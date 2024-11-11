@@ -58,6 +58,7 @@ exports.login = catchAsyncErrors(async (req, res, next) => {
 
 exports.signup = catchAsyncErrors(async (req, res, next) => {
   console.log("Received signup request"); // Debugging statement to confirm signup request is received
+  // console.log(req.body);
 
   if (!req.body) {
     console.log("Request body is missing"); // Debugging statement if body is not provided
