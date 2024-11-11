@@ -1,5 +1,5 @@
 const ProductListing = require('../models/ProductListing'); // Import the ProductListing model
-
+// const User = require('../models/User');
 // Controller to handle fetching product listings by user ID
 exports.getSellerListings = async (req, res) => {
     try {
@@ -42,11 +42,12 @@ exports.getSellerListings = async (req, res) => {
 
 // Controller to handle deletion of listings by item IDs
 exports.deactivateListings = async (req, res) => {
+    console.log("IDR HU");
     const { userIds } = req.body; // Expecting an array of userIds
 
     try {
         // Update the isActive status of all users in the userIds array
-        const result = await User.updateMany(
+        const result = await ProductListing.updateMany(
             { _id: { $in: userIds } },
             { $set: { isActive: false } }
         );

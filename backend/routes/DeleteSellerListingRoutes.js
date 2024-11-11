@@ -4,6 +4,6 @@ const router = express.Router();
 const { deactivateListings } = require('../controllers/SellerListingController');
 
 // DELETE route to handle deletion of seller listings by item IDs
-router.delete('/deactivate-listings', deactivateListings);
+router.post('/', deactivateListings);
 
 module.exports = router;
