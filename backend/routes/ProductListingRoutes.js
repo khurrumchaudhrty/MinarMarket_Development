@@ -3,7 +3,7 @@ const router = express.Router();
 
 const {addProductListing} = require('../controllers/ProductListingController');
 
-console.log("ITHAY AAN");
+// console.log("ITHAY AAN");
 router.post('/', addProductListing);
 
 

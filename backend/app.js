@@ -6,6 +6,7 @@ const cors = require('cors');
 // Routes
 const UserAuthRoutes = require('./routes/UserAuthRoutes');
 const AddProductListing = require('./routes/ProductListingRoutes');
+const SellerListing = require('./routes/SellerListingRoutes')
 // const { verifyAPIRequest } = require('./middleware/authAPIRequest');
 
 const app = express();
@@ -26,6 +27,8 @@ app.use(cookieParser());
 // LOCAL HOST TESTING
 app.use('/api/authentication',  UserAuthRoutes);
 app.use('/addProductListing', AddProductListing);
+app.use('/seller-listings', SellerListing); // Add this line
+
 
 
 module.exports = app;

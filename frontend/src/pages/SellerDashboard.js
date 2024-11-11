@@ -93,14 +93,57 @@ const SellerDashboard = () => {
     { id: '#A1DA58', date: '23/09/2024', title: 'Camera', status: 'Pending' },
   ]);
 
-  useEffect(() => {
-    // Call getUserDetails to log and store user details
-    const userDetails = getUserDetails();
-    if (userDetails) {
-      console.log("User Name:", userDetails.name);
-      console.log("User Email:", userDetails.email);
-    }
-  }, []);
+
+
+//   useEffect(() => {
+//     // Call getUserDetails to log and store user details
+//     const userDetails = getUserDetails();
+//     if (userDetails) {
+//       console.log("User Name:", userDetails.name);
+//       console.log("User Email:", userDetails.email);
+//     }
+//   }, []);
+
+    const [userDetails, setUserDetails] = useState(null);
+    const [sellerListings, setSellerListings] = useState([]); // New state for seller's listings
+
+
+    useEffect(() => {
+        // Call getUserDetails to log and store user details
+        const tempuserDetails = getUserDetails();
+        if (tempuserDetails) {
+        console.log(tempuserDetails);
+        setUserDetails(tempuserDetails);
+        }
+    }, []);
+  
+    const getSellerListing = async () => {
+        if (!userDetails) return;
+        
+        const userId = userDetails.userId; // Extract userId from userDetails
+        try {
+          const response = await fetch(`http://localhost:4000/seller-listings?userId=${userId}`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          });
+          
+          if (response.ok) {
+            const data = await response.json();
+            console.log("Seller Listings:", data);
+            setSellerListings(data); // Save response in sellerListings state
+          } else {
+            console.error("Failed to fetch seller listings:", response.status);
+          }
+        } catch (error) {
+          console.error("Error fetching seller listings:", error);
+        }
+      };
+    
+      useEffect(() => {
+        getSellerListing(); // Call getSellerListing on component mount
+      }, [userDetails]); // Run when userDetails is set
 
 
   // Handle individual checkbox selection
@@ -113,6 +156,15 @@ const SellerDashboard = () => {
       }
     });
   };
+
+  useEffect(() => {
+    // Call getUserDetails to log and store user details
+    const userDetails = getUserDetails();
+    if (userDetails) {
+      console.log("User Name:", userDetails.name);
+      console.log("User Email:", userDetails.email);
+    }
+  }, []);
 
   // Handle select all checkbox
   const handleSelectAll = () => {

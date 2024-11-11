@@ -162,7 +162,7 @@ const SellerDashboardNavbar = () => {
         {/* Right side - with increased spacing */}
         <div className="flex space-x-6 mr-4"> {/* Changed space-x-2 to space-x-6 and added mr-4 */}
           <button className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">
-            List Product
+            <a href='/listing-form'>List Product</a>
           </button>
           <button className="px-4 py-2 border border-gray-300 text-gray-700 rounded hover:bg-gray-50">
             Log out
