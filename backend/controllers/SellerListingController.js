@@ -42,7 +42,7 @@ exports.getSellerListings = async (req, res) => {
 
 // Controller to handle deletion of listings by item IDs
 exports.deactivateListings = async (req, res) => {
-    console.log("IDR HU");
+    // console.log("IDR HU");
     const { userIds } = req.body; // Expecting an array of userIds
 
     try {

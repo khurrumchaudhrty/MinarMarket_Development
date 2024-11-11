@@ -26,13 +26,13 @@ const AdminDashboard = () => {
     }
   }, []);
 
-  const getSellerListing = async () => {
+  const getAllListings = async () => {
     if (!userDetails) return;
   
-    const userId = userDetails.userId; // Extract userId from userDetails
+    // const userId = userDetails.userId; // Extract userId from userDetails
     try {
       const response = await fetch(
-        `http://localhost:4000/seller-listings?userId=${userId}`,
+        `http://localhost:4000/admin-product-listings`,
         {
           method: "GET",
           headers: {
@@ -43,7 +43,7 @@ const AdminDashboard = () => {
   
       if (response.ok) {
         const result = await response.json();
-        console.log("Seller Listings:", result);
+        console.log("All Listings:", result);
         if (result.success && Array.isArray(result.data)) {
           setSellerListings(result.data); // Correctly setting the seller listings array
         } else {
@@ -59,7 +59,7 @@ const AdminDashboard = () => {
   
 
   useEffect(() => {
-    getSellerListing(); // Call getSellerListing on component mount
+    getAllListings(); // Call getSellerListing on component mount
   }, [userDetails]); // Run when userDetails is set
 
   // Handle individual checkbox selection
@@ -98,7 +98,7 @@ const AdminDashboard = () => {
   // };
 
   // Handle decline action
-  // Handle decline (delete) action
+
 const handleDelete = async () => {
   // Ensure there are selected items
   if (selectedItems.length === 0) {
@@ -119,7 +119,7 @@ const handleDelete = async () => {
     if (response.ok) {
       console.log('Selected items deleted successfully.');
       // Call the getSellerListing to refresh the data
-      getSellerListing();
+      getAllListings();
     } else {
       console.error('Failed to delete selected items:', response.status);
     }
@@ -166,10 +166,11 @@ const handleDelete = async () => {
                     />
                   </th>
                   <th className="pb-2">Listing ID</th>
+                  <th className="pb-2">Seller</th>
                   <th className="pb-2">Date Listed</th>
-                  <th className="pb-2">Product Title</th>
+                  <th className="pb-2">Title</th>
                   <th className="pb-2">Status</th>
-                  <th className="pb-2"></th>
+
                 </tr>
               </thead>
               <tbody>
@@ -184,6 +185,7 @@ const handleDelete = async () => {
                       />
                     </td>
                     <td className="py-3 text-blue-600">{listing._id}</td>
+                    <td className=""></td>
                     <td>{new Date(listing.createdAt).toLocaleDateString()}</td>
                     <td>{listing.title}</td>
                     <td>
