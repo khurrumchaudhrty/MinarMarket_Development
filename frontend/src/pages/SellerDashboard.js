@@ -25,32 +25,6 @@ const SellerDashboard = () => {
     }
   }, []);
 
-  // const getSellerListing = async () => {
-  //   if (!userDetails) return;
-
-  //   const userId = userDetails.userId; // Extract userId from userDetails
-  //   try {
-  //     const response = await fetch(
-  //       `http://localhost:4000/seller-listings?userId=${userId}`,
-  //       {
-  //         method: "GET",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //       }
-  //     );
-
-  //     if (response.ok) {
-  //       const data = await response.json();
-  //       console.log("Seller Listings:", data);
-  //       setSellerListings(data); // Save response in sellerListings state
-  //     } else {
-  //       console.error("Failed to fetch seller listings:", response.status);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching seller listings:", error);
-  //   }
-  // };
   const getSellerListing = async () => {
     if (!userDetails) return;
   
@@ -181,35 +155,6 @@ const SellerDashboard = () => {
                   <th className="pb-2"></th>
                 </tr>
               </thead>
-              {/* <tbody>
-                {listings.map((listing) => (
-                  <tr key={listing.id} className="border-b last:border-b-0">
-                    <td className="p-4">
-                      <input
-                        type="checkbox"
-                        checked={selectedItems.includes(listing.id)}
-                        onChange={() => handleCheckboxChange(listing.id)}
-                        className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                      />
-                    </td>
-                    <td className="py-3 text-blue-600">{listing.id}</td>
-                    <td>{listing.date}</td>
-                    <td>{listing.title}</td>
-                    <td>
-                      <span
-                        className={`inline-block px-2 py-1 rounded-full text-sm ${
-                          listing.status === "Approved"
-                            ? "text-green-600 bg-green-100"
-                            : "text-yellow-600 bg-yellow-100"
-                        }`}
-                      >
-                        {listing.status}
-                      </span>
-                    </td>
-                    <td className="text-blue-600">Edit Product Details</td>
-                  </tr>
-                ))}
-              </tbody> */}
               <tbody>
                 {sellerListings.map((listing) => (
                   <tr key={listing._id} className="border-b last:border-b-0">
