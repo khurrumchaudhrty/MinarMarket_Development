@@ -7,6 +7,7 @@ const cors = require('cors');
 const UserAuthRoutes = require('./routes/UserAuthRoutes');
 const AddProductListing = require('./routes/ProductListingRoutes');
 const SellerListing = require('./routes/SellerListingRoutes')
+const DeleteSellerListingRoutes = require('./routes/DeleteSellerListingRoutes')
 // const { verifyAPIRequest } = require('./middleware/authAPIRequest');
 
 
@@ -29,7 +30,7 @@ app.use(cookieParser());
 app.use('/api/authentication',  UserAuthRoutes);
 app.use('/addProductListing', AddProductListing);
 app.use('/seller-listings', SellerListing); // Add this line
-app.use('/delete-seller-listings', SellerListing)
+app.use('/deactivate-listings', DeleteSellerListingRoutes)
 
 
 

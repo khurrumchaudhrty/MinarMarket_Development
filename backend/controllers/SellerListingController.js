@@ -41,39 +41,34 @@ exports.getSellerListings = async (req, res) => {
 
 
 // Controller to handle deletion of listings by item IDs
-exports.deleteSellerListings = async (req, res) => {
+exports.deactivateListings = async (req, res) => {
+    const { userIds } = req.body; // Expecting an array of userIds
+
     try {
-      const { itemIds } = req.body;
-  
-      // Validate that itemIds are provided
-      if (!itemIds || itemIds.length === 0) {
-        return res.status(400).json({
-          success: false,
-          message: 'No items selected for deletion.',
+        // Update the isActive status of all users in the userIds array
+        const result = await User.updateMany(
+            { _id: { $in: userIds } },
+            { $set: { isActive: false } }
+        );
+
+        // If no users were updated, send a 404 response
+        if (result.nModified === 0) {
+            return res.status(404).json({
+                success: false,
+                message: 'No users were deactivated.',
+            });
+        }
+
+        // Success response
+        return res.status(200).json({
+            success: true,
+            message: 'Users deactivated successfully.',
         });
-      }
-  
-      // Delete the listings with matching IDs
-      const result = await ProductListing.deleteMany({ _id: { $in: itemIds } });
-  
-      // If no listings were deleted
-      if (result.deletedCount === 0) {
-        return res.status(404).json({
-          success: false,
-          message: 'No listings found to delete.',
-        });
-      }
-  
-      // Send success response
-      return res.status(200).json({
-        success: true,
-        message: 'Selected listings deleted successfully.',
-      });
     } catch (error) {
-      console.error('Error deleting seller listings:', error);
-      return res.status(500).json({
-        success: false,
-        message: 'An error occurred while deleting seller listings.',
-      });
+        console.error('Error deactivating users:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'An error occurred while deactivating users.',
+        });
     }
-  };
+};

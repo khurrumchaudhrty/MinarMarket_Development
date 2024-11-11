@@ -98,34 +98,62 @@ const SellerDashboard = () => {
 
   // Handle decline action
   // Handle decline (delete) action
+// const handleDelete = async () => {
+//   // Ensure there are selected items
+//   if (selectedItems.length === 0) {
+//     return; // Optionally show a message that no items are selected.
+//   }
+
+//   try {
+//     // Send the selected item IDs to the backend to delete
+//     const response = await fetch(`http://localhost:4000/delete-seller-listings`, {
+//       method: 'DELETE',
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//       body: JSON.stringify({ itemIds: selectedItems }), // Send selected item IDs
+//     });
+
+//     // If the response is ok, re-fetch the seller listings
+//     if (response.ok) {
+//       console.log('Selected items deleted successfully.');
+//       // Call the getSellerListing to refresh the data
+//       getSellerListing();
+//     } else {
+//       console.error('Failed to delete selected items:', response.status);
+//     }
+//   } catch (error) {
+//     console.error('Error deleting selected items:', error);
+//   }
+// };
 const handleDelete = async () => {
-  // Ensure there are selected items
-  if (selectedItems.length === 0) {
-    return; // Optionally show a message that no items are selected.
-  }
+  if (selectedItems.length === 0) return;
 
   try {
-    // Send the selected item IDs to the backend to delete
-    const response = await fetch(`http://localhost:4000/delete-seller-listings`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ itemIds: selectedItems }), // Send selected item IDs
-    });
+      const response = await fetch('http://localhost:4000/deactivate-listings', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+              userIds: selectedItems, // Send the selected user IDs
+          }),
+      });
 
-    // If the response is ok, re-fetch the seller listings
-    if (response.ok) {
-      console.log('Selected items deleted successfully.');
-      // Call the getSellerListing to refresh the data
-      getSellerListing();
-    } else {
-      console.error('Failed to delete selected items:', response.status);
-    }
+      if (response.ok) {
+          const data = await response.json();
+          console.log('Listings deactivated:', data);
+
+          // After successful deletion, re-fetch the listings
+          getSellerListing();
+      } else {
+          console.error('Failed to deactivate Listings:', response.status);
+      }
   } catch (error) {
-    console.error('Error deleting selected items:', error);
+      console.error('Error during deactivation:', error);
   }
 };
+
 
 
   return (
