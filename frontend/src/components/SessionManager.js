@@ -57,9 +57,10 @@ export const getUserDetails = () => {
     const userName = decoded.name;
     const userEmail = decoded.email;
     const userId = decoded.id;
+    const isAdmin = decoded.admin;
     // console.log("Name:", userName);
     // console.log("Email:", userEmail);
-    return {userName, userEmail, userId};
+    return {userName, userEmail, userId, isAdmin};
   }
   return null;
 };

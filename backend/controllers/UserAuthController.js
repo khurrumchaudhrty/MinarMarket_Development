@@ -42,8 +42,9 @@ exports.login = catchAsyncErrors(async (req, res, next) => {
   // Include user name and email in the JWT payload
   const payload = {
     id: user._id,
-    name: user.name, // Assuming 'name' exists in the user model
+    name: user.name, 
     email: user.email,
+    admin: user.admin
   };
 
   //   const token = user.getJWTToken();

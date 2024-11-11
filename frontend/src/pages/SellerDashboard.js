@@ -20,7 +20,7 @@ const SellerDashboard = () => {
     // Call getUserDetails to log and store user details
     const tempuserDetails = getUserDetails();
     if (tempuserDetails) {
-      console.log(tempuserDetails);
+      console.log("SELLER DASHBOARD WALA TEMP USER:",tempuserDetails);
       setUserDetails(tempuserDetails);
     }
   }, []);
