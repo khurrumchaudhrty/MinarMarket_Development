@@ -14,7 +14,7 @@ exports.getSellerListings = async (req, res) => {
         }
 
         // Fetch products with listerId matching userId
-        const products = await ProductListing.find({ listerId: userId });
+        const products = await ProductListing.find({ listerId: userId, isActive: 1 });
 
         // Check if products were found
         if (products.length === 0) {
