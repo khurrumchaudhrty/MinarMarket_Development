@@ -90,7 +90,6 @@ const AdminDashboard = () => {
       });
 
       if (response.ok) {
-        alert("helllo")
         console.log(`Selected items updated to ${newStatus} successfully.`);
         getAllListings();
         setSelectedItems([]);
