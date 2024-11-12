@@ -189,7 +189,7 @@ const AdminDashboard = () => {
                     <td>
                       <span
                         className={`inline-block px-2 py-1 rounded-full text-sm ${
-                          listing.status === "Approved"
+                          listing.status === "Accepted"
                             ? "text-green-600 bg-green-100"
                             : listing.status === "Rejected"
                             ? "text-red-600 bg-red-100"
