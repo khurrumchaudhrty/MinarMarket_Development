@@ -226,7 +226,7 @@ const handleDelete = async () => {
 
                       <span
                         className={`inline-block px-2 py-1 rounded-full text-sm ${
-                          listing.status === "Approved"
+                          listing.status === "Accepted"
                             ? "text-green-600 bg-green-100"
                             : listing.status === "Pending"
                             ? "text-yellow-600 bg-yellow-100"
