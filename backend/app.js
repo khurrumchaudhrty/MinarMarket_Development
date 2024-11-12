@@ -10,7 +10,7 @@ const SellerListing = require('./routes/SellerListingRoutes');
 const DeleteSellerListing = require('./routes/DeleteSellerListingRoutes');
 const AllProductsListing = require('./routes/AdminListingRoutes');
 const UpdateProductsListing = require('./routes/AdminListingRoutes');
-const SellerListing = require('./routes/SellerListingRoutes')
+// const SellerListing = require('./routes/SellerListingRoutes')
 const Bids = require('./routes/Bid');//for Buyer Bids
 
 // const { verifyAPIRequest } = require('./middleware/authAPIRequest');
@@ -35,9 +35,6 @@ app.use(cookieParser());
 app.use('/api/authentication',  UserAuthRoutes);
 app.use('/addProductListing', AddProductListing);
 app.use('/seller-listings', SellerListing); // Add this line
-
-
-
 app.use('/deactivate-listings', DeleteSellerListing);
 app.use('/admin-product-listings', AllProductsListing);
 app.use('/update-listings-status', UpdateProductsListing);

@@ -1,7 +1,7 @@
 import AdminNavbar from "../components/AdminNavbar";
 import AdminSidebar from "../components/AdminSidebar";
 import React, { useState, useEffect } from "react";
-import { getUserDetails } from "../components/SessionManager";
+import { getUserDetails, clearSession } from "../components/SessionManager";
 import { jwtDecode } from 'jwt-decode';
 
 const AdminDashboard = () => {
@@ -17,8 +17,9 @@ const AdminDashboard = () => {
         const decodedData = jwtDecode(token);
         
         if(!decodedData.admin){
+          clearSession();
           window.location.href = '/';
-           
+          
         }          
         
       } catch (error) {
