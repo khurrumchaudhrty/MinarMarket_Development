@@ -1,8 +1,8 @@
-
 import AdminNavbar from "../components/AdminNavbar";
 import AdminSidebar from "../components/AdminSidebar";
 import React, { useState, useEffect } from "react";
 import { getUserDetails } from "../components/SessionManager";
+import { jwtDecode } from 'jwt-decode';
 
 const AdminDashboard = () => {
   const [selectedItems, setSelectedItems] = useState([]);
@@ -10,6 +10,21 @@ const AdminDashboard = () => {
   const [sellerListings, setSellerListings] = useState([]);
 
   useEffect(() => {
+    const token = localStorage.getItem('token');
+
+    if (token) {
+      try {
+        const decodedData = jwtDecode(token);
+        
+        if(!decodedData.admin){
+          window.location.href = '/';
+           
+        }          
+        
+      } catch (error) {
+        console.error('Invalid token:', error); // Handle any error if token is not valid
+      }
+    } 
     const tempUserDetails = getUserDetails();
     if (tempUserDetails) {
       setUserDetails(tempUserDetails);
@@ -18,7 +33,7 @@ const AdminDashboard = () => {
 
   const getAllListings = async () => {
     if (!userDetails) return;
-  
+    
     try {
       const response = await fetch(
         `http://localhost:4000/admin-product-listings`,
@@ -90,6 +105,7 @@ const AdminDashboard = () => {
       });
 
       if (response.ok) {
+        alert("helllo")
         console.log(`Selected items updated to ${newStatus} successfully.`);
         getAllListings();
         setSelectedItems([]);
