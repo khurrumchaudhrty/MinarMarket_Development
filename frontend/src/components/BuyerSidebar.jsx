@@ -72,6 +72,11 @@ const BuyerSidebar = () => {
               <span>Settings</span>
             </Link>
           </div>
+          <div className="p-4 flex justify-center">
+                      <button className="px-4 py-1.5 bg-green-500 text-white text-sm font-medium rounded hover:bg-green-600">
+                        <a href='/seller-dashboard'>Switch to Buyer</a>
+                     </button>
+                    </div>
         </nav>
       </div>
     </aside>

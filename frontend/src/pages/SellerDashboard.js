@@ -214,7 +214,7 @@ const handleDelete = async () => {
                     <td>{new Date(listing.createdAt).toLocaleDateString()}</td>
                     <td>{listing.title}</td>
                     <td>
-                      <span
+                      {/* <span
                         className={`inline-block px-2 py-1 rounded-full text-sm ${
                           listing.status === "Approved"
                             ? "text-green-600 bg-green-100"
@@ -222,9 +222,23 @@ const handleDelete = async () => {
                         }`}
                       >
                         {listing.status}
+                      </span> */}
+
+                      <span
+                        className={`inline-block px-2 py-1 rounded-full text-sm ${
+                          listing.status === "Approved"
+                            ? "text-green-600 bg-green-100"
+                            : listing.status === "Pending"
+                            ? "text-yellow-600 bg-yellow-100"
+                            : "text-red-600 bg-red-100"
+                        }`}>
+                        {listing.status}
                       </span>
+
                     </td>
+                    
                     <td className="text-blue-600">Edit Product Details</td>
+                  
                   </tr>
                 ))}
               </tbody>
