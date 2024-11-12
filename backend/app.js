@@ -9,6 +9,7 @@ const AddProductListing = require('./routes/ProductListingRoutes');
 const SellerListing = require('./routes/SellerListingRoutes');
 const DeleteSellerListing = require('./routes/DeleteSellerListingRoutes');
 const AllProductsListing = require('./routes/AdminListingRoutes');
+const UpdateProductsListing = require('./routes/AdminListingRoutes');
 // const { verifyAPIRequest } = require('./middleware/authAPIRequest');
 
 
@@ -33,7 +34,10 @@ app.use('/addProductListing', AddProductListing);
 app.use('/seller-listings', SellerListing); // Add this line
 app.use('/deactivate-listings', DeleteSellerListing);
 app.use('/admin-product-listings', AllProductsListing);
+app.use('/update-listings-status', UpdateProductsListing);
+
 
 
 
 module.exports = app;
+
