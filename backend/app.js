@@ -33,6 +33,7 @@ app.use('/api/authentication',  UserAuthRoutes);
 app.use('/addProductListing', AddProductListing);
 app.use('/seller-listings', SellerListing); // Add this line
 app.use('/deactivate-listings', DeleteSellerListingRoutes)
+app.use('/product-listings', require('./routes/ProductListingRoutes'));
 //for Buyer Bids
 app.use('/bids/', Bids);
 

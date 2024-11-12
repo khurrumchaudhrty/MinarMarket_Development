@@ -1,4 +1,4 @@
-const catchAsyncErrors = require("../middleware/catchAsyncErrors.js");
+const catchAsyncErrors = require("../middleware/CatchAsyncErrors.js");
 const mongoose = require("mongoose");
 const User = require("../models/User.js");
 const jwt = require('jsonwebtoken');

@@ -10,9 +10,9 @@ const BuyerDashboard = () => {
   useEffect(() => {
     const fetchFeaturedProducts = async () => {
       try {
-        const res = await fetch("http://localhost:4000/api/featured-products");
+        const res = await fetch("http://localhost:4000/product-listings");
         const data = await res.json();
-        setFeaturedProducts(data);
+        setFeaturedProducts(data.data);
       } catch (error) {
         console.error("Error fetching featured products:", error);
       }
@@ -29,9 +29,11 @@ const BuyerDashboard = () => {
     };
 
     fetchFeaturedProducts();
-    fetchFeaturedServices();
+    fetchFeaturedServices();  
   }, []);
-
+  const addBid = (productID) => {
+    
+  }
   return (
     <div className="flex flex-col min-h-screen">
       {/* Navbar */}
@@ -65,39 +67,34 @@ const BuyerDashboard = () => {
         <main className="flex-1 p-8">
           <div className="grid grid-cols-2 gap-6">
             {/* Featured Products */}
-            <div className="bg-gray-100 p-6 rounded-lg shadow">
-              <h2 className="text-lg font-semibold mb-4">Featured Products</h2>
-              <div className="h-40 bg-gray-300 mb-4"></div>
-              <div className="flex justify-between">
-                <button className="bg-black text-white px-4 py-2 rounded">
-                  Buy Now
-                </button>
-                <button className="bg-green-500 text-white px-4 py-2 rounded">
-                  Learn More
-                </button>
+            {featuredProducts.map((product, index) => (
+              <div key={index} className="bg-gray-100 p-6 rounded-lg shadow">
+                <h2 className="text-lg font-semibold mb-4">{product.title}</h2>
+                <div className="h-40 bg-gray-300 mb-4">
+                  <img
+                    src={`${product.images[0].url || ""}`}
+                    alt={product.title}
+                    className="object-cover h-full w-full"
+                    style={{ aspectRatio: '16/9' }}
+                  />
+                </div>
+                <p className="text-lg font-semibold mb-4">${product.price}</p>
+                <div className="flex justify-between">
+                  <button className="bg-black text-white px-4 py-2 rounded">
+                    Buy Now
+                  </button>
+                  <button className="bg-green-500 text-white px-4 py-2 rounded">
+                    Learn More
+                  </button>
+                </div>
               </div>
-            </div>
-
-            {/* Featured Services */}
-            <div className="bg-gray-100 p-6 rounded-lg shadow">
-              <h2 className="text-lg font-semibold mb-4">Find Your Favourite Services</h2>
-              <div className="flex space-x-4">
-                {featuredServices.map((service, index) => (
-                  <div
-                    key={index}
-                    className="w-16 h-16 bg-gray-300 rounded-full flex items-center justify-center"
-                  >
-                    {service.title}
-                  </div>
-                ))}
-              </div>
-            </div>
+            ))}
 
             {/* Sale Section */}
-            <div className="bg-gray-100 p-6 rounded-lg shadow">
+            {/* <div className="bg-gray-100 p-6 rounded-lg shadow">
               <h2 className="text-lg font-semibold mb-4">SALE</h2>
               <div className="h-40 bg-gray-300"></div>
-            </div>
+            </div> */}
 
             {/* My Listings */}
             <div className="bg-gray-100 p-6 rounded-lg shadow">
