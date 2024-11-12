@@ -8,6 +8,10 @@ const UserAuthRoutes = require('./routes/UserAuthRoutes');
 const AddProductListing = require('./routes/ProductListingRoutes');
 const SellerListing = require('./routes/SellerListingRoutes')
 const DeleteSellerListingRoutes = require('./routes/DeleteSellerListingRoutes')
+//for Buyer Bids
+const AddBid = require('./routes/AddBid');
+const DeleteBid = require('./routes/DeleteBid');
+const GetBid = require('./routes/ViewBid');
 // const { verifyAPIRequest } = require('./middleware/authAPIRequest');
 
 
@@ -31,6 +35,11 @@ app.use('/api/authentication',  UserAuthRoutes);
 app.use('/addProductListing', AddProductListing);
 app.use('/seller-listings', SellerListing); // Add this line
 app.use('/deactivate-listings', DeleteSellerListingRoutes)
+//for Buyer Bids
+app.use('/addBid', AddBid);
+app.use('/deleteBid', DeleteBid);
+app.use('/getBid', GetBid);
+
 
 
 
