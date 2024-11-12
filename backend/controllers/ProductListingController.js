@@ -51,7 +51,8 @@ exports.addProductListing = async (req, res) => {
 
 exports.showProductListings = async (req, res) => {
     try {
-        const productListings = await ProductListing.find();
+        //Find all approved product listings with status "Approved"
+        const productListings = await ProductListing.find({ status: "Approved" });
 
         return res.status(200).json({
             success: true,
