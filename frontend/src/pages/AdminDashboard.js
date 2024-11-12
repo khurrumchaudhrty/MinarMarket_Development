@@ -3,33 +3,22 @@ import AdminNavbar from "../components/AdminNavbar";
 import AdminSidebar from "../components/AdminSidebar";
 import React, { useState, useEffect } from "react";
 import { getUserDetails } from "../components/SessionManager";
-import { ChevronRight, ChevronDown } from "lucide-react";
 
 const AdminDashboard = () => {
-  // State to track selected items
   const [selectedItems, setSelectedItems] = useState([]);
-  // Sample data array
-  const [listings, setListings] = useState([
-    { id: "#A1DA59", date: "23/09/2024", title: "Laptop", status: "Approved" },
-    { id: "#A1DA58", date: "23/09/2024", title: "Camera", status: "Pending" },
-  ]);
-
   const [userDetails, setUserDetails] = useState(null);
   const [sellerListings, setSellerListings] = useState([]);
 
   useEffect(() => {
-    // Call getUserDetails to log and store user details
-    const tempuserDetails = getUserDetails();
-    if (tempuserDetails) {
-      console.log(tempuserDetails);
-      setUserDetails(tempuserDetails);
+    const tempUserDetails = getUserDetails();
+    if (tempUserDetails) {
+      setUserDetails(tempUserDetails);
     }
   }, []);
 
   const getAllListings = async () => {
     if (!userDetails) return;
   
-    // const userId = userDetails.userId; // Extract userId from userDetails
     try {
       const response = await fetch(
         `http://localhost:4000/admin-product-listings`,
@@ -43,9 +32,9 @@ const AdminDashboard = () => {
   
       if (response.ok) {
         const result = await response.json();
-        console.log("All Listings:", result);
+        
         if (result.success && Array.isArray(result.data)) {
-          setSellerListings(result.data); // Correctly setting the seller listings array
+          setSellerListings(result.data);
         } else {
           console.error("Error: Invalid data structure", result);
         }
@@ -57,12 +46,10 @@ const AdminDashboard = () => {
     }
   };
   
-
   useEffect(() => {
-    getAllListings(); // Call getSellerListing on component mount
-  }, [userDetails]); // Run when userDetails is set
+    getAllListings();
+  }, [userDetails]);
 
-  // Handle individual checkbox selection
   const handleCheckboxChange = (itemId) => {
     setSelectedItems((prev) => {
       if (prev.includes(itemId)) {
@@ -73,61 +60,47 @@ const AdminDashboard = () => {
     });
   };
 
-  useEffect(() => {
-    // Call getUserDetails to log and store user details
-    const userDetails = getUserDetails();
-    if (userDetails) {
-      console.log("User Name:", userDetails.name);
-      console.log("User Email:", userDetails.email);
-    }
-  }, []);
-
-  // Handle select all checkbox
   const handleSelectAll = () => {
-    if (selectedItems.length === listings.length) {
+    if (selectedItems.length === sellerListings.length) {
       setSelectedItems([]);
     } else {
-      setSelectedItems(listings.map((item) => item.id));
+      setSelectedItems(sellerListings.map((item) => item._id));
     }
   };
 
-  // // Handle approve action
-  // const handleApprove = () => {
-  //   // Add your approve logic here
-  //   console.log("Approving items:", selectedItems);
-  // };
+  const handleStatusUpdate = async (newStatus) => {
+    if (selectedItems.length === 0) return;
 
-  // Handle decline action
+    const pendingOnly = selectedItems.every(
+      (id) => sellerListings.find((item) => item._id === id).status === "Pending"
+    );
 
-const handleDelete = async () => {
-  // Ensure there are selected items
-  if (selectedItems.length === 0) {
-    return; // Optionally show a message that no items are selected.
-  }
-
-  try {
-    // Send the selected item IDs to the backend to delete
-    const response = await fetch(`http://localhost:4000/delete-seller-listings`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ itemIds: selectedItems }), // Send selected item IDs
-    });
-
-    // If the response is ok, re-fetch the seller listings
-    if (response.ok) {
-      console.log('Selected items deleted successfully.');
-      // Call the getSellerListing to refresh the data
-      getAllListings();
-    } else {
-      console.error('Failed to delete selected items:', response.status);
+    if (!pendingOnly) {
+      console.log("Only pending listings can be accepted or rejected.");
+      return;
     }
-  } catch (error) {
-    console.error('Error deleting selected items:', error);
-  }
-};
 
+    try {
+      const response = await fetch(`http://localhost:4000/admin-product-listings/update-listings-status`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ itemIds: selectedItems, newStatus }),
+      });
+
+      if (response.ok) {
+        alert("helllo")
+        console.log(`Selected items updated to ${newStatus} successfully.`);
+        getAllListings();
+        setSelectedItems([]);
+      } else {
+        console.error(`Failed to update selected items:`, response.status);
+      }
+    } catch (error) {
+      console.error(`Error updating selected items to ${newStatus}:`, error);
+    }
+  };
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -138,17 +111,27 @@ const handleDelete = async () => {
           <div className="flex justify-between items-center mb-4">
             <h1 className="text-xl font-semibold">Products</h1>
             <div className="space-x-2">
-              
               <button
-                onClick={handleDelete}
-                disabled={selectedItems.length === 0}
+                onClick={() => handleStatusUpdate("Accepted")}
+                disabled={selectedItems.length === 0 || !selectedItems.every(id => sellerListings.find(listing => listing._id === id)?.status === "Pending")}
                 className={`px-4 py-2 rounded ${
-                  selectedItems.length === 0
+                  selectedItems.length === 0 || !selectedItems.every(id => sellerListings.find(listing => listing._id === id)?.status === "Pending")
+                    ? "bg-gray-300 cursor-not-allowed"
+                    : "bg-green-500 text-white hover:bg-green-600"
+                }`}
+              >
+                Accept
+              </button>
+              <button
+                onClick={() => handleStatusUpdate("Rejected")}
+                disabled={selectedItems.length === 0 || !selectedItems.every(id => sellerListings.find(listing => listing._id === id)?.status === "Pending")}
+                className={`px-4 py-2 rounded ${
+                  selectedItems.length === 0 || !selectedItems.every(id => sellerListings.find(listing => listing._id === id)?.status === "Pending")
                     ? "bg-gray-300 cursor-not-allowed"
                     : "bg-red-500 text-white hover:bg-red-600"
                 }`}
               >
-                Delete Selected
+                Reject
               </button>
             </div>
           </div>
@@ -160,7 +143,7 @@ const handleDelete = async () => {
                   <th className="p-4">
                     <input
                       type="checkbox"
-                      checked={selectedItems.length === listings.length}
+                      checked={selectedItems.length === sellerListings.length}
                       onChange={handleSelectAll}
                       className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                     />
@@ -170,7 +153,6 @@ const handleDelete = async () => {
                   <th className="pb-2">Date Listed</th>
                   <th className="pb-2">Title</th>
                   <th className="pb-2">Status</th>
-
                 </tr>
               </thead>
               <tbody>
@@ -185,7 +167,7 @@ const handleDelete = async () => {
                       />
                     </td>
                     <td className="py-3 text-blue-600">{listing._id}</td>
-                    <td className=""></td>
+                    <td>{listing.sellerName || "N/A"}</td>
                     <td>{new Date(listing.createdAt).toLocaleDateString()}</td>
                     <td>{listing.title}</td>
                     <td>
@@ -193,13 +175,14 @@ const handleDelete = async () => {
                         className={`inline-block px-2 py-1 rounded-full text-sm ${
                           listing.status === "Approved"
                             ? "text-green-600 bg-green-100"
+                            : listing.status === "Rejected"
+                            ? "text-red-600 bg-red-100"
                             : "text-yellow-600 bg-yellow-100"
                         }`}
                       >
                         {listing.status}
                       </span>
                     </td>
-                    <td className="text-blue-600">Edit Product Details</td>
                   </tr>
                 ))}
               </tbody>
@@ -225,3 +208,4 @@ const handleDelete = async () => {
 };
 
 export default AdminDashboard;
+
