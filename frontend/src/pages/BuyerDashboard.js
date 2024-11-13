@@ -10,7 +10,7 @@ const BuyerDashboard = () => {
   useEffect(() => {
     const fetchFeaturedProducts = async () => {
       try {
-        const res = await fetch("http://localhost:4000/product-listings");
+        const res = await fetch(process.env.REACT_APP_API_URL+"/product-listings");
         const data = await res.json();
         setFeaturedProducts(data.data);
       } catch (error) {
