@@ -1,9 +1,16 @@
 const ProductListing = require('../models/ProductListing');
+const user = require('../models/User');
 
-exports.getAllProductListings = async(req,res) => {
+exports.getAllProductListings = async (req, res) => {
     try {
-        
-        const products = await ProductListing.find({isActive:1});
+        // Find all active product listings and populate the lister's name from the User collection
+        const products = await ProductListing.find({ isActive: 1 })
+            .populate({
+                path: 'listerId',
+                model: 'user', 
+                select: 'name' // Only select the name field from the User model
+            });
+
         // Check if products were found
         if (products.length === 0) {
             return res.status(404).json({
@@ -11,13 +18,13 @@ exports.getAllProductListings = async(req,res) => {
                 message: 'No product listings found in the database.',
             });
         }
-        // Send a success response with the products
+
+        // Send a success response with the products and the seller's name
         return res.status(200).json({
             success: true,
             message: 'Product listings fetched successfully.',
             data: products,
         });
-
     } catch (error) {
         console.error('Error fetching all product listings:', error);
         return res.status(500).json({
