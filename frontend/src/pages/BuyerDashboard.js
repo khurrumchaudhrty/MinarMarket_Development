@@ -20,7 +20,7 @@ const BuyerDashboard = () => {
 
     const fetchFeaturedServices = async () => {
       try {
-        const res = await fetch("http://localhost:4000/api/featured-services");
+        const res = await fetch(process.env.REACT_APP_API_URL+"/api/featured-services");
         const data = await res.json();
         setFeaturedServices(data);
       } catch (error) {
@@ -29,7 +29,7 @@ const BuyerDashboard = () => {
     };
 
     fetchFeaturedProducts();
-    fetchFeaturedServices();  
+    // fetchFeaturedServices();  
   }, []);
   const addBid = (productID) => {
     
