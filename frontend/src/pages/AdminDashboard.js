@@ -1,7 +1,7 @@
 import AdminNavbar from "../components/AdminNavbar";
 import AdminSidebar from "../components/AdminSidebar";
 import React, { useState, useEffect } from "react";
-import { getUserDetails, clearSession } from "../components/SessionManager";
+import { getUserDetails } from "../components/SessionManager";
 import { jwtDecode } from 'jwt-decode';
 
 const AdminDashboard = () => {
@@ -17,9 +17,8 @@ const AdminDashboard = () => {
         const decodedData = jwtDecode(token);
         
         if(!decodedData.admin){
-          clearSession();
           window.location.href = '/';
-          
+           
         }          
         
       } catch (error) {
@@ -34,7 +33,7 @@ const AdminDashboard = () => {
 
   const getAllListings = async () => {
     if (!userDetails) return;
-    
+  
     try {
       const response = await fetch(
         `http://localhost:4000/admin-product-listings`,
@@ -48,9 +47,14 @@ const AdminDashboard = () => {
   
       if (response.ok) {
         const result = await response.json();
-        
+  
         if (result.success && Array.isArray(result.data)) {
-          setSellerListings(result.data);
+      
+          const listingsWithSellerName = result.data.map(listing => ({
+            ...listing,
+            sellerName: listing.listerId?.name || "N/A"  
+          }));
+          setSellerListings(listingsWithSellerName);
         } else {
           console.error("Error: Invalid data structure", result);
         }
@@ -61,6 +65,7 @@ const AdminDashboard = () => {
       console.error("Error fetching seller listings:", error);
     }
   };
+  
   
   useEffect(() => {
     getAllListings();
@@ -183,7 +188,7 @@ const AdminDashboard = () => {
                       />
                     </td>
                     <td className="py-3 text-blue-600">{listing._id}</td>
-                    <td>{listing.sellerName || "N/A"}</td>
+                    <td>{listing.sellerName}</td>
                     <td>{new Date(listing.createdAt).toLocaleDateString()}</td>
                     <td>{listing.title}</td>
                     <td>
