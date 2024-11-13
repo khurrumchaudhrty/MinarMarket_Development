@@ -97,7 +97,7 @@ const AdminDashboard = () => {
     );
 
     if (!pendingOnly) {
-      console.log("Only pending listings can be accepted or rejected.");
+      console.log("Only pending listings can be approved or rejected.");
       return;
     }
 
@@ -133,7 +133,7 @@ const AdminDashboard = () => {
             <h1 className="text-xl font-semibold">Products</h1>
             <div className="space-x-2">
               <button
-                onClick={() => handleStatusUpdate("Accepted")}
+                onClick={() => handleStatusUpdate("Approved")}
                 disabled={selectedItems.length === 0 || !selectedItems.every(id => sellerListings.find(listing => listing._id === id)?.status === "Pending")}
                 className={`px-4 py-2 rounded ${
                   selectedItems.length === 0 || !selectedItems.every(id => sellerListings.find(listing => listing._id === id)?.status === "Pending")
@@ -194,7 +194,7 @@ const AdminDashboard = () => {
                     <td>
                       <span
                         className={`inline-block px-2 py-1 rounded-full text-sm ${
-                          listing.status === "Accepted"
+                          listing.status === "Approved"
                             ? "text-green-600 bg-green-100"
                             : listing.status === "Rejected"
                             ? "text-red-600 bg-red-100"
