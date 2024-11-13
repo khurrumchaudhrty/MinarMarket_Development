@@ -141,7 +141,7 @@ const AdminDashboard = () => {
                     : "bg-green-500 text-white hover:bg-green-600"
                 }`}
               >
-                Accept
+                Approve
               </button>
               <button
                 onClick={() => handleStatusUpdate("Rejected")}
