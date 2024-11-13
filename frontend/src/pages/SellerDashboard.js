@@ -90,42 +90,6 @@ const SellerDashboard = () => {
     }
   };
 
-  // // Handle approve action
-  // const handleApprove = () => {
-  //   // Add your approve logic here
-  //   console.log("Approving items:", selectedItems);
-  // };
-
-  // Handle decline action
-  // Handle decline (delete) action
-// const handleDelete = async () => {
-//   // Ensure there are selected items
-//   if (selectedItems.length === 0) {
-//     return; // Optionally show a message that no items are selected.
-//   }
-
-//   try {
-//     // Send the selected item IDs to the backend to delete
-//     const response = await fetch(`http://localhost:4000/delete-seller-listings`, {
-//       method: 'DELETE',
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//       body: JSON.stringify({ itemIds: selectedItems }), // Send selected item IDs
-//     });
-
-//     // If the response is ok, re-fetch the seller listings
-//     if (response.ok) {
-//       console.log('Selected items deleted successfully.');
-//       // Call the getSellerListing to refresh the data
-//       getSellerListing();
-//     } else {
-//       console.error('Failed to delete selected items:', response.status);
-//     }
-//   } catch (error) {
-//     console.error('Error deleting selected items:', error);
-//   }
-// };
 const handleDelete = async () => {
   if (selectedItems.length === 0) return;
 
@@ -214,19 +178,10 @@ const handleDelete = async () => {
                     <td>{new Date(listing.createdAt).toLocaleDateString()}</td>
                     <td>{listing.title}</td>
                     <td>
-                      {/* <span
-                        className={`inline-block px-2 py-1 rounded-full text-sm ${
-                          listing.status === "Approved"
-                            ? "text-green-600 bg-green-100"
-                            : "text-yellow-600 bg-yellow-100"
-                        }`}
-                      >
-                        {listing.status}
-                      </span> */}
 
                       <span
                         className={`inline-block px-2 py-1 rounded-full text-sm ${
-                          listing.status === "Accepted"
+                          listing.status === "Approved"
                             ? "text-green-600 bg-green-100"
                             : listing.status === "Pending"
                             ? "text-yellow-600 bg-yellow-100"
