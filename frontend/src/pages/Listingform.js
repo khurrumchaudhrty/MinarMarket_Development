@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Upload, X } from "lucide-react";
 import { getUserDetails } from "../components/SessionManager";
+import { useNavigate } from 'react-router-dom';
+
 
 const ListingForm = () => {
   const [formData, setFormData] = useState({
@@ -71,6 +73,16 @@ const ListingForm = () => {
   };
 
 
+  const navigate = useNavigate(); // useNavigate hook for navigation
+
+  const handleLogout = () => {
+    // Remove token from localStorage
+    localStorage.removeItem('token');
+    
+    // Redirect to login page
+    navigate('/'); // Use navigate instead of history.push
+  };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -109,6 +121,8 @@ const ListingForm = () => {
         setMessage(
           "Product has been successfully sent to the admin for approval."
         );
+        
+        navigate('/');
       } else {
         const errorData = await response
           .json()
@@ -136,7 +150,7 @@ const ListingForm = () => {
           <div className="flex items-center space-x-4">
             <div className="w-8 h-8 bg-gray-200 rounded-full"></div>
             <nav className="flex space-x-4">
-              <a href="#" className="font-medium text-gray-900">
+              <a href="/seller-dashboard" className="font-medium text-gray-900">
                 Home
               </a>
               <a href="#" className="text-gray-500">
@@ -144,7 +158,7 @@ const ListingForm = () => {
               </a>
             </nav>
           </div>
-          <button className="px-4 py-2 text-gray-600 border rounded-md hover:bg-gray-50">
+          <button className="px-4 py-2 text-gray-600 border rounded-md hover:bg-gray-50" onClick={handleLogout}>
             Log out
           </button>
         </div>
@@ -188,7 +202,7 @@ const ListingForm = () => {
               </div>
               <div>
                 <label className="block text-sm text-gray-600 mb-2">
-                  Price
+                  Price (PKR)
                 </label>
                 <input
                   type="number"
