@@ -31,7 +31,7 @@ const SellerDashboard = () => {
     const userId = userDetails.userId; // Extract userId from userDetails
     try {
       const response = await fetch(
-        `http://localhost:4000/seller-listings?userId=${userId}`,
+        `${process.env.REACT_APP_API_URL}/seller-listings?userId=${userId}`,
         {
           method: "GET",
           headers: {
@@ -94,7 +94,7 @@ const handleDelete = async () => {
   if (selectedItems.length === 0) return;
 
   try {
-      const response = await fetch('http://localhost:4000/deactivate-listings', {
+      const response = await fetch(process.env.REACT_APP_API_URL+'/deactivate-listings', {
           method: 'POST',
           headers: {
               'Content-Type': 'application/json',

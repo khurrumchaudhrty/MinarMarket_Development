@@ -97,7 +97,7 @@ const ListingForm = () => {
 
       console.log("Form Data to send to backend:", finalFormData);
 
-      const response = await fetch("http://localhost:4000/addProductListing", {
+      const response = await fetch(process.env.REACT_APP_API_URL+"/addProductListing", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

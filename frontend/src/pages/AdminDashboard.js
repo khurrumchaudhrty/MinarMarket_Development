@@ -36,7 +36,7 @@ const AdminDashboard = () => {
   
     try {
       const response = await fetch(
-        `http://localhost:4000/admin-product-listings`,
+        `${process.env.REACT_APP_API_URL}/admin-product-listings`,
         {
           method: "GET",
           headers: {
@@ -102,7 +102,7 @@ const AdminDashboard = () => {
     }
 
     try {
-      const response = await fetch(`http://localhost:4000/admin-product-listings/update-listings-status`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/admin-product-listings/update-listings-status`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
