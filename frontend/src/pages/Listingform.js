@@ -122,7 +122,7 @@ const ListingForm = () => {
           "Product has been successfully sent to the admin for approval."
         );
         
-        navigate('/');
+        navigate('/seller-dashboard');
       } else {
         const errorData = await response
           .json()
