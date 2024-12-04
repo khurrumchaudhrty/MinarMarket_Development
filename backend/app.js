@@ -10,6 +10,7 @@ const SellerListing = require('./routes/SellerListingRoutes');
 const DeleteSellerListing = require('./routes/DeleteSellerListingRoutes');
 const AllProductsListing = require('./routes/AdminListingRoutes');
 const UpdateProductsListing = require('./routes/AdminListingRoutes');
+// const ProductListingRoutes = require('./routes/ProductListingRoutes');
 // const SellerListing = require('./routes/SellerListingRoutes')
 const Bids = require('./routes/Bid');//for Buyer Bids
 

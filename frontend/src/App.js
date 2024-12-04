@@ -7,6 +7,7 @@ import SellerDashboard from "./pages/SellerDashboard.js";
 import BuyerDashboard from "./pages/BuyerDashboard.js"; // Import BuyerDashboard
 import AdminDashboard from "./pages/AdminDashboard.js";
 import RouteGuard from "./components/RouteGuard.js";
+import BuyerMyListings from "./pages/BuyerMyListings.js";
 
 function App() {
   return (
@@ -49,6 +50,16 @@ function App() {
             </RouteGuard>
           }
         />
+
+        <Route
+          path="/my-listings"
+          element={
+            <RouteGuard>
+              <BuyerMyListings /> {/* Protected Buyer Dashboard */}
+            </RouteGuard>
+          }
+        />
+
       </Routes>
     </Router>
   );

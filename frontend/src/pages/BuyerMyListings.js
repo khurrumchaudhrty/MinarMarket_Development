@@ -1,46 +1,70 @@
 import React, { useState, useEffect } from "react";
 import BuyerSidebar from "../components/BuyerSidebar";
 import Footer from "../components/Footer";
+import { jwtDecode } from "jwt-decode";
 
-const BuyerDashboard = () => {
-  const [featuredProducts, setFeaturedProducts] = useState([]);
+const BuyerMyListings = () => {
+  const [myProducts, setMyProducts] = useState([]);
   const [featuredServices, setFeaturedServices] = useState([]);
-  const [saleProducts, setSaleProducts] = useState([]);
 
   useEffect(() => {
-    const fetchFeaturedProducts = async () => {
+    const fetchMyProducts = async () => {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        console.error("No token found in localStorage");
+        return;
+      }
+
       try {
-        const res = await fetch(process.env.REACT_APP_API_URL+"/product-listings");
+        const decodedData = jwtDecode(token); // Decode the token to extract the id
+        const payload = { id: decodedData.id }; // Prepare the payload
+        console.log("payload: ", payload);
+        const res = await fetch(
+          `${process.env.REACT_APP_API_URL}/product-listings/buyer/my-product-listings`,
+          {
+            method: "POST", // Use POST method
+            headers: {
+              "Content-Type": "application/json", // Set content type
+            },
+            body: JSON.stringify(payload), // Send the payload as JSON
+          }
+        );
+
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+
         const data = await res.json();
-        setFeaturedProducts(data.data);
+        setMyProducts(data.data); // Update the state with the fetched data
       } catch (error) {
-        console.error("Error fetching featured products:", error);
+        console.error("Error fetching my products:", error);
       }
     };
 
-    const fetchFeaturedServices = async () => {
-      try {
-        const res = await fetch(process.env.REACT_APP_API_URL+"/api/featured-services");
-        const data = await res.json();
-        setFeaturedServices(data);
-      } catch (error) {
-        console.error("Error fetching featured services:", error);
-      }
-    };
+    // const fetchFeaturedServices = async () => {
+    //   try {
+    //     const res = await fetch(process.env.REACT_APP_API_URL+"/api/featured-services");
+    //     const data = await res.json();
+    //     setFeaturedServices(data);
+    //   } catch (error) {
+    //     console.error("Error fetching featured services:", error);
+    //   }
+    // };
 
-    fetchFeaturedProducts();
-    // fetchFeaturedServices();  
+    fetchMyProducts();
+    // fetchFeaturedServices();
   }, []);
-  const addBid = (productID) => {
-    
-  }
+  const addBid = (productID) => {};
   return (
     <div className="flex flex-col min-h-screen">
       {/* Navbar */}
       <nav className="flex justify-between items-center p-4 bg-white shadow w-full">
         <div className="text-xl font-bold">Minar Market</div>
         <div className="flex items-center space-x-4">
-          <a href="#" className="hover:text-blue-500">About</a>
+          <a href="#" className="hover:text-blue-500">
+            About
+          </a>
           <div>
             <select className="border border-gray-300 p-2 rounded">
               <option>All</option>
@@ -53,8 +77,12 @@ const BuyerDashboard = () => {
             placeholder="Search"
             className="border border-gray-300 p-2 rounded w-64"
           />
-          <a href="#" className="hover:text-blue-500">❤</a>
-          <a href="#" className="hover:text-blue-500">🛒</a>
+          <a href="#" className="hover:text-blue-500">
+            ❤
+          </a>
+          <a href="#" className="hover:text-blue-500">
+            🛒
+          </a>
           <button className="bg-green-500 text-white px-4 py-2 rounded">
             List Requirement
           </button>
@@ -67,7 +95,7 @@ const BuyerDashboard = () => {
         <main className="flex-1 p-8">
           <div className="grid grid-cols-2 gap-6">
             {/* Featured Products */}
-            {featuredProducts.map((product, index) => (
+            {myProducts.map((product, index) => (
               <div key={index} className="bg-gray-100 p-6 rounded-lg shadow">
                 <h2 className="text-lg font-semibold mb-4">{product.title}</h2>
                 <div className="h-40 bg-gray-300 mb-4">
@@ -75,32 +103,13 @@ const BuyerDashboard = () => {
                     src={`${product.images[0].url || ""}`}
                     alt={product.title}
                     className="object-cover h-full w-full"
-                    style={{ aspectRatio: '16/9' }}
+                    style={{ aspectRatio: "16/9" }}
                   />
                 </div>
                 <p className="text-lg font-semibold mb-4">${product.price}</p>
-                <div className="flex justify-between">
-                  <button className="bg-black text-white px-4 py-2 rounded">
-                    Buy Now
-                  </button>
-                  <button className="bg-green-500 text-white px-4 py-2 rounded">
-                    Learn More
-                  </button>
-                </div>
               </div>
             ))}
 
-            {/* Sale Section */}
-            {/* <div className="bg-gray-100 p-6 rounded-lg shadow">
-              <h2 className="text-lg font-semibold mb-4">SALE</h2>
-              <div className="h-40 bg-gray-300"></div>
-            </div> */}
-
-            {/* My Listings */}
-            {/* <div className="bg-gray-100 p-6 rounded-lg shadow">
-              <h2 className="text-lg font-semibold mb-4">My Listings</h2>
-              <div className="h-40 bg-gray-300"></div>
-            </div> */}
           </div>
         </main>
       </div>
@@ -111,4 +120,4 @@ const BuyerDashboard = () => {
   );
 };
 
-export default BuyerDashboard;
+export default BuyerMyListings;
