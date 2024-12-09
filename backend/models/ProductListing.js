@@ -57,15 +57,16 @@ const productListingSchema = new mongoose.Schema({
         default: Date.now,
     },
     listerId: {
-        type: mongoose.Schema.Types.ObjectId,  // Reference to a User or Seller model
-        ref: 'users',  // Assuming you have a User model for the lister
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'users',  
         required: true,
     },
-    
     isActive:{
         type:Boolean,
         default:1
-    }
+    },
+    
+
 });
 
 // Ensure updatedAt is updated on every save operation
