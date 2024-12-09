@@ -62,6 +62,20 @@ const BuyerSidebar = () => {
             )}
           </div>
 
+
+          {/* My Listings Link */}
+          <div>
+            <Link
+              to="/my-listings"
+              className="flex items-center space-x-2 text-gray-600 hover:text-blue-500"
+            >
+              <span className="text-lg"></span>
+              <span>My Listings</span>
+            </Link>
+          </div>
+
+
+
           {/* Settings Link */}
           <div>
             <Link
