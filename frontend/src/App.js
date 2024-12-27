@@ -1,13 +1,14 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Login from "./pages/Login"; // Adjust the path if necessary
-import Signup from "./pages/Signup"; // Import Signup component
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
 import ListingForm from "./pages/Listingform.js";
 import SellerDashboard from "./pages/SellerDashboard.js";
-import BuyerDashboard from "./pages/BuyerDashboard.js"; // Import BuyerDashboard
+import BuyerDashboard from "./pages/BuyerDashboard.js";
 import AdminDashboard from "./pages/AdminDashboard.js";
 import RouteGuard from "./components/RouteGuard.js";
 import BuyerMyListings from "./pages/BuyerMyListings.js";
+import ServiceListing from "./pages/ServiceListing.js"; // Import the new ServiceListing page
 
 function App() {
   return (
@@ -15,14 +16,14 @@ function App() {
       <Routes>
         {/* Public routes */}
         <Route path="/" element={<Login />} />
-        <Route path="/signup" element={<Signup />} /> {/* Signup route */}
+        <Route path="/signup" element={<Signup />} />
 
         {/* Protected routes */}
         <Route
           path="/seller-dashboard"
           element={
             <RouteGuard>
-              <SellerDashboard /> {/* Protected Seller Dashboard */}
+              <SellerDashboard />
             </RouteGuard>
           }
         />
@@ -30,7 +31,15 @@ function App() {
           path="/listing-form"
           element={
             <RouteGuard>
-              <ListingForm /> {/* Protected Listing Form */}
+              <ListingForm />
+            </RouteGuard>
+          }
+        />
+        <Route
+          path="/service-listing"
+          element={
+            <RouteGuard>
+              <ServiceListing />
             </RouteGuard>
           }
         />
@@ -38,7 +47,7 @@ function App() {
           path="/admin-dashboard"
           element={
             <RouteGuard>
-              <AdminDashboard /> {/* Protected Admin Dashboard */}
+              <AdminDashboard />
             </RouteGuard>
           }
         />
@@ -46,20 +55,18 @@ function App() {
           path="/buyer-dashboard"
           element={
             <RouteGuard>
-              <BuyerDashboard /> {/* Protected Buyer Dashboard */}
+              <BuyerDashboard />
             </RouteGuard>
           }
         />
-
         <Route
           path="/my-listings"
           element={
             <RouteGuard>
-              <BuyerMyListings /> {/* Protected Buyer Dashboard */}
+              <BuyerMyListings />
             </RouteGuard>
           }
         />
-
       </Routes>
     </Router>
   );
