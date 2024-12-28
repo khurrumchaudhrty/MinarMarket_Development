@@ -3,6 +3,8 @@ import SellerSidebar from "../components/SellerSidebar";
 import React, { useState, useEffect } from "react";
 import { getUserDetails } from "../components/SessionManager";
 import { ChevronRight, ChevronDown } from "lucide-react";
+import Footer from "../components/Footer";
+import { useNavigate } from "react-router-dom";
 
 const SellerDashboard = () => {
   // State to track selected items
@@ -15,7 +17,7 @@ const SellerDashboard = () => {
 
   const [userDetails, setUserDetails] = useState(null);
   const [sellerListings, setSellerListings] = useState([]);
-
+  const navigate = useNavigate();
   useEffect(() => {
     // Call getUserDetails to log and store user details
     const tempuserDetails = getUserDetails();
@@ -54,6 +56,10 @@ const SellerDashboard = () => {
     } catch (error) {
       console.error("Error fetching seller listings:", error);
     }
+  };
+
+  const handleEditClick = (listingId) => {
+    navigate(`/listing-form`, { state: { productId: listingId } }); // Pass the product ID using state
   };
   
 
@@ -192,7 +198,7 @@ const handleDelete = async () => {
 
                     </td>
                     
-                    <td className="text-blue-600">Edit Product Details</td>
+                    <td className="text-blue-600 hover:underline hover:cursor-pointer" onClick={() => handleEditClick(listing._id)}>Edit Product Details</td>
                   
                   </tr>
                 ))}
@@ -201,19 +207,7 @@ const handleDelete = async () => {
           </div>
         </main>
       </div>
-      <footer className="border-t border-gray-200 py-4">
-        <div className="max-w-screen-xl mx-auto px-4 flex justify-end space-x-6 text-sm text-gray-600">
-          <a href="#" className="hover:text-gray-900">
-            Help Center
-          </a>
-          <a href="#" className="hover:text-gray-900">
-            Terms of Service
-          </a>
-          <a href="#" className="hover:text-gray-900">
-            Privacy Policy
-          </a>
-        </div>
-      </footer>
+      <Footer/>
     </div>
   );
 };
