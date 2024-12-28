@@ -53,7 +53,7 @@ exports.showProductListings = async (req, res) => {
     try {
         //Find all approved product listings with status "Approved"
         const productListings = await ProductListing.find({ status: "Approved", isActive: true });
-
+     
         return res.status(200).json({
             success: true,
             message: 'Product listings retrieved successfully.',
