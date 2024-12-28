@@ -12,11 +12,25 @@ const serviceListingSchema = new mongoose.Schema({
         required: true,
         maxlength: 200,
     },
-    hourlyRate: {
+    category:{
+        type: String,
+        required: true
+    },
+    rate: {
         type: Number,
         required: true,
         min: 0,
-    }, 
+    },
+    pricingModel:{
+        type: String,
+        default: 'Per Hour',
+        enum:["Per Hour", "Per Day", "Per Job"],
+        required:true
+    },
+    city:{
+        type: String,
+        required: true
+    },
     availability:{
         type:Boolean,
         default:0
@@ -52,4 +66,4 @@ serviceListingSchema.pre('save', function(next) {
 });
 
 
-module.exports = mongoose.model('ServiceListing', serviceListingSchema);
+module.exports = mongoose.model('ServiceListing', serviceListingSchema, 'servicelistings');
