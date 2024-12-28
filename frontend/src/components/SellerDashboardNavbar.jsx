@@ -1,12 +1,15 @@
 import React from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const SellerDashboardNavbar = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // useNavigate hook for navigation
 
   const handleLogout = () => {
+    // Remove token from localStorage
     localStorage.removeItem('token');
-    navigate('/');
+    
+    // Redirect to login page
+    navigate('/'); // Use navigate instead of history.push
   };
 
   return (
@@ -17,32 +20,23 @@ const SellerDashboardNavbar = () => {
           <div className="w-8 h-8 bg-gray-200 rounded-full"></div>
           <ul className="flex space-x-4">
             <li>
-              <Link to="/seller-dashboard" className="text-black hover:text-gray-600">
+              <a href="#" className="text-black hover:text-gray-600">
                 Home
-              </Link>
+              </a>
             </li>
             <li>
-              <Link to="/profile" className="text-gray-500 hover:text-gray-600">
+              <a href="#" className="text-gray-500 hover:text-gray-600">
                 Profile
-              </Link>
+              </a>
             </li>
           </ul>
         </div>
 
         {/* Right side - with increased spacing */}
-        <div className="flex space-x-4 mr-4">
-          <Link 
-            to="/listing-form" 
-            className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
-          >
-            List Product
-          </Link>
-          <Link 
-            to="/service-listing" 
-            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-          >
-            List Service
-          </Link>
+        <div className="flex space-x-6 mr-4">
+          <button className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">
+            <a href='/listing-form'>List Product</a>
+          </button>
           <button
             className="px-4 py-2 border border-gray-300 text-gray-700 rounded hover:bg-gray-50"
             onClick={handleLogout}
