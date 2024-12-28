@@ -2,14 +2,14 @@ import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
-// import ListingForm from "./pages/Listingform.js";
 import SellerDashboard from "./pages/SellerDashboard.js";
 import BuyerDashboard from "./pages/BuyerDashboard.js";
 import AdminDashboard from "./pages/AdminDashboard.js";
 import RouteGuard from "./components/RouteGuard.js";
 import BuyerMyListings from "./pages/BuyerMyListings.js";
 import ProductListingForm from "./pages/ProductListingForm.js";
-import ServiceListing from "./pages/ServiceListing.js"; // Import the new ServiceListing page
+import ServiceListing from "./pages/ServiceListing.js";
+import BuyerListings from "./pages/BuyerListings"; // Import BuyerListings page
 
 function App() {
   return (
@@ -32,8 +32,7 @@ function App() {
           path="/listing-form"
           element={
             <RouteGuard>
-              <ProductListingForm /> {/* Protected Listing Form */}
-
+              <ProductListingForm />
             </RouteGuard>
           }
         />
@@ -66,6 +65,14 @@ function App() {
           element={
             <RouteGuard>
               <BuyerMyListings />
+            </RouteGuard>
+          }
+        />
+        <Route
+          path="/buyer-listings"
+          element={
+            <RouteGuard>
+              <BuyerListings /> {/* New Buyer Listings page */}
             </RouteGuard>
           }
         />
