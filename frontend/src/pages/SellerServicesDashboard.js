@@ -193,7 +193,7 @@ const handleDelete = async () => {
 
                     </td>
                     
-                    <td className="text-blue-600 hover:underline hover:cursor-pointer" onClick={() => handleEditClick(listing._id)}>Edit Product Details</td>
+                    <td className="text-blue-600 hover:underline hover:cursor-pointer" onClick={() => handleEditClick(listing._id)}>Edit Service Details</td>
                   
                   </tr>
                 ))}

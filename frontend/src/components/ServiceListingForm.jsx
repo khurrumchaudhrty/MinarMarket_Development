@@ -8,7 +8,7 @@ const ServiceListingForm = () => {
   const navigate = useNavigate(); // useNavigate hook for navigation
 
   const serviceId = location.state?.serviceId || null;
-
+  console.log("serviceId: ",serviceId);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -45,8 +45,10 @@ const ServiceListingForm = () => {
             setFormData({
               title: serviceData.service.title,
               description: serviceData.service.description,
-              price: serviceData.service.price,
               category: serviceData.service.category,
+              city: serviceData.service.city,
+              rate: serviceData.service.rate,
+              pricingModel: serviceData.service.pricingModel,
             });
             setUploadedFiles(serviceData.service.images || []);
             console.log("After updating from the backend, formData: ", formData);
@@ -156,7 +158,7 @@ const ServiceListingForm = () => {
             ? "Service has been successfully updated."
             : "Service has been successfully sent to the admin for approval."
         );
-        navigate('/seller-dashboard');
+        navigate('/seller-dashboard/services');
       } else {
         const errorData = await response
           .json()
