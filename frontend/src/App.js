@@ -10,7 +10,7 @@ import BuyerMyListings from "./pages/BuyerMyListings.js";
 import ProductListingForm from "./pages/ProductListingForm.js";
 import ServiceListing from "./pages/ServiceListing.js";
 import BuyerListings from "./pages/BuyerListings"; // Import BuyerListings page
-
+import SellerServicesDashboard from "./pages/SellerServicesDashboard.js";
 function App() {
   return (
     <Router>
@@ -25,6 +25,14 @@ function App() {
           element={
             <RouteGuard>
               <SellerDashboard />
+            </RouteGuard>
+          }
+        />
+        <Route
+          path="/seller-dashboard/services"
+          element={
+            <RouteGuard>
+              <SellerServicesDashboard />
             </RouteGuard>
           }
         />

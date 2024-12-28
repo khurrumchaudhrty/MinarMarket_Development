@@ -2,19 +2,30 @@ const ServiceListing = require("../models/ServiceListing");
 
 exports.addServiceListing = async(req,res) => {
     try {
-        const {title, description, hourlyRate, userId } = req.body;
+        const {title, description, rate, userId, images, pricingModel, city, category } = req.body;
 
-        if(!title || !description || !hourlyRate || !userId){
+        if(!title || !description || !rate || !userId ||!pricingModel ||!city ||!category){
             return res.status(400).json({
                 success:false,
                 message:"All fields are required"
             });
         }
 
+        // Check that no more than 6 images are being uploaded
+        if (images.length > 6) {
+            return res.status(400).json({
+                success: false,
+                message: 'You can upload a maximum of 6 images.',
+            });
+        }
         const newService = new ServiceListing({
             title,
             description,
-            hourlyRate,
+            rate,
+            pricingModel,
+            city,
+            category,
+            images,
             listerId:userId
         });
 

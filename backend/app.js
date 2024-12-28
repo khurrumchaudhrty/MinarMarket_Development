@@ -13,6 +13,7 @@ const UpdateProductsListing = require('./routes/AdminListingRoutes');
 // const ProductListingRoutes = require('./routes/ProductListingRoutes');
 // const SellerListing = require('./routes/SellerListingRoutes')
 const AddServiceListing = require('./routes/ServiceListingRoutes');
+const GetSellerServicesListing = require('./routes/SellerListingRoutes');
 const Bids = require('./routes/Bid');//for Buyer Bids
 const ProductListingRoutes = require('./routes/ProductListingRoutes');
 // const { verifyAPIRequest } = require('./middleware/authAPIRequest');
