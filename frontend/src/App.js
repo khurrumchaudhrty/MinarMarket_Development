@@ -1,6 +1,5 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import LandingPage from "./pages/LandingPage"; // Import Landing Page
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import SellerDashboard from "./pages/SellerDashboard.js";
@@ -10,14 +9,19 @@ import RouteGuard from "./components/RouteGuard.js";
 import BuyerMyListings from "./pages/BuyerMyListings.js";
 import ProductListingForm from "./pages/ProductListingForm.js";
 import ServiceListing from "./pages/ServiceListing.js";
-import BuyerListings from "./pages/BuyerListings"; // Import BuyerListings page
+import BuyerListings from "./pages/BuyerListings";
+import LandingPage from "./pages/LandingPage";
+import AboutUs from "./pages/AboutUs";
+import ContactUs from "./pages/ContactUs";
 
 function App() {
   return (
     <Router>
       <Routes>
         {/* Public routes */}
-        <Route path="/" element={<LandingPage />} /> {/* Landing Page */}
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/about" element={<AboutUs />} />
+        <Route path="/contact" element={<ContactUs />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
 
