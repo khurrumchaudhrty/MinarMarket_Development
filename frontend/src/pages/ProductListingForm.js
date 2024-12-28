@@ -1,10 +1,161 @@
+// import React, { useState, useEffect } from "react";
+// import { Upload, X } from "lucide-react";
+// import { getUserDetails } from "../components/SessionManager";
+// import { useNavigate } from 'react-router-dom';
+
+
+// const ProductListingForm = () => {
+//   const [formData, setFormData] = useState({
+//     title: "",
+//     description: "",
+//     price: "",
+//     category: "Electronics",
+//   });
+
+//   const [uploadedFiles, setUploadedFiles] = useState([]);
+//   const [uploading, setUploading] = useState(false);
+//   const [message, setMessage] = useState("");
+//   const [userDetails, setUserDetails] = useState(null);
+
+//   useEffect(() => {
+//     // Call getUserDetails to log and store user details
+//     const tempuserDetails = getUserDetails();
+//     if (tempuserDetails) {
+//       console.log(tempuserDetails);
+//       setUserDetails(tempuserDetails);
+//     }
+//   }, []);
+
+//   const handleInputChange = (e) => {
+//     const { name, value } = e.target;
+//     setFormData((prev) => ({
+//       ...prev,
+//       [name]: value,
+//     }));
+//   };
+
+//   const handleFileUpload = (e) => {
+//     const files = Array.from(e.target.files);
+//     if (uploadedFiles.length + files.length > 6) {
+//       alert("You can only upload a maximum of 6 photos.");
+//       return;
+//     }
+
+//     setUploading(true);
+//     const newFiles = files.map((file) => ({
+//       file,
+//       name: file.name,
+//       status: "pending",
+//     }));
+//     setUploadedFiles((prev) => [...prev, ...newFiles]);
+//     setUploading(false);
+//   };
+
+//   const removeFile = (fileName) => {
+//     setUploadedFiles((prev) => prev.filter((file) => file.name !== fileName));
+//   };
+
+//   const uploadToCloudinary = async (file) => {
+//     const formData = new FormData();
+//     formData.append("file", file);
+//     formData.append("upload_preset", "xxy7dsyf");
+
+//     const response = await fetch(
+//       `https://api.cloudinary.com/v1_1/dm56xy1oj/image/upload`,
+//       {
+//         method: "POST",
+//         body: formData,
+//       }
+//     );
+
+//     const data = await response.json();
+//     return data.secure_url;
+//   };
+
+
+//   const navigate = useNavigate(); // useNavigate hook for navigation
+
+//   const handleLogout = () => {
+//     // Remove token from localStorage
+//     localStorage.removeItem('token');
+    
+//     // Redirect to login page
+//     navigate('/'); // Use navigate instead of history.push
+//   };
+
+
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+//     setUploading(true);
+//     setMessage("");
+
+//     try {
+//       const uploadedUrls = await Promise.all(
+//         uploadedFiles.map((fileObj) =>
+//           uploadToCloudinary(fileObj.file).then((url) => ({
+//             name: fileObj.name,
+//             url,
+//           }))
+//         )
+//       );
+
+//       setUploading(false);
+
+//       const finalFormData = {
+//         ...formData,
+//         images: uploadedUrls,
+//         userId: userDetails.userId
+//       };
+
+//       console.log("Form Data to send to backend:", finalFormData);
+
+//       const response = await fetch(process.env.REACT_APP_API_URL+"/addProductListing", {
+//         method: "POST",
+//         headers: {
+//           "Content-Type": "application/json",
+//         },
+//         body: JSON.stringify(finalFormData),
+//       });
+
+//       if (response.ok) {
+//         setMessage(
+//           "Product has been successfully sent to the admin for approval."
+//         );
+        
+//         navigate('/');
+//       } else {
+//         const errorData = await response
+//           .json()
+//           .catch(() => ({ message: "Server Error" }));
+//         setMessage(
+//           `Error adding product listing: ${
+//             errorData.message || "Unknown error"
+//           }`
+//         );
+//       }
+//     } catch (error) {
+//       console.error(
+//         "Error uploading images to Cloudinary or adding product:",
+//         error
+//       );
+//       setMessage("An error occurred. Please try again.");
+//       setUploading(false);
+//     }
+//   };
+
+
 import React, { useState, useEffect } from "react";
 import { Upload, X } from "lucide-react";
 import { getUserDetails } from "../components/SessionManager";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom'; // Import useLocation
 
+const ProductListingForm = () => {
+  const location = useLocation(); // Access the state passed via navigation
+  const navigate = useNavigate(); // useNavigate hook for navigation
 
-const ListingForm = () => {
+  // Extract product ID from state (if exists)
+  const productId = location.state?.productId || null;
+  
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -25,6 +176,37 @@ const ListingForm = () => {
       setUserDetails(tempuserDetails);
     }
   }, []);
+
+  // Fetch product details if productId exists
+  useEffect(() => {
+    const fetchProductDetails = async () => {
+      if (productId) {
+        try {
+          const response = await fetch(`${process.env.REACT_APP_API_URL}/product-listings/fetch-product-details/${productId}`);
+          if (response.ok) {
+            const productData = await response.json();
+            console.log("productData from the backend: ",productData)
+            setFormData({
+              title: productData.product.title,
+              description: productData.product.description,
+              price: productData.product.price,
+              category: productData.product.category,
+            });
+            setUploadedFiles(productData.product.images || []);
+            console.log("After updating from the backend, formData: ", formData);
+            console.log("After updating from the backend, uploadedFiles: ", uploadedFiles);
+            
+          } else {
+            console.error("Failed to fetch product details.");
+          }
+        } catch (error) {
+          console.error("Error fetching product details:", error);
+        }
+      }
+    };
+
+    fetchProductDetails();
+  }, [productId]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -72,17 +254,12 @@ const ListingForm = () => {
     return data.secure_url;
   };
 
-
-  const navigate = useNavigate(); // useNavigate hook for navigation
-
   const handleLogout = () => {
     // Remove token from localStorage
     localStorage.removeItem('token');
-    
     // Redirect to login page
-    navigate('/'); // Use navigate instead of history.push
+    navigate('/');
   };
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -104,13 +281,19 @@ const ListingForm = () => {
       const finalFormData = {
         ...formData,
         images: uploadedUrls,
-        userId: userDetails.userId
+        userId: userDetails.userId,
       };
 
       console.log("Form Data to send to backend:", finalFormData);
 
-      const response = await fetch(process.env.REACT_APP_API_URL+"/addProductListing", {
-        method: "POST",
+      const endpoint = productId
+        ? `${process.env.REACT_APP_API_URL}/product-listings/updateProduct/${productId}`
+        : `${process.env.REACT_APP_API_URL}/addProductListing`;
+
+      const method = productId ? "PUT" : "POST";
+
+      const response = await fetch(endpoint, {
+        method,
         headers: {
           "Content-Type": "application/json",
         },
@@ -119,30 +302,30 @@ const ListingForm = () => {
 
       if (response.ok) {
         setMessage(
-          "Product has been successfully sent to the admin for approval."
+          productId
+            ? "Product has been successfully updated."
+            : "Product has been successfully sent to the admin for approval."
         );
-        
-        navigate('/');
+        navigate('/seller-dashboard');
       } else {
         const errorData = await response
           .json()
           .catch(() => ({ message: "Server Error" }));
         setMessage(
-          `Error adding product listing: ${
+          `Error adding/updating product: ${
             errorData.message || "Unknown error"
           }`
         );
       }
     } catch (error) {
       console.error(
-        "Error uploading images to Cloudinary or adding product:",
+        "Error uploading images to Cloudinary or adding/updating product:",
         error
       );
       setMessage("An error occurred. Please try again.");
       setUploading(false);
     }
   };
-
   return (
     <div className="min-h-screen bg-gray-50">
       <header className="border-b bg-white">
@@ -294,4 +477,4 @@ const ListingForm = () => {
   );
 };
 
-export default ListingForm;
+export default ProductListingForm;
