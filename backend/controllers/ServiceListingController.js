@@ -36,23 +36,24 @@ exports.addServiceListing = async(req,res) => {
 }
 
 
-// exports.showServiceListings = async(req,res) =>{
-//     try{
-//         const serviceListings = await ServiceListing.find({status:"Approved"})
+exports.showServiceListings = async(req,res) =>{
+    try{
+        const serviceListings = await ServiceListing.find({status:"Approved", isActive: true})
+        
+        return res.status(200).json({
+            success:true,
+            message:"Service Listings retreived successfully.",
+            data: serviceListings
+        });
 
-//         return res.status(200).json({
-//             success:true,
-//             message:"Service Listings retreived successfully.",
-//             data: serviceListings
-//         });
+    }
+    catch(error){
+        console.error("Error retreiving service listings: ", error);
+        return res.status(500).json({
+            success:false,
+            message:"An error occurred while retreiving service listings."
+        });
+    }
+}
 
-//     }
-//     catch(error){
-//         console.error("Error retreiving service listings: ", error);
-//         return res.status(500).json({
-//             success:false,
-//             message:"An error occurred while retreiving service listings."
-//         });
-//     }
-// }
 
