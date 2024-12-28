@@ -1,5 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import LandingPage from "./pages/LandingPage"; // Import Landing Page
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import SellerDashboard from "./pages/SellerDashboard.js";
@@ -16,7 +17,8 @@ function App() {
     <Router>
       <Routes>
         {/* Public routes */}
-        <Route path="/" element={<Login />} />
+        <Route path="/" element={<LandingPage />} /> {/* Landing Page */}
+        <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
 
         {/* Protected routes */}
@@ -72,7 +74,7 @@ function App() {
           path="/buyer-listings"
           element={
             <RouteGuard>
-              <BuyerListings /> {/* New Buyer Listings page */}
+              <BuyerListings />
             </RouteGuard>
           }
         />
