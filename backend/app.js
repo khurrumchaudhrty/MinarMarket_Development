@@ -14,6 +14,7 @@ const AllServicesListing = require('./routes/ServiceListingRoutes');
 const AddServiceListing = require('./routes/ServiceListingRoutes');
 const Bids = require('./routes/Bid'); // For Buyer Bids
 const BuyerRequirement = require('./routes/BuyerRequirementRoutes');
+const BuyerProductRequirementController = require('./routes/BuyerProductRequirementRoutes');
 const ServiceListingRoutes = require('./routes/ServiceListingRoutes');
 const ProductListingRoutes = require('./routes/ProductListingRoutes');
 
@@ -47,5 +48,6 @@ app.use('/bids', Bids);
 
 // For Buyer Requirements
 app.use('/buyer-requirement', BuyerRequirement);
+app.use('/buyer-product-requirement', BuyerProductRequirementController);
 
 module.exports = app;
