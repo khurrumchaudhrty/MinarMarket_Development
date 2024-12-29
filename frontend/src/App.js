@@ -14,7 +14,7 @@ import AboutUs from "./pages/AboutUs";
 import ContactUs from "./pages/ContactUs";
 import SellerServicesDashboard from "./pages/SellerServicesDashboard";
 import BuyerRequirementForm from "./pages/BuyerRequirementForm";
-import BuyerProductRequirementsListings from "./pages/BuyerProductRequirementsListings";
+import BuyerProductRequirement from "./pages/BuyerProductRequirement";
 import BuyerServicesRequirementsListings from "./pages/BuyerServicesRequirementsListings";
 
 function App() {
@@ -97,7 +97,7 @@ function App() {
           path="/buyer-products-listings"
           element={
             <RouteGuard>
-              <BuyerProductRequirementsListings />
+              <BuyerProductRequirement />
             </RouteGuard>
           }
         />

@@ -95,7 +95,7 @@ const BuyerProductRequirement = () => {
                 <p className="text-gray-600 mb-4 line-clamp-3">{listing.description}</p>
                 <div className="flex justify-between items-center text-sm text-gray-500 mb-4">
                   <span>Budget: ${listing.price}</span>
-                  <span>Deadline: {new Date(listing.updatedAt).toLocaleDateString()}</span>
+                  <span>Date Modified: {new Date(listing.updatedAt).toLocaleDateString()}</span>
                 </div>
                 <button
                   className="w-full bg-emerald-600 text-white py-2 rounded-lg hover:bg-emerald-700"
