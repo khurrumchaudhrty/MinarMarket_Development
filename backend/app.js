@@ -14,6 +14,8 @@ const UpdateProductsListing = require('./routes/AdminListingRoutes');
 // const SellerListing = require('./routes/SellerListingRoutes')
 const AddServiceListing = require('./routes/ServiceListingRoutes');
 const Bids = require('./routes/Bid');//for Buyer Bids
+const BuyerRequirement = require('./routes/BuyerRequirementRoutes');
+
 const ServiceListingRoutes = require('./routes/ServiceListingRoutes');
 const ProductListingRoutes = require('./routes/ProductListingRoutes');
 // const { verifyAPIRequest } = require('./middleware/authAPIRequest');
@@ -31,7 +33,7 @@ app.use(cookieParser());
 /// PRODUCTION
 // app.use('/api/authentication', verifyAPIRequest, UserAuthRoutes);
 
-
+// console.log(process.env.REACT_APP_API_URL+"/api/buyer-requirement")
 
 
 // LOCAL HOST TESTING
@@ -48,7 +50,9 @@ app.use('/product-listings', ProductListingRoutes);
 app.use('/service-listings', ServiceListingRoutes);
 //for Buyer Bids
 app.use('/bids/', Bids);
+app.use('/buyer-requirement', BuyerRequirement);
 
+// console.log("App.js wala API: ", process.env.REACT_APP_API_URL+"/api/buyer-requirement")
 
 module.exports = app;
 

@@ -71,6 +71,12 @@ const SellerSidebar = () => {
                             </div>
                         )}
                     </div>
+                    
+                    {/* Buyer requirement */}
+                    <div className="flex items-center space-x-2 text-gray-600">
+                        <span className="text-lg">®️</span>
+                        <span><a href='/buyer-requirements'>Buyers Requirement</a></span>
+                    </div>
 
                     {/* Settings Item */}
                     <div className="flex items-center space-x-2 text-gray-600">

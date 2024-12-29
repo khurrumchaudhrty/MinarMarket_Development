@@ -14,11 +14,13 @@ import LandingPage from "./pages/LandingPage";
 import AboutUs from "./pages/AboutUs";
 import ContactUs from "./pages/ContactUs";
 import SellerServicesDashboard from "./pages/SellerServicesDashboard.js";
+import BuyerRequirementForm from "./pages/BuyerRequirementForm.js";
 
 function App() {
   return (
     <Router>
       <Routes>
+
         {/* Public routes */}
         <Route path="/" element={<LandingPage />} />
         <Route path="/about" element={<AboutUs />} />
@@ -91,6 +93,20 @@ function App() {
             </RouteGuard>
           }
         />
+
+        <Route
+          path="/buyer-requirement-form"
+          element={
+            <RouteGuard>
+              <BuyerRequirementForm /> {/* Protected Buyer Dashboard */}
+            </RouteGuard>
+          }
+        />
+
+        
+
+
+        
       </Routes>
     </Router>
   );
