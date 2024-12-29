@@ -49,5 +49,8 @@ app.use('/bids', Bids);
 // For Buyer Requirements
 app.use('/buyer-requirement', BuyerRequirement);
 app.use('/buyer-product-requirement', BuyerProductRequirementController);
+app.use('/buyer-listings', BuyerRequirement);
+app.use('/buyer-listings/delete', BuyerRequirement);
+app.use('/buyer-listings/update', BuyerRequirement);
 
 module.exports = app;
