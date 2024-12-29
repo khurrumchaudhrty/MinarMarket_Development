@@ -1,5 +1,6 @@
 const ProductListing = require('../models/ProductListing'); // Import the ProductListing model
 const mongoose = require('mongoose');
+
 // Controller to handle adding a new product listing
 exports.addProductListing = async (req, res) => {
     try {
@@ -28,7 +29,7 @@ exports.addProductListing = async (req, res) => {
             price,
             category,
             images,
-            listerId: userId
+            listerId: userId,
         });
 
         // Save to the database
@@ -49,10 +50,14 @@ exports.addProductListing = async (req, res) => {
     }
 };
 
+// Controller to show all approved product listings
 exports.showProductListings = async (req, res) => {
     try {
-        //Find all approved product listings with status "Approved"
-        const productListings = await ProductListing.find({ status: "Approved", isActive: true });
+        // Find all approved product listings with status "Approved"
+        const productListings = await ProductListing.find({
+            status: 'Approved',
+            isActive: true,
+        });
 
         return res.status(200).json({
             success: true,
@@ -66,8 +71,9 @@ exports.showProductListings = async (req, res) => {
             message: 'An error occurred while retrieving product listings.',
         });
     }
-}
+};
 
+// Controller to show product listings for a specific lister
 exports.showMyProductListings = async (req, res) => {
     try {
         // Extract the id from the request body
@@ -85,9 +91,9 @@ exports.showMyProductListings = async (req, res) => {
 
         // Query the database for listings with the given listerId
         const productListings = await ProductListing.find({
-            status: "Approved",
+            status: 'Approved',
             isActive: true,
-            listerId: objectId, // Use the converted ObjectId here
+            listerId: objectId,
         });
 
         return res.status(200).json({
@@ -104,7 +110,7 @@ exports.showMyProductListings = async (req, res) => {
     }
 };
 
-
+// Controller to fetch details of a specific product listing
 exports.fetchProductListing = async (req, res) => {
     try {
         // Extract the productId from the request parameters
@@ -114,7 +120,7 @@ exports.fetchProductListing = async (req, res) => {
         if (!mongoose.Types.ObjectId.isValid(productId)) {
             return res.status(400).json({
                 success: false,
-                message: "Invalid product ID format.",
+                message: 'Invalid product ID format.',
             });
         }
 
@@ -125,26 +131,26 @@ exports.fetchProductListing = async (req, res) => {
         if (!product) {
             return res.status(404).json({
                 success: false,
-                message: "Product not found.",
+                message: 'Product not found.',
             });
         }
 
         // Return the product details
         return res.status(200).json({
             success: true,
-            message: "Product details fetched successfully.",
-            product, // Include the selected product details in the response
+            message: 'Product details fetched successfully.',
+            product,
         });
     } catch (error) {
-        console.error("Error fetching the product details: ", error);
+        console.error('Error fetching the product details:', error);
         return res.status(500).json({
             success: false,
-            message: "An error occurred while fetching the product details.",
+            message: 'An error occurred while fetching the product details.',
         });
     }
 };
 
-
+// Controller to update a product listing
 exports.updateProductListing = async (req, res) => {
     try {
         // Extract the product ID from the route parameters
@@ -173,14 +179,14 @@ exports.updateProductListing = async (req, res) => {
 
         // Find the product by ID and update its details
         const updatedProduct = await ProductListing.findByIdAndUpdate(
-            objectId, // Use the converted ObjectId
+            objectId,
             {
                 title,
                 description,
                 price,
                 category,
                 images,
-                status: "Pending",
+                status: 'Pending',
             },
             { new: true } // Return the updated document
         );
@@ -200,7 +206,7 @@ exports.updateProductListing = async (req, res) => {
             data: updatedProduct,
         });
     } catch (error) {
-        console.error("Error updating the product details: ", error);
+        console.error('Error updating the product details:', error);
 
         // Handle invalid ObjectId errors explicitly
         if (error.kind === 'ObjectId') {
@@ -212,7 +218,7 @@ exports.updateProductListing = async (req, res) => {
 
         return res.status(500).json({
             success: false,
-            message: "An error occurred while updating the product details.",
+            message: 'An error occurred while updating the product details.',
         });
     }
 };

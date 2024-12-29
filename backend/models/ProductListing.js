@@ -76,4 +76,5 @@ productListingSchema.pre('save', function(next) {
 });
 
 // Export the model
-module.exports = mongoose.model('ProductListing', productListingSchema);
+module.exports = mongoose.model('ProductListing', productListingSchema, 'productlistings');
+

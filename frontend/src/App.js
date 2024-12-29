@@ -2,34 +2,33 @@ import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
-import SellerDashboard from "./pages/SellerDashboard.js";
-import BuyerDashboard from "./pages/BuyerDashboard.js";
-import AdminDashboard from "./pages/AdminDashboard.js";
-import RouteGuard from "./components/RouteGuard.js";
-import BuyerMyListings from "./pages/BuyerMyListings.js";
-import ProductListingForm from "./pages/ProductListingForm.js";
-import ServiceListing from "./pages/ServiceListing.js";
-import BuyerListings from "./pages/BuyerListings";
+import SellerDashboard from "./pages/SellerDashboard";
+import BuyerDashboard from "./pages/BuyerDashboard";
+import AdminDashboard from "./pages/AdminDashboard";
+import RouteGuard from "./components/RouteGuard";
+import BuyerMyListings from "./pages/BuyerMyListings";
+import ProductListingForm from "./pages/ProductListingForm";
+import ServiceListing from "./pages/ServiceListing";
 import LandingPage from "./pages/LandingPage";
 import AboutUs from "./pages/AboutUs";
 import ContactUs from "./pages/ContactUs";
-import SellerServicesDashboard from "./pages/SellerServicesDashboard.js";
-import BuyerRequirementForm from "./pages/BuyerRequirementForm.js";
-import BuyerProductRequirement from "./pages/BuyerProductRequirement.js";
+import SellerServicesDashboard from "./pages/SellerServicesDashboard";
+import BuyerRequirementForm from "./pages/BuyerRequirementForm";
+import BuyerProductRequirementsListings from "./pages/BuyerProductRequirementsListings";
+import BuyerServicesRequirementsListings from "./pages/BuyerServicesRequirementsListings";
 
 function App() {
   return (
     <Router>
       <Routes>
-
-        {/* Public routes */}
+        {/* Public Routes */}
         <Route path="/" element={<LandingPage />} />
         <Route path="/about" element={<AboutUs />} />
         <Route path="/contact" element={<ContactUs />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
 
-        {/* Protected routes */}
+        {/* Protected Routes */}
         <Route
           path="/seller-dashboard"
           element={
@@ -87,36 +86,29 @@ function App() {
           }
         />
         <Route
-          path="/buyer-listings"
-          element={
-            <RouteGuard>
-              <BuyerListings />
-            </RouteGuard>
-          }
-        />
-
-        <Route
           path="/buyer-requirement-form"
           element={
             <RouteGuard>
-              <BuyerRequirementForm /> {/* Protected Buyer Dashboard */}
+              <BuyerRequirementForm />
             </RouteGuard>
           }
         />
-
         <Route
-          path="/buyer-product-requirement"
+          path="/buyer-products-listings"
           element={
             <RouteGuard>
-              <BuyerProductRequirement /> {/* Protected Buyer Dashboard */}
+              <BuyerProductRequirementsListings />
             </RouteGuard>
           }
         />
-
-        
-
-
-        
+        <Route
+          path="/buyer-services-listings"
+          element={
+            <RouteGuard>
+              <BuyerServicesRequirementsListings />
+            </RouteGuard>
+          }
+        />
       </Routes>
     </Router>
   );
