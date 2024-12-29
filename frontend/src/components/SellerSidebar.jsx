@@ -16,8 +16,8 @@ const SellerSidebar = () => {
   };
 
   return (
-    <div className="w-64 h-screen bg-white border-r border-gray-200 flex flex-col justify-between">
-      <div className="p-4">
+    <div className="w-64 h-screen bg-white border-r border-gray-200 flex flex-col">
+      <div className="p-4 flex-1">
         <div className="space-y-4">
           {/* Sidebar Header */}
           <div className="text-lg font-semibold text-gray-800">Seller</div>
@@ -108,13 +108,13 @@ const SellerSidebar = () => {
             <span>Settings</span>
           </div>
         </div>
+      </div>
 
-        {/* Switch to Buyer Button */}
-        <div className="mt-6">
-          <button className="w-full px-4 py-2 bg-gradient-to-r from-blue-500 to-green-500 text-white font-medium text-sm rounded-lg shadow-md hover:shadow-lg hover:from-blue-600 hover:to-green-600 transition-all">
-            <Link to="/buyer-dashboard">Switch to Buyer</Link>
-          </button>
-        </div>
+      {/* Switch to Buyer Button */}
+      <div className="p-4">
+        <button className="w-full px-4 py-2 bg-gradient-to-r from-blue-500 to-green-500 text-white font-medium text-sm rounded-lg shadow-md hover:shadow-lg hover:from-blue-600 hover:to-green-600 transition-all">
+          <Link to="/buyer-dashboard">Switch to Buyer</Link>
+        </button>
       </div>
     </div>
   );
