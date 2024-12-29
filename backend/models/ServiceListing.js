@@ -85,4 +85,4 @@ serviceListingSchema.pre('save', function(next) {
 });
 
 
-module.exports = mongoose.model('ServiceListing', serviceListingSchema);
+module.exports = mongoose.model('ServiceListing', serviceListingSchema, 'servicelistings');
