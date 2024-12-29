@@ -76,7 +76,7 @@ const BuyerSidebar = () => {
 
                         
           <Link
-              to="/proposals"
+              to="/buyer-proposal"
               className="flex items-center space-x-2 text-gray-600 hover:text-blue-500"
             >
               <span className="text-lg">📝</span>

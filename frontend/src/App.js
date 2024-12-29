@@ -16,7 +16,8 @@ import SellerServicesDashboard from "./pages/SellerServicesDashboard";
 import BuyerRequirementForm from "./pages/BuyerRequirementForm";
 import BuyerProductRequirement from "./pages/BuyerProductRequirement";
 import BuyerServicesRequirementsListings from "./pages/BuyerServicesRequirementsListings";
-import Proposal from './pages/Proposal';
+import BuyerProposal from './pages/BuyerProposal';
+import SellerProposal from './pages/SellerProposal';
 
 function App() {
   return (
@@ -95,6 +96,14 @@ function App() {
           }
         />
         <Route
+          path="/buyer-requirement-form"
+          element={
+            <RouteGuard>
+              <BuyerRequirementForm />
+            </RouteGuard>
+          }
+        />
+        <Route
           path="/buyer-services-listings"
           element={
             <RouteGuard>
@@ -103,14 +112,24 @@ function App() {
           }
         />
         <Route
-          path="/proposal"
+          path="/buyer-proposal"
           element={
             <RouteGuard>
-              <Proposal />
+              <BuyerProposal />
+            </RouteGuard>
+          }
+          />
+        <Route
+          path="/seller-proposal"
+          element={
+            <RouteGuard>
+              <SellerProposal />
             </RouteGuard>
           }
           />
       </Routes>
+
+        
     </Router>
   );
 }

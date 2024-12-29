@@ -1,4 +1,5 @@
 const Proposal = require('../models/Proposal');
+const User = require('../models/User');
 
 exports.createProposal = async (req, res) => {
   try {
@@ -49,10 +50,18 @@ exports.getProposalsByUser = async (req, res) => {
       });
     }
 
+    const userExists = await User.findById(userId);
+    if (!userExists) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found'
+      });
+    }
+
     const query = role === 'seller' ? { sellerId: userId } : { buyerId: userId };
 
     const proposals = await Proposal.find(query)
-      .populate('buyerId', 'name email')
+      .populate('buyerId', 'name email')  
       .populate('sellerId', 'name email')
       .populate('requirementId', 'title description')
       .sort({ createdAt: -1 });

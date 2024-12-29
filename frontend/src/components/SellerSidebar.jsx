@@ -103,12 +103,13 @@ const SellerSidebar = () => {
           </div>
             
             <Link
-              to="/proposal"
+              to="/seller-proposal"
               className="flex items-center space-x-2 text-gray-600 hover:text-blue-500"
             >
               <span className="text-lg">📝</span>
               <span>Proposals</span>
             </Link>
+            
           {/* Settings Section */}
           <div className="flex items-center space-x-2 text-gray-600">
             <span className="text-lg">⚙</span>

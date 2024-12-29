@@ -3,12 +3,12 @@ const mongoose = require('mongoose');
 const proposalSchema = new mongoose.Schema({
     buyerId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'users',
+        ref: 'user',
         required: true
     },
     sellerId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'users', 
+        ref: 'user', 
         required: true
     },
     requirementId: {
