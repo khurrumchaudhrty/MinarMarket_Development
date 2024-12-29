@@ -103,3 +103,116 @@ exports.showMyProductListings = async (req, res) => {
         });
     }
 };
+
+
+exports.fetchProductListing = async (req, res) => {
+    try {
+        // Extract the productId from the request parameters
+        const { productId } = req.params;
+
+        // Validate the productId
+        if (!mongoose.Types.ObjectId.isValid(productId)) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid product ID format.",
+            });
+        }
+
+        // Fetch the product details with only the required fields
+        const product = await ProductListing.findById(productId, '_id title description price category images');
+
+        // Check if the product exists
+        if (!product) {
+            return res.status(404).json({
+                success: false,
+                message: "Product not found.",
+            });
+        }
+
+        // Return the product details
+        return res.status(200).json({
+            success: true,
+            message: "Product details fetched successfully.",
+            product, // Include the selected product details in the response
+        });
+    } catch (error) {
+        console.error("Error fetching the product details: ", error);
+        return res.status(500).json({
+            success: false,
+            message: "An error occurred while fetching the product details.",
+        });
+    }
+};
+
+
+exports.updateProductListing = async (req, res) => {
+    try {
+        // Extract the product ID from the route parameters
+        const { productId } = req.params;
+
+        // Convert productId to ObjectId
+        const objectId = new mongoose.Types.ObjectId(productId);
+
+        const { title, description, price, category, images } = req.body; // Extract fields from the request body
+
+        // Validate required fields
+        if (!title || !description || !price || !category || !images || images.length === 0) {
+            return res.status(400).json({
+                success: false,
+                message: 'All fields are required, and at least one image must be provided.',
+            });
+        }
+
+        // Check that no more than 6 images are being uploaded
+        if (images.length > 6) {
+            return res.status(400).json({
+                success: false,
+                message: 'You can upload a maximum of 6 images.',
+            });
+        }
+
+        // Find the product by ID and update its details
+        const updatedProduct = await ProductListing.findByIdAndUpdate(
+            objectId, // Use the converted ObjectId
+            {
+                title,
+                description,
+                price,
+                category,
+                images,
+                status: "Pending",
+            },
+            { new: true } // Return the updated document
+        );
+
+        // If no product is found, return an error
+        if (!updatedProduct) {
+            return res.status(404).json({
+                success: false,
+                message: 'Product not found.',
+            });
+        }
+
+        // Send a success response
+        return res.status(200).json({
+            success: true,
+            message: 'Product details updated successfully.',
+            data: updatedProduct,
+        });
+    } catch (error) {
+        console.error("Error updating the product details: ", error);
+
+        // Handle invalid ObjectId errors explicitly
+        if (error.kind === 'ObjectId') {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid product ID format.',
+            });
+        }
+
+        return res.status(500).json({
+            success: false,
+            message: "An error occurred while updating the product details.",
+        });
+    }
+};

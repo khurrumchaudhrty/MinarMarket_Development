@@ -16,6 +16,8 @@ const AddServiceListing = require('./routes/ServiceListingRoutes');
 const Bids = require('./routes/Bid');//for Buyer Bids
 const BuyerRequirement = require('./routes/BuyerRequirementRoutes');
 
+const ServiceListingRoutes = require('./routes/ServiceListingRoutes');
+const ProductListingRoutes = require('./routes/ProductListingRoutes');
 // const { verifyAPIRequest } = require('./middleware/authAPIRequest');
 
 
@@ -43,7 +45,9 @@ app.use('/deactivate-listings', DeleteSellerListing);
 app.use('/admin-product-listings', AllProductsListing);
 app.use('/update-listings-status', UpdateProductsListing);
 // app.use('/deactivate-listings', DeleteSellerListingRoutes)
-app.use('/product-listings', require('./routes/ProductListingRoutes'));
+// app.use('/product-listings', require('./routes/ProductListingRoutes'));
+app.use('/product-listings', ProductListingRoutes);
+app.use('/service-listings', ServiceListingRoutes);
 //for Buyer Bids
 app.use('/bids/', Bids);
 app.use('/buyer-requirement', BuyerRequirement);
