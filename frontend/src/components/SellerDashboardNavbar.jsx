@@ -1,12 +1,12 @@
-import React from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import React from "react";
+import { useNavigate, Link } from "react-router-dom";
 
 const SellerDashboardNavbar = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    navigate('/');
+    localStorage.removeItem("token");
+    navigate("/");
   };
 
   return (
@@ -29,23 +29,23 @@ const SellerDashboardNavbar = () => {
           </ul>
         </div>
 
-        {/* Right side - with increased spacing */}
+        {/* Right side - Actions */}
         <div className="flex space-x-4 mr-4">
-          <Link 
-            to="/listing-form" 
-            className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+          <Link
+            to="/listing-form"
+            className="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors"
           >
             List Product
           </Link>
-          <Link 
-            to="/service-listing" 
-            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          <Link
+            to="/service-listing"
+            className="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors"
           >
             List Service
           </Link>
           <button
-            className="px-4 py-2 border border-gray-300 text-gray-700 rounded hover:bg-gray-50"
             onClick={handleLogout}
+            className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
           >
             Log out
           </button>

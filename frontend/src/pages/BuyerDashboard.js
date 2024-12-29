@@ -39,9 +39,8 @@ const BuyerDashboard = () => {
   }, []);
 
   const handleFilterChange = (event) => {
-    
-    handleSearchClick();
     setSelectedFilter(event.target.value);
+    handleSearchClick();
   };
 
   const handleSortChange = (event) => {
@@ -71,25 +70,14 @@ const BuyerDashboard = () => {
       (item.description && item.description.toLowerCase().includes(query.toLowerCase()))
     );
 
-    if(selectedFilter === "Products"){
-      setFilteredProducts(filteredSuggestions)
-    
-      renderContent();
-    }
-    if(selectedFilter === "Services"){
-      setFilteredServices(filteredSuggestions)
-
-      renderContent();
-    }
-
     setSuggestions(filteredSuggestions.slice(0, 4));
   };
 
   const sortItems = (items, option) => {
     if (option === "Price") {
       return items.sort((a, b) => {
-        const aPrice = a.hasOwnProperty('price') ? a.price : a.rate;
-        const bPrice = b.hasOwnProperty('price') ? b.price : b.rate;
+        const aPrice = a.hasOwnProperty("price") ? a.price : a.rate;
+        const bPrice = b.hasOwnProperty("price") ? b.price : b.rate;
         return aPrice - bPrice;
       });
     }
@@ -105,27 +93,21 @@ const BuyerDashboard = () => {
     setSuggestions([]);
     let allItems = [];
     if (selectedFilter === "Products" || selectedFilter === "All") {
-      
       allItems = allItems.concat(featuredProducts);
     }
     if (selectedFilter === "Services" || selectedFilter === "All") {
-      
       allItems = allItems.concat(featuredServices);
     }
-    
+
     const filteredItems = allItems.filter((item) =>
       item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       (item.description && item.description.toLowerCase().includes(searchQuery.toLowerCase()))
     );
 
-    if(filteredItems.length === 0){
+    if (filteredItems.length === 0) {
       setFilteredServices([]);
       setFilteredProducts([]);
-     
-    }
-    
-
-    else if (selectedFilter === "Products") {
+    } else if (selectedFilter === "Products") {
       setFilteredProducts(sortItems(filteredItems, sortOption));
       setFilteredServices([]);
     } else if (selectedFilter === "Services") {
@@ -133,16 +115,14 @@ const BuyerDashboard = () => {
       setFilteredProducts([]);
     } else {
       const sortedItems = sortItems(filteredItems, sortOption);
-      setFilteredProducts(sortedItems.filter((item) => item.hasOwnProperty('price')));
-      setFilteredServices(sortedItems.filter((item) => item.hasOwnProperty('rate')));
+      setFilteredProducts(sortedItems.filter((item) => item.hasOwnProperty("price")));
+      setFilteredServices(sortedItems.filter((item) => item.hasOwnProperty("rate")));
     }
   };
 
-
-
   const handleSuggestionClick = (item) => {
     setSearchQuery(item.title);
-    if (item.hasOwnProperty('price')) {
+    if (item.hasOwnProperty("price")) {
       setSelectedFilter("Products");
       setFilteredProducts([item]);
       setFilteredServices([]);
@@ -156,26 +136,25 @@ const BuyerDashboard = () => {
 
   const renderContent = () => {
     let itemsToRender = [];
-    
-    if(!searchQuery){
+
+    if (!searchQuery) {
       if (selectedFilter === "Products") {
-        itemsToRender =  featuredProducts 
+        itemsToRender = featuredProducts;
       } else if (selectedFilter === "Services") {
-        itemsToRender =  featuredServices
+        itemsToRender = featuredServices;
       } else {
         itemsToRender = [...featuredProducts, ...featuredServices];
       }
-    }
-    else{
+    } else {
       if (selectedFilter === "Products") {
-        itemsToRender =  filteredProducts 
+        itemsToRender = filteredProducts;
       } else if (selectedFilter === "Services") {
-        itemsToRender =  filteredServices
+        itemsToRender = filteredServices;
       } else {
-        itemsToRender = [...featuredProducts, ...featuredServices];
+        itemsToRender = [...filteredProducts, ...filteredServices];
       }
     }
-    
+
     itemsToRender = sortItems(itemsToRender, sortOption);
 
     if (itemsToRender.length === 0) {
@@ -183,7 +162,7 @@ const BuyerDashboard = () => {
     }
 
     return itemsToRender.map((item, index) => {
-      if (item.hasOwnProperty('price')) {
+      if (item.hasOwnProperty("price")) {
         return (
           <div key={index} className="bg-gray-100 p-6 rounded-lg shadow">
             <h2 className="text-lg font-semibold mb-4">{item.title}</h2>
@@ -192,7 +171,7 @@ const BuyerDashboard = () => {
                 src={`${item.images?.[0]?.url || ""}`}
                 alt={item.title}
                 className="object-cover h-full w-full"
-                style={{ aspectRatio: '16/9' }}
+                style={{ aspectRatio: "16/9" }}
               />
             </div>
             <p className="text-lg font-semibold mb-4">${item.price}</p>
@@ -223,37 +202,23 @@ const BuyerDashboard = () => {
     });
   };
 
-
   return (
     <div className="flex flex-col min-h-screen">
       <nav className="flex justify-between items-center p-4 bg-white shadow w-full">
         <div className="text-xl font-bold">Minar Market</div>
         <div className="flex items-center space-x-4">
           <a href="#" className="hover:text-blue-500">About</a>
-          <span className="text-gray-700 font-semibold">  View </span>
-          <div>
-            <select
-              value={selectedFilter}
-              onChange={handleFilterChange}
-              className="border border-gray-300 p-2 rounded"
-            >
-        
-              <option>Products</option>
-              <option>Services</option>
-            </select>
-          </div>
-          <div>
-            <span className="text-gray-700 font-semibold"> Filters </span>
-            <select
-              value={sortOption}
-              onChange={handleSortChange}
-              className="border border-gray-300 p-2 rounded"
-            >
-              <option>None</option>
-              <option>Price</option>
-              <option>Date</option>
-            </select>
-          </div>
+          <span className="text-gray-700 font-semibold">View</span>
+          <select value={selectedFilter} onChange={handleFilterChange} className="border border-gray-300 p-2 rounded">
+            <option>Products</option>
+            <option>Services</option>
+          </select>
+          <span className="text-gray-700 font-semibold">Filters</span>
+          <select value={sortOption} onChange={handleSortChange} className="border border-gray-300 p-2 rounded">
+            <option>None</option>
+            <option>Price</option>
+            <option>Date</option>
+          </select>
           <input
             type="text"
             placeholder="Search"
@@ -274,14 +239,9 @@ const BuyerDashboard = () => {
               ))}
             </div>
           )}
-          <button
-            onClick={handleSearchClick}
-            className="bg-blue-500 text-white px-4 py-2 rounded"
-          >
-            Search
-          </button>
+          <button onClick={handleSearchClick} className="bg-blue-500 text-white px-4 py-2 rounded">Search</button>
           <button className="bg-green-500 text-white px-4 py-2 rounded">
-            List Requirement
+            <a href="/buyer-requirement-form">List Requirement</a>
           </button>
           <button className="bg-gray-300 px-4 py-2 rounded">Log out</button>
         </div>
@@ -300,11 +260,3 @@ const BuyerDashboard = () => {
 };
 
 export default BuyerDashboard;
-
-
-
-
-
-
-
-
