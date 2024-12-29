@@ -15,6 +15,7 @@ import AboutUs from "./pages/AboutUs";
 import ContactUs from "./pages/ContactUs";
 import SellerServicesDashboard from "./pages/SellerServicesDashboard.js";
 import BuyerRequirementForm from "./pages/BuyerRequirementForm.js";
+import BuyerProductRequirement from "./pages/BuyerProductRequirement.js";
 
 function App() {
   return (
@@ -99,6 +100,15 @@ function App() {
           element={
             <RouteGuard>
               <BuyerRequirementForm /> {/* Protected Buyer Dashboard */}
+            </RouteGuard>
+          }
+        />
+
+        <Route
+          path="/buyer-product-requirement"
+          element={
+            <RouteGuard>
+              <BuyerProductRequirement /> {/* Protected Buyer Dashboard */}
             </RouteGuard>
           }
         />

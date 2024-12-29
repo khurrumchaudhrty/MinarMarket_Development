@@ -15,6 +15,7 @@ const UpdateProductsListing = require('./routes/AdminListingRoutes');
 const AddServiceListing = require('./routes/ServiceListingRoutes');
 const Bids = require('./routes/Bid');//for Buyer Bids
 const BuyerRequirement = require('./routes/BuyerRequirementRoutes');
+const BuyerProductRequirementController = require('./routes/BuyerProductRequirementRoutes');
 
 const ServiceListingRoutes = require('./routes/ServiceListingRoutes');
 const ProductListingRoutes = require('./routes/ProductListingRoutes');
@@ -51,6 +52,9 @@ app.use('/service-listings', ServiceListingRoutes);
 //for Buyer Bids
 app.use('/bids/', Bids);
 app.use('/buyer-requirement', BuyerRequirement);
+// app.use('/buyer-product-requirement', BuyerProductRequrementController);
+app.use('/buyer-product-requirement', BuyerProductRequirementController); // Fix this usage
+
 
 // console.log("App.js wala API: ", process.env.REACT_APP_API_URL+"/api/buyer-requirement")
 
