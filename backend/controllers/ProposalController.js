@@ -52,8 +52,8 @@ exports.getProposalsByUser = async (req, res) => {
     const query = role === 'seller' ? { sellerId: userId } : { buyerId: userId };
 
     const proposals = await Proposal.find(query)
-      .populate('buyerId', 'name')
-      .populate('sellerId', 'name')
+      .populate('buyerId', 'name email')
+      .populate('sellerId', 'name email')
       .populate('requirementId', 'title description')
       .sort({ createdAt: -1 });
 
@@ -63,7 +63,7 @@ exports.getProposalsByUser = async (req, res) => {
     });
 
   } catch (error) {
-    console.error('Error fetching proposals:', error);
+    console.error('Error:', error);
     res.status(500).json({
       success: false,
       message: 'Error fetching proposals',

@@ -16,6 +16,7 @@ import SellerServicesDashboard from "./pages/SellerServicesDashboard";
 import BuyerRequirementForm from "./pages/BuyerRequirementForm";
 import BuyerProductRequirement from "./pages/BuyerProductRequirement";
 import BuyerServicesRequirementsListings from "./pages/BuyerServicesRequirementsListings";
+import Proposal from './pages/Proposal';
 
 function App() {
   return (
@@ -101,6 +102,14 @@ function App() {
             </RouteGuard>
           }
         />
+        <Route
+          path="/proposal"
+          element={
+            <RouteGuard>
+              <Proposal />
+            </RouteGuard>
+          }
+          />
       </Routes>
     </Router>
   );
