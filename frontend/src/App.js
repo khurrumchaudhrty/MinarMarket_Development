@@ -9,14 +9,21 @@ import RouteGuard from "./components/RouteGuard.js";
 import BuyerMyListings from "./pages/BuyerMyListings.js";
 import ProductListingForm from "./pages/ProductListingForm.js";
 import ServiceListing from "./pages/ServiceListing.js";
-import BuyerListings from "./pages/BuyerListings"; // Import BuyerListings page
+import BuyerListings from "./pages/BuyerListings";
+import LandingPage from "./pages/LandingPage";
+import AboutUs from "./pages/AboutUs";
+import ContactUs from "./pages/ContactUs";
 import SellerServicesDashboard from "./pages/SellerServicesDashboard.js";
+
 function App() {
   return (
     <Router>
       <Routes>
         {/* Public routes */}
-        <Route path="/" element={<Login />} />
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/about" element={<AboutUs />} />
+        <Route path="/contact" element={<ContactUs />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
 
         {/* Protected routes */}
@@ -80,7 +87,7 @@ function App() {
           path="/buyer-listings"
           element={
             <RouteGuard>
-              <BuyerListings /> {/* New Buyer Listings page */}
+              <BuyerListings />
             </RouteGuard>
           }
         />
