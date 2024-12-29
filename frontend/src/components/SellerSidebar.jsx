@@ -47,6 +47,9 @@ const SellerSidebar = () => {
                             </button>
                         </div>
 
+                                                
+                        
+
                         {openSubMenu['My Listings'] && (
                             <div className="ml-6 space-y-2">
                                 {/* <div className="text-blue-600">Products</div> */}
@@ -94,7 +97,7 @@ const SellerSidebar = () => {
                                 {/* <div className="text-blue-600">Products</div> */}
                                 <div>
                                     <Link
-                                        to="/seller-dashboard"
+                                        to="/buyer-listings"
                                         className="flex items-center space-x-2 text-gray-600 hover:text-blue-500"
                                     >
                                         <span className="text-lg"></span>
@@ -113,6 +116,14 @@ const SellerSidebar = () => {
                             </div>
                         )}
                     </div>
+
+                    <Link
+                      to="/proposals"
+                      className="flex items-center space-x-2 text-gray-600 hover:text-blue-500"
+                    >
+                      <span className="text-lg">📝</span>
+                      <span>Proposals</span>
+                    </Link>
                     
                     {/* Buyer requirement
                     <div className="flex items-center space-x-2 text-gray-600">
@@ -125,6 +136,7 @@ const SellerSidebar = () => {
                         <span className="text-lg">⚙</span>
                         <span>Settings</span>
                     </div>
+                                        
 
                     <div className="p-4 flex justify-center">
                         <button className="px-4 py-1.5 bg-green-500 text-white text-sm font-medium rounded hover:bg-green-600">

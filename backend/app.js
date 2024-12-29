@@ -52,6 +52,7 @@ app.use('/service-listings', ServiceListingRoutes);
 app.use('/bids/', Bids);
 app.use('/buyer-requirement', BuyerRequirement);
 
+app.use('/proposals', require('./routes/ProposalRoutes'));
 // console.log("App.js wala API: ", process.env.REACT_APP_API_URL+"/api/buyer-requirement")
 
 module.exports = app;

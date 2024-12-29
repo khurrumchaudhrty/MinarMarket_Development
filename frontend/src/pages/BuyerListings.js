@@ -2,14 +2,18 @@ import React, { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Filter, MessageCircle, Bookmark, BookmarkCheck } from "lucide-react";
 import SellerDashboardNavbar from "../components/SellerDashboardNavbar";
+import ProposalModal from "../components/ProposalModal";
+import { getUserDetails } from "../components/SessionManager";
 
 const BuyerListings = () => {
   const [searchParams] = useSearchParams();
   const [listings, setListings] = useState([]);
   const [savedListings, setSavedListings] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedListing, setSelectedListing] = useState(null);
+  const userDetails = getUserDetails();
 
-  // Mock Listings Data
   const mockListings = [
     {
       id: 1,
@@ -20,6 +24,7 @@ const BuyerListings = () => {
       location: "Remote",
       budget: 5000,
       deadline: new Date(2023, 11, 31).toISOString(),
+      listerId: "buyer123"
     },
     {
       id: 2,
@@ -30,6 +35,7 @@ const BuyerListings = () => {
       location: "Local",
       budget: 3000,
       deadline: new Date(2023, 10, 15).toISOString(),
+      listerId: "buyer456"
     },
     {
       id: 3,
@@ -40,16 +46,15 @@ const BuyerListings = () => {
       location: "Remote",
       budget: 1500,
       deadline: new Date(2023, 9, 30).toISOString(),
-    },
+      listerId: "buyer789"
+    }
   ];
 
-  // Fetch mock listings based on search params
   useEffect(() => {
     const fetchListings = async () => {
       setLoading(true);
       try {
         const searchQuery = searchParams.get("search") || "";
-        // Simulate API filter by search
         const filteredListings = mockListings.filter((listing) =>
           listing.title.toLowerCase().includes(searchQuery.toLowerCase())
         );
@@ -72,9 +77,48 @@ const BuyerListings = () => {
     );
   };
 
-  const handleContact = (listingId) => {
-    console.log("Contacting buyer for listing:", listingId);
+  const handleContact = (listing) => {
+    setSelectedListing(listing);
+    setIsModalOpen(true);
   };
+
+  const submitProposal = async (proposalData) => {
+    try {
+      console.log('Submitting proposal with data:', {
+        buyerId: selectedListing.listerId,
+        sellerId: userDetails.userId,
+        requirementId: selectedListing.id,
+        ...proposalData
+      });
+
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/proposals`, {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          buyerId: "6731364f0703697a514c42b3",
+          sellerId: userDetails.userId,
+          //hard coded requirementId because we don't have the actual requirementId rn
+          requirementId:"6770afe80b843a338ab0336c"          ,
+          price: proposalData.price,
+          description: proposalData.description
+        })
+      });
+
+      const data = await response.json();
+      
+      if (response.ok) {
+        alert('Proposal sent successfully!');
+        setIsModalOpen(false);
+      } else {
+        throw new Error(data.message || 'Failed to send proposal');
+      }
+    } catch (error) {
+      console.error('Error sending proposal:', error);
+      alert(error.message || 'Error sending proposal');
+    }
+};
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -130,16 +174,25 @@ const BuyerListings = () => {
                 </div>
                 <button
                   className="w-full bg-emerald-600 text-white py-2 rounded-lg hover:bg-emerald-700"
-                  onClick={() => handleContact(listing.id)}
+                  onClick={() => handleContact(listing)}
                 >
                   <MessageCircle className="h-4 w-4 mr-2 inline-block" />
-                  Contact Buyer
+                  Send Proposal
                 </button>
               </div>
             ))}
           </div>
         )}
       </main>
+      
+      {isModalOpen && (
+        <ProposalModal 
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onSubmit={submitProposal}
+          listing={selectedListing}
+        />
+      )}
     </div>
   );
 };

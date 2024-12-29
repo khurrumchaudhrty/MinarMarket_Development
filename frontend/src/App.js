@@ -7,14 +7,17 @@ import BuyerDashboard from "./pages/BuyerDashboard.js";
 import AdminDashboard from "./pages/AdminDashboard.js";
 import RouteGuard from "./components/RouteGuard.js";
 import BuyerMyListings from "./pages/BuyerMyListings.js";
-import ProductListingForm from "./pages/ProductListingForm.js";
+import BuyerListings from "./pages/BuyerListings.js";
 import ServiceListing from "./pages/ServiceListing.js";
-import BuyerListings from "./pages/BuyerListings";
-import LandingPage from "./pages/LandingPage";
-import AboutUs from "./pages/AboutUs";
-import ContactUs from "./pages/ContactUs";
+import ProductListingForm from "./pages/ProductListingForm.js";
 import SellerServicesDashboard from "./pages/SellerServicesDashboard.js";
-import BuyerRequirementForm from "./pages/BuyerRequirementForm.js";
+import Proposals from "./pages/Proposal.js";
+import LandingPage from "./pages/LandingPage.js";
+import AboutUs from "./pages/AboutUs.js";
+import ContactUs from "./pages/ContactUs.js";
+
+
+
 
 function App() {
   return (
@@ -85,6 +88,9 @@ function App() {
             </RouteGuard>
           }
         />
+        // Add route
+        <Route path="/proposals" element={
+          <Proposals />} />
         <Route
           path="/buyer-listings"
           element={
@@ -94,19 +100,6 @@ function App() {
           }
         />
 
-        <Route
-          path="/buyer-requirement-form"
-          element={
-            <RouteGuard>
-              <BuyerRequirementForm /> {/* Protected Buyer Dashboard */}
-            </RouteGuard>
-          }
-        />
-
-        
-
-
-        
       </Routes>
     </Router>
   );
