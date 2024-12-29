@@ -56,7 +56,7 @@ const BuyerDashboard = () => {
           <a href="#" className="hover:text-blue-500">❤</a>
           <a href="#" className="hover:text-blue-500">🛒</a>
           <button className="bg-green-500 text-white px-4 py-2 rounded">
-            List Requirement
+            <a href="/buyer-requirement-form">List Requirement</a> 
           </button>
           <button className="bg-gray-300 px-4 py-2 rounded">Log out</button>
         </div>
@@ -90,17 +90,9 @@ const BuyerDashboard = () => {
               </div>
             ))}
 
-            {/* Sale Section */}
-            {/* <div className="bg-gray-100 p-6 rounded-lg shadow">
-              <h2 className="text-lg font-semibold mb-4">SALE</h2>
-              <div className="h-40 bg-gray-300"></div>
-            </div> */}
-
-            {/* My Listings */}
-            {/* <div className="bg-gray-100 p-6 rounded-lg shadow">
-              <h2 className="text-lg font-semibold mb-4">My Listings</h2>
-              <div className="h-40 bg-gray-300"></div>
-            </div> */}
+          
+          
+          
           </div>
         </main>
       </div>

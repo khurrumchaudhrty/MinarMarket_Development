@@ -8,11 +8,13 @@ import BuyerDashboard from "./pages/BuyerDashboard.js"; // Import BuyerDashboard
 import AdminDashboard from "./pages/AdminDashboard.js";
 import RouteGuard from "./components/RouteGuard.js";
 import BuyerMyListings from "./pages/BuyerMyListings.js";
+import BuyerRequirementForm from "./pages/BuyerRequirementForm.js";
 
 function App() {
   return (
     <Router>
       <Routes>
+
         {/* Public routes */}
         <Route path="/" element={<Login />} />
         <Route path="/signup" element={<Signup />} /> {/* Signup route */}
@@ -60,6 +62,19 @@ function App() {
           }
         />
 
+        <Route
+          path="/buyer-requirement-form"
+          element={
+            <RouteGuard>
+              <BuyerRequirementForm /> {/* Protected Buyer Dashboard */}
+            </RouteGuard>
+          }
+        />
+
+        
+
+
+        
       </Routes>
     </Router>
   );
