@@ -51,7 +51,6 @@ const SellerSidebar = () => {
                     to="/seller-dashboard"
                     className="flex items-center space-x-2 text-gray-600 hover:text-blue-500"
                   >
-                    <span className="text-lg"></span>
                     <span>Products</span>
                   </Link>
                 </div>
@@ -60,7 +59,6 @@ const SellerSidebar = () => {
                     to="/seller-dashboard/services"
                     className="flex items-center space-x-2 text-gray-600 hover:text-blue-500"
                   >
-                    <span className="text-lg"></span>
                     <span>Services</span>
                   </Link>
                 </div>
@@ -110,13 +108,13 @@ const SellerSidebar = () => {
             <span>Settings</span>
           </div>
         </div>
-      </div>
 
-      {/* Switch to Buyer Button */}
-      <div className="p-4 flex justify-center">
-        <button className="px-4 py-1.5 bg-green-500 text-white text-sm font-medium rounded hover:bg-green-600">
-          <Link to="/buyer-dashboard">Switch to Buyer</Link>
-        </button>
+        {/* Switch to Buyer Button */}
+        <div className="mt-6">
+          <button className="w-full px-4 py-2 bg-gradient-to-r from-blue-500 to-green-500 text-white font-medium text-sm rounded-lg shadow-md hover:shadow-lg hover:from-blue-600 hover:to-green-600 transition-all">
+            <Link to="/buyer-dashboard">Switch to Buyer</Link>
+          </button>
+        </div>
       </div>
     </div>
   );
