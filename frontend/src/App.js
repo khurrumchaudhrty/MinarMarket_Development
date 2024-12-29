@@ -13,6 +13,7 @@ import BuyerListings from "./pages/BuyerListings";
 import LandingPage from "./pages/LandingPage";
 import AboutUs from "./pages/AboutUs";
 import ContactUs from "./pages/ContactUs";
+import SellerServicesDashboard from "./pages/SellerServicesDashboard.js";
 
 function App() {
   return (
@@ -31,6 +32,14 @@ function App() {
           element={
             <RouteGuard>
               <SellerDashboard />
+            </RouteGuard>
+          }
+        />
+        <Route
+          path="/seller-dashboard/services"
+          element={
+            <RouteGuard>
+              <SellerServicesDashboard />
             </RouteGuard>
           }
         />

@@ -1,5 +1,16 @@
 const mongoose = require('mongoose');
 
+// Image schema for the product
+const imageSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true,
+    },
+    url: {
+        type: String,
+        required: true,
+    }
+});
 
 const serviceListingSchema = new mongoose.Schema({
     title: {
@@ -12,14 +23,28 @@ const serviceListingSchema = new mongoose.Schema({
         required: true,
         maxlength: 200,
     },
-    hourlyRate: {
+    category:{
+        type: String,
+        required: true
+    },
+    rate: {
         type: Number,
         required: true,
         min: 0,
-    }, 
+    },
+    pricingModel:{
+        type: String,
+        default: 'Per Hour',
+        enum:["Per Hour", "Per Day", "Per Job"],
+        required:true
+    },
+    city:{
+        type: String,
+        required: true
+    },
     availability:{
         type:Boolean,
-        default:0
+        default:1
     },
     listerId: {
         type: mongoose.Schema.Types.ObjectId,
@@ -34,6 +59,14 @@ const serviceListingSchema = new mongoose.Schema({
         type: String,
         default: "Pending",
         enum: ["Approved", "Rejected", "Pending"]
+    },
+    images: {
+        type: [imageSchema],
+        validate: {
+            validator: (images) => images.length <= 6,
+            message: 'A maximum of 6 images can be uploaded.',
+        },
+        
     },
     createdAt: {
         type: Date,

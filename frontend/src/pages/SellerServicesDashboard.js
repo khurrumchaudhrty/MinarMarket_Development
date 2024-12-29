@@ -2,21 +2,15 @@ import SellerDashboardNavbar from "../components/SellerDashboardNavbar";
 import SellerSidebar from "../components/SellerSidebar";
 import React, { useState, useEffect } from "react";
 import { getUserDetails } from "../components/SessionManager";
-import { ChevronRight, ChevronDown } from "lucide-react";
 import Footer from "../components/Footer";
 import { useNavigate } from "react-router-dom";
 
-const SellerDashboard = () => {
+const SellerServicesDashboard = () => {
   // State to track selected items
   const [selectedItems, setSelectedItems] = useState([]);
-  // Sample data array
-  const [listings, setListings] = useState([
-    { id: "#A1DA59", date: "23/09/2024", title: "Laptop", status: "Approved" },
-    { id: "#A1DA58", date: "23/09/2024", title: "Camera", status: "Pending" },
-  ]);
-
   const [userDetails, setUserDetails] = useState(null);
-  const [sellerListings, setSellerListings] = useState([]);
+  const [sellerServicesListings, setSellerServicesListings] = useState([]);
+  const [listings, setListings] = useState([]);
   const navigate = useNavigate();
   useEffect(() => {
     // Call getUserDetails to log and store user details
@@ -27,13 +21,13 @@ const SellerDashboard = () => {
     }
   }, []);
 
-  const getSellerListing = async () => {
+  const getSellerServicesListings = async () => {
     if (!userDetails) return;
   
     const userId = userDetails.userId; // Extract userId from userDetails
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_API_URL}/seller-listings?userId=${userId}`,
+        `${process.env.REACT_APP_API_URL}/seller-listings/get-seller-services-listings/${userId}`,
         {
           method: "GET",
           headers: {
@@ -44,14 +38,14 @@ const SellerDashboard = () => {
   
       if (response.ok) {
         const result = await response.json();
-        console.log("Seller Listings:", result);
+        console.log("Seller Services Listings:", result);
         if (result.success && Array.isArray(result.data)) {
-          setSellerListings(result.data); // Correctly setting the seller listings array
+          setSellerServicesListings(result.data); // Correctly setting the seller listings array
         } else {
           console.error("Error: Invalid data structure", result);
         }
       } else {
-        console.error("Failed to fetch seller listings:", response.status);
+        console.error("Failed to fetch seller listings:", response.status, await response.text());
       }
     } catch (error) {
       console.error("Error fetching seller listings:", error);
@@ -59,12 +53,12 @@ const SellerDashboard = () => {
   };
 
   const handleEditClick = (listingId) => {
-    navigate(`/listing-form`, { state: { productId: listingId } }); // Pass the product ID using state
+    navigate(`/service-listing`, { state: { serviceId: listingId } }); // Pass the service ID using state
   };
   
 
   useEffect(() => {
-    getSellerListing(); // Call getSellerListing on component mount
+    getSellerServicesListings(); // Call getSellerServicesListings on component mount
   }, [userDetails]); // Run when userDetails is set
 
   // Handle individual checkbox selection
@@ -107,7 +101,7 @@ const handleDelete = async () => {
           },
           body: JSON.stringify({
               listingIds: selectedItems, // Send the selected user IDs
-              type: "product"
+              type: "service"
             }),
       });
 
@@ -116,7 +110,7 @@ const handleDelete = async () => {
           console.log('Listings deactivated:', data);
 
           // After successful deletion, re-fetch the listings
-          getSellerListing();
+          getSellerServicesListings();
       } else {
           console.error('Failed to deactivate Listings:', response.status);
       }
@@ -134,7 +128,7 @@ const handleDelete = async () => {
         <SellerSidebar />
         <main className="flex-1 p-6">
           <div className="flex justify-between items-center mb-4">
-            <h1 className="text-xl font-semibold">Products</h1>
+            <h1 className="text-xl font-semibold">Services</h1>
             <div className="space-x-2">
               
               <button
@@ -165,13 +159,13 @@ const handleDelete = async () => {
                   </th>
                   <th className="pb-2">Listing ID</th>
                   <th className="pb-2">Date Listed</th>
-                  <th className="pb-2">Product Title</th>
+                  <th className="pb-2">Service Title</th>
                   <th className="pb-2">Status</th>
                   <th className="pb-2"></th>
                 </tr>
               </thead>
               <tbody>
-                {sellerListings.map((listing) => (
+                {sellerServicesListings.map((listing) => (
                   <tr key={listing._id} className="border-b last:border-b-0">
                     <td className="p-4">
                       <input
@@ -199,7 +193,7 @@ const handleDelete = async () => {
 
                     </td>
                     
-                    <td className="text-blue-600 hover:underline hover:cursor-pointer" onClick={() => handleEditClick(listing._id)}>Edit Product Details</td>
+                    <td className="text-blue-600 hover:underline hover:cursor-pointer" onClick={() => handleEditClick(listing._id)}>Edit Service Details</td>
                   
                   </tr>
                 ))}
@@ -213,4 +207,4 @@ const handleDelete = async () => {
   );
 };
 
-export default SellerDashboard;
+export default SellerServicesDashboard;
