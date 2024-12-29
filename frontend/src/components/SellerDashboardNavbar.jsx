@@ -1,21 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { Search } from "lucide-react";
 
 const SellerDashboardNavbar = () => {
   const navigate = useNavigate();
-  const [searchQuery, setSearchQuery] = useState("");
 
   const handleLogout = () => {
     localStorage.removeItem("token");
     navigate("/");
-  };
-
-  const handleSearch = (e) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      navigate(`/buyer-listings?search=${encodeURIComponent(searchQuery)}`);
-    }
   };
 
   return (
@@ -37,20 +28,6 @@ const SellerDashboardNavbar = () => {
             </li>
           </ul>
         </div>
-
-        {/* Center - Search Bar */}
-        <form onSubmit={handleSearch} className="flex-1 max-w-xl mx-4">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 h-4 w-4" />
-            <input
-              type="search"
-              placeholder="Search buyer listings..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
-            />
-          </div>
-        </form>
 
         {/* Right side - Actions */}
         <div className="flex space-x-4 mr-4">
