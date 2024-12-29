@@ -71,12 +71,54 @@ const SellerSidebar = () => {
                             </div>
                         )}
                     </div>
+
+                    {/* My Listings Section */}
+                    <div>
+                        <div className="flex items-center mb-2">
+                            <button
+                                onClick={() => toggleSubMenu('My Listings')}
+                                className="flex items-center space-x-2 text-gray-600"
+                            >
+                                <span className="text-lg">◎</span>
+                                <span>Buyers Requirement</span>
+                                {openSubMenu['My Listings'] ? (
+                                    <ChevronDown className="w-4 h-4 ml-auto" />
+                                ) : (
+                                    <ChevronRight className="w-4 h-4 ml-auto" />
+                                )}
+                            </button>
+                        </div>
+
+                        {openSubMenu['My Listings'] && (
+                            <div className="ml-6 space-y-2">
+                                {/* <div className="text-blue-600">Products</div> */}
+                                <div>
+                                    <Link
+                                        to="/seller-dashboard"
+                                        className="flex items-center space-x-2 text-gray-600 hover:text-blue-500"
+                                    >
+                                        <span className="text-lg"></span>
+                                        <span>Products</span>
+                                    </Link>
+                                </div>
+                                <div>
+                                    <Link
+                                        to="/buyer-listings"
+                                        className="flex items-center space-x-2 text-gray-600 hover:text-blue-500"
+                                    >
+                                        <span className="text-lg"></span>
+                                        <span>Services</span>
+                                    </Link>
+                                </div>
+                            </div>
+                        )}
+                    </div>
                     
-                    {/* Buyer requirement */}
+                    {/* Buyer requirement
                     <div className="flex items-center space-x-2 text-gray-600">
                         <span className="text-lg">®️</span>
                         <span><a href='/buyer-requirements'>Buyers Requirement</a></span>
-                    </div>
+                    </div> */}
 
                     {/* Settings Item */}
                     <div className="flex items-center space-x-2 text-gray-600">

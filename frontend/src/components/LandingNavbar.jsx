@@ -20,7 +20,7 @@ const Navbar = () => {
           </div>
           <div className="flex items-center space-x-4">
             <Link 
-              to="/signin" 
+              to="/login" 
               className="bg-emerald-500 text-white px-4 py-2 rounded-lg hover:bg-emerald-600 transition-colors"
             >
               Sign In
