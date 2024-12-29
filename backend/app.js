@@ -52,11 +52,7 @@ app.use('/service-listings', ServiceListingRoutes);
 //for Buyer Bids
 app.use('/bids/', Bids);
 app.use('/buyer-requirement', BuyerRequirement);
-// app.use('/buyer-product-requirement', BuyerProductRequrementController);
-app.use('/buyer-product-requirement', BuyerProductRequirementController); // Fix this usage
-
-
-// console.log("App.js wala API: ", process.env.REACT_APP_API_URL+"/api/buyer-requirement")
+app.use('/buyer-product-requirement', BuyerProductRequirementController); 
 
 module.exports = app;
 

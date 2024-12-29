@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 
-const { showbuyerProductListings } = require("../controllers/BuyerProductRequrementController");
+const { showbuyerProductListings } = require("../controllers/BuyerProductRequirementController");
 
 // Route for listing a product
 router.get("/", showbuyerProductListings);
