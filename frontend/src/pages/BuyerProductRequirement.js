@@ -3,11 +3,41 @@ import React, { useState, useEffect } from "react";
 import { Filter, MessageCircle, Bookmark, BookmarkCheck } from "lucide-react";
 import SellerDashboardNavbar from "../components/SellerDashboardNavbar";
 
+import ProposalModal from "../components/ProposalModal";
+import { getUserDetails } from "../components/SessionManager";
+
 const BuyerProductRequirement = () => {
   const [listings, setListings] = useState([]);
   const [savedListings, setSavedListings] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedListing, setSelectedListing] = useState(null);
+  const userDetails = getUserDetails();
+  const handleProposalSubmit = async (proposalData) => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/proposals`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          buyerId: selectedListing.listerId,
+          sellerId: userDetails.userId,
+          requirementId: selectedListing._id,
+          price: proposalData.price,
+          description: proposalData.description
+        })
+      });
 
+      if (response.ok) {
+        alert('Proposal sent successfully!');
+        setIsModalOpen(false);
+      } else {
+        throw new Error('Failed to send proposal');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert(error.message);
+    }
+  };
   // Fetch buyer listings from the backend
   useEffect(() => {
     const fetchListings = async () => {
@@ -42,9 +72,13 @@ const BuyerProductRequirement = () => {
     );
   };
 
-  const handleContact = (listingId) => {
-    console.log("Contacting buyer for listing:", listingId);
+  const handleContact = (listing) => {
+    setSelectedListing(listing);
+    console.log("Selected Listing:", listing);
+    setIsModalOpen(true);
   };
+
+  
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -99,7 +133,7 @@ const BuyerProductRequirement = () => {
                 </div>
                 <button
                   className="w-full bg-emerald-600 text-white py-2 rounded-lg hover:bg-emerald-700"
-                  onClick={() => handleContact(listing._id)}
+                  onClick={() => handleContact(listing)}
                 >
                   <MessageCircle className="h-4 w-4 mr-2 inline-block" />
                   Contact Buyer
@@ -109,8 +143,21 @@ const BuyerProductRequirement = () => {
           </div>
         )}
       </main>
+      <ProposalModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSubmit={handleProposalSubmit}
+        listing={selectedListing}
+      />
+    
     </div>
   );
+
+ 
+  
 };
+
+
+
 
 export default BuyerProductRequirement;

@@ -84,7 +84,7 @@ const SellerSidebar = () => {
               <div className="ml-6 space-y-2">
                 <div>
                   <Link
-                    to="/buyer-products-listings"
+                    to="/buyer-listings"
                     className="flex items-center space-x-2 text-gray-600 hover:text-blue-500"
                   >
                     <span>Product Requirements</span>
