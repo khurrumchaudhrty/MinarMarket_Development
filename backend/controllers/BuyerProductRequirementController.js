@@ -3,10 +3,16 @@ const BuyerRequirement = require("../models/BuyerRequirement");
 
 // Controller function to handle product listing    
 exports.showbuyerProductListings = async (req, res) => {
-
     try {
-        //Find all approved product listings with status "Approved"
-        const productListings = await BuyerRequirement.find({ isActive: true });
+        
+        const userId = req.query.userId; // Extract userId from query parameters
+        console.log("User ID from query:", userId);
+        // Find all approved product listings, excluding those created by the current user
+        const productListings = await BuyerRequirement.find({
+            isActive: true,
+            listerId: { $ne: String(userId) }, // Exclude listings by the current user
+            status: 'Approved'  
+        });
 
         return res.status(200).json({
             success: true,
@@ -20,5 +26,4 @@ exports.showbuyerProductListings = async (req, res) => {
             message: 'An error occurred while retrieving product listings.',
         });
     }
-}
-
+};

@@ -7,7 +7,7 @@ exports.listProduct = async (req, res) => {
   
  
   try {
-    console.log("Controller wala API: ", process.env.REACT_APP_API_URL+"/api/buyer-requirement")
+    // console.log("Controller wala API: ", process.env.REACT_APP_API_URL+"/api/buyer-requirement")
 
     const { title, description, price, category, userId } = req.body;
 

@@ -3,8 +3,9 @@ import React, { useState, useEffect } from "react";
 import { Filter, MessageCircle, Bookmark, BookmarkCheck } from "lucide-react";
 import SellerDashboardNavbar from "../components/SellerDashboardNavbar";
 
-import ProposalModal from "../components/ProposalModal";
 import { getUserDetails } from "../components/SessionManager";
+
+import ProposalModal from "../components/ProposalModal";
 
 const BuyerProductRequirement = () => {
   const [listings, setListings] = useState([]);
@@ -13,6 +14,8 @@ const BuyerProductRequirement = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedListing, setSelectedListing] = useState(null);
   const userDetails = getUserDetails();
+  
+  
   const handleProposalSubmit = async (proposalData) => {
     try {
       const response = await fetch(`${process.env.REACT_APP_API_URL}/proposals`, {
@@ -38,12 +41,17 @@ const BuyerProductRequirement = () => {
       alert(error.message);
     }
   };
+
+  
   // Fetch buyer listings from the backend
   useEffect(() => {
     const fetchListings = async () => {
+      
       setLoading(true);
+      const userId = userDetails.userId; // Extract userId from userDetails
+      
       try {
-        const response = await fetch(process.env.REACT_APP_API_URL + "/buyer-product-requirement");
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/buyer-product-requirement?userId=${userId}`);
         console.log("Response status:", response.status);
         if (!response.ok) {
           throw new Error("Failed to fetch listings");
@@ -61,7 +69,8 @@ const BuyerProductRequirement = () => {
     };
   
     fetchListings();
-  }, []);
+}, [userDetails.userId]); // Depend only on userId
+
   
 
   const toggleSaved = (listingId) => {
