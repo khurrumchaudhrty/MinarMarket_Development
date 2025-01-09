@@ -102,7 +102,7 @@ const BuyerRequirementForm = () => {
               <a href="#" className="text-gray-500">Profile</a>
             </nav>
           </div>
-          <button className="px-4 py-2 text-gray-600 border rounded-md hover:bg-gray-50">
+          <button className="px-4 py-2 text-gray-600 border rounded-md hover:bg-gray-50" onClick={handleLogout}>
             Log out
           </button>
         </div>
