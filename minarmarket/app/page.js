@@ -46,8 +46,15 @@ export default function Home() {
       <SiteHeader />
       <main className="flex-1">
         <section className="relative">
-          <div className="container flex flex-col-reverse items-center gap-8 md:flex-row md:gap-12">
-            <div className="flex flex-col items-start gap-4">
+          <div className="container relative min-h-[600px] flex items-center">
+            <Image
+              src=""
+              alt="Hero Image"
+              fill
+              className="object-cover absolute inset-0 -z-10"
+              priority
+            />
+            <div className="flex flex-col items-start gap-4 max-w-2xl relative z-10 bg-white/80 p-8 rounded-lg">
               <h1 className="text-3xl font-bold sm:text-5xl md:text-6xl">
                 FIND CLOTHES THAT MATCHES YOUR STYLE
               </h1>
@@ -58,15 +65,6 @@ export default function Home() {
               <Button size="lg" asChild>
                 <Link href="/products">Shop Now</Link>
               </Button>
-            </div>
-            <div className="relative aspect-square w-full max-w-xl">
-              <Image
-                src=""
-                alt="Hero Image"
-                fill
-                className="object-cover"
-                priority
-              />
             </div>
           </div>
         </section>
