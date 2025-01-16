@@ -7,18 +7,11 @@ import { ProductCard } from "@/components/product-card"
 import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
 
-const productCategories = [
-  { label: "Men's Fashion", href: "/category/mens", icon: "/placeholder.svg" },
-  { label: "Women's Fashion", href: "/category/womens", icon: "/placeholder.svg" },
-  // Add more categories...
-]
-
-const serviceCategories = [
-  { label: "Alterations", href: "/services/alterations", icon: "/placeholder.svg" },
-  { label: "Cleaning", href: "/services/cleaning", icon: "/placeholder.svg" },
-  // Add more services...
-]
-
+const categories = Array.from({ length: 9 }).map((_, i) => ({
+  id: `category-${i + 1}`,
+  name: `Category ${i + 1}`,
+  image: "",
+}))
 const topSellingProducts = [
   {
     id: "1",
@@ -37,7 +30,40 @@ const topSellingProducts = [
     rating: 3.5,
     type: "Seller" ,
   },
-  // Add more products...
+  {
+    id: "1",
+    title: "T-shirt with Tape Details",
+    image: "",
+    price: 120,
+    rating: 4.5,
+    type: "Buyer" ,
+  },
+  {
+    id: "2",
+    title: "Skinny Fit Jeans",
+    image: "",
+    price: 240,
+    originalPrice: 260,
+    rating: 3.5,
+    type: "Seller" ,
+  },
+  {
+    id: "1",
+    title: "T-shirt with Tape Details",
+    image: "",
+    price: 120,
+    rating: 4.5,
+    type: "Buyer" ,
+  },
+  {
+    id: "2",
+    title: "Skinny Fit Jeans",
+    image: "",
+    price: 240,
+    originalPrice: 260,
+    rating: 3.5,
+    type: "Seller" ,
+  },
 ]
 
 export default function Home() {
@@ -68,22 +94,48 @@ export default function Home() {
             </div>
           </div>
         </section>
-        <section className="container py-12">
-          <h2 className="mb-8 text-2xl font-bold">Product Categories</h2>
-          <div className="grid grid-cols-3 gap-4 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8">
-            {productCategories.map((category) => (
-              <CategoryIcon key={category.href} {...category} />
-            ))}
-          </div>
-        </section>
-        <section className="container py-12">
-          <h2 className="mb-8 text-2xl font-bold">Service Categories</h2>
-          <div className="grid grid-cols-3 gap-4 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8">
-            {serviceCategories.map((category) => (
-              <CategoryIcon key={category.href} {...category} />
-            ))}
-          </div>
-        </section>
+        
+        <section>
+                        <h2 className="mb-6 text-2xl font-bold">Product Categories</h2>
+                        <div className="grid grid-cols-3 gap-4 md:grid-cols-6 lg:grid-cols-9">
+                          {categories.map((category) => (
+                            <div
+                              key={category.id}
+                              className="flex aspect-square flex-col items-center justify-center gap-2 rounded-lg border bg-card p-4 text-card-foreground"
+                            >
+                              <div className="relative aspect-square w-12">
+                                <img
+                                  src={category.image || ""}
+                                  alt={category.name}
+                                  className="rounded-lg object-cover"
+                                />
+                              </div>
+                              <span className="text-xs">{category.name}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </section>
+            
+                      <section>
+                        <h2 className="mb-6 text-2xl font-bold">Service Categories</h2>
+                        <div className="grid grid-cols-3 gap-4 md:grid-cols-6 lg:grid-cols-9">
+                          {categories.map((category) => (
+                            <div
+                              key={category.id}
+                              className="flex aspect-square flex-col items-center justify-center gap-2 rounded-lg border bg-card p-4 text-card-foreground"
+                            >
+                              <div className="relative aspect-square w-12">
+                                <img
+                                  src={category.image || ""}
+                                  alt={category.name}
+                                  className="rounded-lg object-cover"
+                                />
+                              </div>
+                              <span className="text-xs">{category.name}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </section>
         <section className="container py-12">
           <h2 className="mb-8 text-2xl font-bold">TOP SELLING</h2>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
