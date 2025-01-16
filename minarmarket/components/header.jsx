@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input"
 export function Header() {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background">
-      <div className="container flex h-16 flex items-center justify-between px-4 gap-16 ">
+      <div className="container flex h-16  items-center justify-between px-4 gap-16 ">
         <Link href="/" className="font-bold text-xl text-primary">
           MINAR MARKET
         </Link>

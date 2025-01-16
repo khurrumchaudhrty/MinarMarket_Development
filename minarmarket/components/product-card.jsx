@@ -5,7 +5,7 @@ import { Star } from 'lucide-react'
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 
-
+import { AspectRatio } from "@/components/ui/aspect-ratio"
 
 export function ProductCard({
   id,
@@ -19,20 +19,23 @@ export function ProductCard({
   return (
     <Card className="overflow-hidden">
       <CardContent className="p-0">
-        <Badge variant={type === "Buyer" ? "default" : "secondary"} className="absolute m-2">
+        <Badge  variant={type === "Buyer" ? "default" : "secondary"} className="absolute m-2 z-10">
           {type}
         </Badge>
-        <div className="relative aspect-square">
+        <div className="relative aspect-square ">
+          <AspectRatio ratio={4/3} >
           <Image
             src={image || "/placeholder.svg"}
             alt={title}
             fill
             className="object-cover"
           />
+          </AspectRatio>
+          <h3 className="font-semibold  py-4 px-2">{title}</h3>
         </div>
       </CardContent>
-      <CardFooter className="flex flex-col items-start gap-2 p-4">
-        <h3 className="font-semibold">{title}</h3>
+      <CardFooter className="flex flex-col items-start gap-2 px-4">
+        
         <div className="flex items-center gap-2">
           {Array.from({ length: 5 }).map((_, i) => (
             <Star

@@ -7,14 +7,14 @@
             const categories = Array.from({ length: 9 }).map((_, i) => ({
               id: `category-${i + 1}`,
               name: `Category ${i + 1}`,
-              image: "",
+              image: "https://placehold.co/600x600/png",
             }))
             
             const topSellingProducts = [
               {
                 id: "1",
                 title: "T-shirt with Tape Details",
-                image: "",
+                image: "https://placehold.co/600x400/png",
                 price: 120,
                 rating: 4.5,
                 type: "Buyer" ,
@@ -22,7 +22,7 @@
               {
                 id: "2",
                 title: "Fit Shirt",
-                image: "",
+                image: "https://placehold.co/600x400/png",
                 price: 230,
                 originalPrice: 260,
                 rating: 3.5,
@@ -31,7 +31,7 @@
               {
                 id: "3",
                 title: "Fit Jeans",
-                image: "",
+                image: "https://placehold.co/600x400/png",
                 price: 20,
                 originalPrice: 260,
                 rating: 3.5,
@@ -40,7 +40,16 @@
               {
                 id: "3",
                 title: "Fit Jeans",
-                image: "",
+                image: "https://placehold.co/600x400/png",
+                price: 20,
+                originalPrice: 260,
+                rating: 3.5,
+                type: "Buyer" ,
+              },
+              {
+                id: "3",
+                title: "Fit Jeans",
+                image: "https://placehold.co/600x400/png",
                 price: 20,
                 originalPrice: 260,
                 rating: 3.5,
@@ -52,13 +61,18 @@
               return (
                 <div className="flex min-h-screen flex-col px-4">
                   <Header />
-                  <div className="container flex-1 items-start md:grid md:grid-cols-[220px_1fr] md:gap-6 md:py-6">
+                  <div className="container flex-1 items-start md:grid md:grid-cols-[220px_1fr] md:gap-4 md:py-6">
                     <aside className="fixed top-14 z-30 -ml-2 hidden h-[calc(100vh-3.5rem)] w-full shrink-0 overflow-y-auto border-r md:sticky md:block">
-                      <ScrollArea className="py-6 pr-6">
+                      
+                      <ScrollArea className="pb-6 pr-6 ">
+                        <h1 className="mb-6  pl-6 text-xl font-semibold">Buyer</h1>
+                        <div className="pl-2">
                         <SidebarNav />
+                        </div>
                       </ScrollArea>
+                      
                     </aside>
-                    <main className="flex w-full flex-col gap-8">
+                    <main className="flex w-full flex-col gap-8 ">
                       <section>
                         <h2 className="mb-6 text-2xl font-bold">Product Categories</h2>
                         <div className="grid grid-cols-3 gap-4 md:grid-cols-6 lg:grid-cols-9">
@@ -101,7 +115,7 @@
                         </div>
                       </section>
             
-                      <section className="container py-12">
+                      <section className="container py-8">
                                 <h2 className="mb-8 text-2xl font-bold">TOP SELLING</h2>
                                 <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
                                   {topSellingProducts.map((product) => (
