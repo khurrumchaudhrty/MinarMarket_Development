@@ -19,7 +19,6 @@ export default function SignupForm() {
     firstName: '',
     lastName: '',
     email: '',
-    role: '',
     password: '',
     confirmPassword: ''
   })
@@ -28,7 +27,7 @@ export default function SignupForm() {
     firstName: z.string().min(2, 'First name must be at least 2 characters'),
     lastName: z.string().min(2, 'Last name must be at least 2 characters'),
     email: z.string().email('Invalid email address'),
-    role: z.enum(['seller', 'buyer'], 'Please select a role'),
+    
     password: z.string()
       .min(8, 'Password must be at least 8 characters')
       .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, 
@@ -115,18 +114,7 @@ export default function SignupForm() {
           />
         </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="role">Role</Label>
-          <Select onValueChange={(value) => setFormData(prev => ({ ...prev, role: value }))}>
-            <SelectTrigger>
-              <SelectValue placeholder="Seller" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="seller">Seller</SelectItem>
-              <SelectItem value="buyer">Buyer</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
+      
 
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
