@@ -1,9 +1,11 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { X } from "lucide-react"
+import { useRouter } from "next/navigation"
 
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
@@ -11,49 +13,159 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { ImageUpload } from "@/components/image-upload"
-import { productSchema} from "@/lib/validations/product"
+import { productSchema } from "@/lib/validations/product"
+import { fetchProduct, createProduct, updateProduct, uploadToCloudinary } from "@/lib/api/product"
+import { useToast } from "@/hooks/use-toast"
+import { getUserDetails } from "@/lib/SessionManager"
+import { Toaster } from "./ui/toaster"
 
-const categories = ["Electronics", "Clothing", "Books", "Home & Garden", "Sports", "Toys", "Other"]
+const categories = ['Electronics', 'Clothing', 'Books', 'Other']
 
-export function ProductForm() {
-  const [files, setFiles] = useState([])
+export function ProductForm({ productId }) {
+  const { toast } = useToast()
+  const router = useRouter()
+  const queryClient = useQueryClient()
   const [uploading, setUploading] = useState(false)
+  const [files, setFiles] = useState([])
+  const user = getUserDetails()
 
+  // Fetch product data if editing
+  const { data: productData } = useQuery({
+    queryKey: ['product', productId],
+    queryFn: () => fetchProduct(productId),
+    enabled: !!productId
+  })
   const form = useForm({
     resolver: zodResolver(productSchema),
     defaultValues: {
-      title: "",
-      description: "",
-      price: "",
-      category: "",
-      images: [],
+      title: productData?.title || "",
+      description: productData?.description || "",
+      price: productData?.price || "",
+      category: productData?.category || "",
+      images: productData?.images || [],
     },
   })
 
+  // Initialize files state with existing images if editing
+  useEffect(() => {
+    if (productData?.images) {
+      setFiles(productData.images)
+      form.setValue("images", productData.images)
+    }
+  }, [productData, form])
+
+  
+  // Mutations for creating/updating products
+  const mutation = useMutation({
+    mutationFn: async (formData) => {
+      try {
+        setUploading(true)
+        
+        // Handle file uploads first
+        const uploadedImages = await Promise.all(
+          files.map(async (file) => {
+            // Check if the file is already an uploaded image URL
+            if (typeof file === 'string' || (file.url && typeof file.url === 'string')) {
+              return { url: typeof file === 'string' ? file : file.url };
+            }
+            const url = await uploadToCloudinary(file);
+            return {
+              name:file.name,url: url };
+          })
+        );
+
+        // Prepare final data for submission
+        const finalData = {
+          ...formData,
+          userId: user.userId,
+          images: uploadedImages,
+        }
+
+        if (productId) {
+          return await updateProduct(productId, finalData)
+        }
+        return await createProduct(finalData)
+      } catch (error) {
+        console.error("Mutation error:", error)
+        throw error
+      } finally {
+        setUploading(false)
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(['products'])
+      toast({
+        title: productId ? "Product updated" : "Product created",
+        description: "Your product has been submitted for approval.",
+      })
+      router.push('/app/my-products')
+    },
+    onError: (error) => {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      })
+    },
+  })
+
+  const handleFilesSelected = (newFiles) => {
+    // Directly use the File objects
+    setFiles(prevFiles => {
+      const updatedFiles = [...prevFiles, ...newFiles];
+      // Limit to 5 files
+      if (updatedFiles.length > 5) {
+        toast({
+          title: "Error",
+          description: "Maximum 5 images allowed",
+          variant: "destructive",
+        });
+        return prevFiles;
+      }
+      return updatedFiles;
+    });
+  }
+
   async function onSubmit(data) {
     try {
-      // Here you would typically send the data to your API
-      console.log("Form submitted:", data)
+      if (files.length === 0) {
+        toast({
+          title: "Error",
+          description: "Please upload at least one image",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      mutation.mutate(data);
     } catch (error) {
-      console.error("Error submitting form:", error)
+      console.error("Submit error:", error);
+      toast({
+        title: "Error",
+        description: error.message || "Failed to submit product",
+        variant: "destructive",
+      });
     }
   }
 
-  const handleFilesSelected = (newFiles) => {
-    setFiles((prev) => [...prev, ...newFiles])
-    form.setValue("images", [...files, ...newFiles])
-  }
-
   const removeFile = (fileName) => {
-    const updatedFiles = files.filter((file) => file.name !== fileName)
-    setFiles(updatedFiles)
-    form.setValue("images", updatedFiles)
+    setFiles(prevFiles => 
+      prevFiles.filter(file => 
+        (file.name !== fileName) && 
+        (typeof file === 'string' ? file !== fileName : true)
+      )
+    );
   }
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+    <><Toaster/><Form {...form}>
+      <form onSubmit={(e)=>{e.preventDefault()
+        console.log("Form data before submission:", form.getValues())
+       onSubmit(form.getValues())
+      }
+        } className="space-y-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        
           <div className="space-y-6">
             <FormField
               control={form.control}
@@ -154,11 +266,15 @@ export function ProductForm() {
           </div>
         </div>
 
-        <Button type="submit" className="w-full md:w-auto" disabled={uploading}>
+        <Button type="submit"
+          // onClick={form.handleSubmit(onSubmit)}
+        className="w-full md:w-auto" disabled={mutation.isPending}>
           Submit for Approval
         </Button>
       </form>
     </Form>
+    </>
+    
   )
 }
 
