@@ -1,8 +1,9 @@
-
 import { Header } from "@/components/header"
 import { SidebarNav } from "@/components/sidebar-nav"
 import { ProductCard } from "@/components/product-card"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { useQuery } from "@tanstack/react-query"
+import { ProductGrid } from "@/components/product-grid"
 
 const categories = Array.from({ length: 9 }).map((_, i) => ({
   id: `category-${i + 1}`,
@@ -10,52 +11,52 @@ const categories = Array.from({ length: 9 }).map((_, i) => ({
   image: "https://placehold.co/600x600/png",
 }))
 
-const topSellingProducts = [
-  {
-    id: "1",
-    title: "T-shirt with Tape Details",
-    image: "https://placehold.co/600x400/png",
-    price: 120,
-    rating: 4.5,
-    type: "Product",
-  },
-  {
-    id: "2",
-    title: "Fit Shirt",
-    image: "https://placehold.co/600x400/png",
-    price: 230,
-    originalPrice: 260,
-    rating: 3.5,
-    type: "Service",
-  },
-  {
-    id: "3",
-    title: "Fit Jeans",
-    image: "https://placehold.co/600x400/png",
-    price: 20,
-    originalPrice: 260,
-    rating: 3.5,
-    type: "Service",
-  },
-  {
-    id: "3",
-    title: "Fit Jeans",
-    image: "https://placehold.co/600x400/png",
-    price: 20,
-    originalPrice: 260,
-    rating: 3.5,
-    type: "Product",
-  },
-  {
-    id: "3",
-    title: "Fit Jeans",
-    image: "https://placehold.co/600x400/png",
-    price: 20,
-    originalPrice: 260,
-    rating: 3.5,
-    type: "Product",
-  },
-]
+// const topSellingProducts = [
+//   {
+//     id: "1",
+//     title: "T-shirt with Tape Details",
+//     image: "https://placehold.co/600x400/png",
+//     price: 120,
+//     rating: 4.5,
+//     type: "Product",
+//   },
+//   {
+//     id: "2",
+//     title: "Fit Shirt",
+//     image: "https://placehold.co/600x400/png",
+//     price: 230,
+//     originalPrice: 260,
+//     rating: 3.5,
+//     type: "Service",
+//   },
+//   {
+//     id: "3",
+//     title: "Fit Jeans",
+//     image: "https://placehold.co/600x400/png",
+//     price: 20,
+//     originalPrice: 260,
+//     rating: 3.5,
+//     type: "Service",
+//   },
+//   {
+//     id: "3",
+//     title: "Fit Jeans",
+//     image: "https://placehold.co/600x400/png",
+//     price: 20,
+//     originalPrice: 260,
+//     rating: 3.5,
+//     type: "Product",
+//   },
+//   {
+//     id: "3",
+//     title: "Fit Jeans",
+//     image: "https://placehold.co/600x400/png",
+//     price: 20,
+//     originalPrice: 260,
+//     rating: 3.5,
+//     type: "Product",
+//   },
+// ]
 
 export default function DashboardPage() {
   return (
@@ -105,15 +106,9 @@ export default function DashboardPage() {
               ))}
             </div>
           </section>
+          <ProductGrid />
 
-          <section className="container py-8">
-            <h2 className="mb-8 text-2xl font-bold">TOP SELLING</h2>
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-              {topSellingProducts.map((product) => (
-                <ProductCard key={product.id} {...product} />
-              ))}
-            </div>
-          </section>
+          
         </main>
       </div>
     </div>
