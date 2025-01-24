@@ -8,15 +8,40 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import Link from 'next/link'
 import { z } from 'zod'
+import { useMutation } from '@tanstack/react-query'
+import { useRouter } from 'next/navigation'
 
 export default function LoginPage() {
     const [showPassword, setShowPassword] = useState(false)
-
+    const router = useRouter()
     const [formError, setFormError] = useState('')
 
     const loginSchema = z.object({
         email: z.string().email('Invalid email address'),
         password: z.string().min(6, 'Password must be at least 6 characters'),
+    })
+    const loginMutation = useMutation({
+        mutationFn: async (credentials) => {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/authentication/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(credentials),
+            })
+            const data = await response.json()
+            if (!data.success) {
+                throw new Error(data.message)
+            }
+            return data
+        },
+        onSuccess: (data) => {
+            localStorage.setItem('token', data.token)
+            router.push('/app/dashboard')
+        },
+        onError: (error) => {
+            setFormError(error.message)
+        },
     })
 
     const handleSubmit = async (e) => {
@@ -29,8 +54,9 @@ export default function LoginPage() {
             }
 
             const validatedData = loginSchema.parse(formData)
-            console.log('Form data:', validatedData) // Added console log
             setFormError('')
+            loginMutation.mutate(validatedData)
+
         } catch (error) {
             if (error instanceof z.ZodError) {
                 console.error('Validation error:', error.errors[0].message) // Added console log
@@ -107,8 +133,10 @@ export default function LoginPage() {
                             </Button>
                         </div>
 
-                        <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white">
-                            Sign In
+                        <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+                        disabled={loginMutation.isPending}
+                        >
+                            {loginMutation.isPending ? 'Loading...' : 'Sign In'}
                         </Button>
 
                         <div className="text-center text-sm">

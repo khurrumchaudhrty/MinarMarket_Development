@@ -72,7 +72,7 @@ function App() {
           }
         />
         <Route
-          path="/buyer-dashboard"
+          path="/dashboard"
           element={
             <RouteGuard>
               <BuyerDashboard />

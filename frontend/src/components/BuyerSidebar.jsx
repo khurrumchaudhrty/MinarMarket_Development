@@ -22,7 +22,7 @@ const BuyerSidebar = () => {
           {/* Dashboard Link */}
           <div>
             <Link
-              to="/buyer-dashboard"
+              to="/dashboard"
               className="flex items-center space-x-2 text-blue-600 hover:text-blue-700"
             >
               <span className="text-lg">⊞</span>
