@@ -121,7 +121,7 @@ const SellerSidebar = () => {
       {/* Switch to Buyer Button */}
       <div className="p-4">
         <button className="w-full px-4 py-2 bg-gradient-to-r from-blue-500 to-green-500 text-white font-medium text-sm rounded-lg shadow-md hover:shadow-lg hover:from-blue-600 hover:to-green-600 transition-all">
-          <Link to="/buyer-dashboard">Switch to Buyer</Link>
+          <Link to="/dashboard">Switch to Buyer</Link>
         </button>
       </div>
     </div>

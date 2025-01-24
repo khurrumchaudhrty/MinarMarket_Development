@@ -1,7 +1,7 @@
 
 
 export const metadata= {
-  title: "Minar Market",
+  title: "My Product | Minar Market",
   description: "Your marketplace for products and services",
 }
 

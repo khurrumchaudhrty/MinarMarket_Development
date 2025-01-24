@@ -7,8 +7,9 @@ import { useState } from 'react'
 
 import { Button } from "@/components/ui/button"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-
-export function SidebarNav() {
+import { useLocalStorage } from "@uidotdev/usehooks"
+import { ScrollArea } from "./ui/scroll-area"
+function SidebarNavComponent() {
   const pathname = usePathname()
   const [openDropdown, setOpenDropdown] = useState(null)
 
@@ -16,7 +17,7 @@ export function SidebarNav() {
     {
       label: "My Listings",
       icon: ShoppingBag,
-      href: "/my-listings", 
+      href: "/my-listings",
       subitems: {
         "Products": "/app/my-products",
         "Services": "/app/my-services",
@@ -67,7 +68,7 @@ export function SidebarNav() {
                       </Link>
                     ))} */}
                     {Object.entries(route.subitems).map(([label, href]) => (
-                      <Link 
+                      <Link
                         key={href}
                         href={href}
                         className="block w-full pl-6 py-2 text-sm text-muted-foreground hover:bg-secondary"
@@ -79,16 +80,34 @@ export function SidebarNav() {
                 </AccordionContent>
               </>
             ) : (
-                
+
               <Link href={route.href} className={`flex items-center py-3 ${pathname === route.href ? "bg-secondary" : ""}`}>
                 <route.icon className="mr-2 h-4 w-4" />
                 {route.label}
               </Link>
-              
+
             )}
           </AccordionItem>
         ))}
       </Accordion>
+
     </nav>
   )
+}
+export function SidebarNav() {
+  const [type,setType] = useLocalStorage("type", "buyer");
+  return(
+  <aside className="fixed top-14 z-30 -ml-2 hidden h-[calc(100vh-3.5rem)] w-full shrink-0 overflow-y-auto border-r md:sticky md:block">
+
+    <ScrollArea className="pb-6 pr-6 ">
+      <h1 className="mb-2  pl-2 text-l font-semibold">
+        {type === "buyer" ? "Buyer " : "Seller "}
+        Dashboard</h1>
+      <div className="pl-2">
+        <SidebarNavComponent />
+      </div>
+    </ScrollArea>
+
+
+  </aside>)
 }

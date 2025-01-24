@@ -68,7 +68,7 @@ export default function SignupForm() {
     },
     onSuccess: (data) => {
       localStorage.setItem('token', data.token)
-      router.push('/app/buyer-dashboard') 
+      router.push('/app/dashboard') 
     },
     onError: (error) => {
       setApiError(error.message)

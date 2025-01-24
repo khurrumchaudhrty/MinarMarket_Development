@@ -1,9 +1,8 @@
-"use client"
+
 import { Header } from "@/components/header"
 import { SidebarNav } from "@/components/sidebar-nav"
 import { ProductCard } from "@/components/product-card"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { useLocalStorage } from "@uidotdev/usehooks"
 
 const categories = Array.from({ length: 9 }).map((_, i) => ({
   id: `category-${i + 1}`,
@@ -59,23 +58,11 @@ const topSellingProducts = [
 ]
 
 export default function DashboardPage() {
-  const [type, setType] = useLocalStorage("type", "buyer")
   return (
     <div className="flex min-h-screen flex-col px-4">
       <Header />
       <div className="container flex-1 items-start md:grid md:grid-cols-[220px_1fr] md:gap-4 md:py-6">
-        <aside className="fixed top-14 z-30 -ml-2 hidden h-[calc(100vh-3.5rem)] w-full shrink-0 overflow-y-auto border-r md:sticky md:block">
-
-          <ScrollArea className="pb-6 pr-6 ">
-            <h1 className="mb-2  pl-2 text-l font-semibold">
-              {type === "buyer" ? "Buyer " : "Seller "}   
-               Dashboard</h1>
-            <div className="pl-2">
-              <SidebarNav />
-            </div>
-          </ScrollArea>
-
-        </aside>
+        <SidebarNav />
         <main className="flex w-full flex-col gap-8 ">
           <section>
             <h2 className="mb-6 text-2xl font-bold">Product Categories</h2>

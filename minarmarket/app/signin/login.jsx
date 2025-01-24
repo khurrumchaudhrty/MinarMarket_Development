@@ -37,7 +37,7 @@ export default function LoginPage() {
         },
         onSuccess: (data) => {
             localStorage.setItem('token', data.token)
-            router.push('/app/buyer-dashboard')
+            router.push('/app/dashboard')
         },
         onError: (error) => {
             setFormError(error.message)
