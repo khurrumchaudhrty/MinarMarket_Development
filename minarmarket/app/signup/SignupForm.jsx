@@ -9,11 +9,15 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox"
 import { z } from 'zod'
+import {useMutation} from "@tanstack/react-query"
+import { useRouter } from 'next/navigation'
 
 
 export default function SignupForm() {
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState(null)
+  const [apiError, setApiError] = useState(null)
+  const router = useRouter()
 
   const [formData, setFormData] = useState({
     firstName: '',
@@ -30,12 +34,46 @@ export default function SignupForm() {
     
     password: z.string()
       .min(8, 'Password must be at least 8 characters')
-      .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, 
-        'Password must contain uppercase, lowercase, number and special character'),
+      .max(100, 'Password must be at most 100 characters'),
     confirmPassword: z.string()
   }).refine((data) => data.password === data.confirmPassword, {
     message: "Passwords don't match",
     path: ["confirmPassword"]
+  })
+  const signUpMutation = useMutation({
+    mutationFn: async (credentials) => {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/authentication/signup`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          /**name: fullName,
+                email,
+                password,
+                admin: role.toLowerCase() === 'admin',
+                confirmPassword */
+            name: `${credentials.firstName} ${credentials.lastName}`,
+            email: credentials.email,
+            password: credentials.password,
+            admin: false,
+            confirmPassword: credentials.confirmPassword
+        }),
+      })
+      const data = await response.json()
+      if (!data.success) {
+        throw new Error(data.message)
+      }
+      return data
+    },
+    onSuccess: (data) => {
+      localStorage.setItem('token', data.token)
+      router.push('/app/buyer-dashboard') 
+    },
+    onError: (error) => {
+      setApiError(error.message)
+      // console.log() 
+    },
   })
 
   const handleSubmit = async (e) => {
@@ -43,7 +81,8 @@ export default function SignupForm() {
     try {
       const validatedData = signUpSchema.parse(formData)
       // Handle successful validation
-      console.log(validatedData)
+      setError(null)
+      signUpMutation.mutate(validatedData)
     } catch (error) {
       // Handle validation errors
       if (error instanceof z.ZodError) {
@@ -72,6 +111,11 @@ export default function SignupForm() {
               <li key={index}>{err.message}</li>
             ))}
           </ul>
+        </div>
+      )}
+      {apiError && (
+        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-md">
+          <p className="text-sm text-red-600">{apiError}</p>
         </div>
       )}
       <p className="text-sm text-muted-foreground mb-6">

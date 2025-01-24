@@ -14,7 +14,7 @@ export default function RootLayout({ children }) {
 
         if (!token) {
             // Redirect to signin if no token exists
-            router.push('/signin')
+            router.push('/')
         }
         else{
         setLoading(false)

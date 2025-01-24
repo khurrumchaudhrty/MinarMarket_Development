@@ -19,7 +19,7 @@ export function ProductCard({
   return (
     <Card className="overflow-hidden">
       <CardContent className="p-0">
-        <Badge  variant={type === "Buyer" ? "default" : "secondary"} className="absolute m-2 z-10">
+        <Badge  variant={type === "Product" ? "default" : "secondary"} className="absolute m-2 z-10">
           {type}
         </Badge>
         <div className="relative aspect-square ">
@@ -53,6 +53,11 @@ export function ProductCard({
             </span>
           )}
         </div>
+        <Link href={`/send-proposal/${id}`} className="w-full">
+          <button className="w-full bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 rounded-md">
+            Send Proposal
+          </button>
+        </Link>
       </CardFooter>
     </Card>
   )

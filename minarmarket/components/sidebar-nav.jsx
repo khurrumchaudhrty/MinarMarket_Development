@@ -16,14 +16,20 @@ export function SidebarNav() {
     {
       label: "My Listings",
       icon: ShoppingBag,
-      href: "/listings",
-      subitems: ["Products", "Services"],
+      href: "/my-listings", 
+      subitems: {
+        "Products": "/app/my-products",
+        "Services": "/app/my-services",
+      }
     },
     {
       label: "Proposals",
       icon: FileText,
-      href: "/proposals",
-      subitems: ["Sent", "Received"],
+      href: "/",
+      subitems: {
+        "Received": "/app/received-proposals",
+        "Sent": "/app/sent-proposals",
+      }
     },
     {
       label: "Settings",
@@ -51,13 +57,22 @@ export function SidebarNav() {
                 </AccordionTrigger>
                 <AccordionContent>
                   <div className="pl-4">
-                    {route.subitems.map((subitem) => (
+                    {/* {route.subitems.map((subitem) => (
                       <Link 
                         key={subitem}
-                        href={`${route.href}/${subitem.toLowerCase()}`}
+                        href={`${route.href}/${subitem.toLowerCase().replace(" ", "-")}`}
                         className="block w-full pl-6 py-2 text-sm text-muted-foreground hover:bg-secondary"
                       >
                         {subitem}
+                      </Link>
+                    ))} */}
+                    {Object.entries(route.subitems).map(([label, href]) => (
+                      <Link 
+                        key={href}
+                        href={href}
+                        className="block w-full pl-6 py-2 text-sm text-muted-foreground hover:bg-secondary"
+                      >
+                        {label}
                       </Link>
                     ))}
                   </div>
