@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { X } from "lucide-react"
-import { useRouter } from "next/navigation"
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
 
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
@@ -19,11 +19,14 @@ import { useToast } from "@/hooks/use-toast"
 import { getUserDetails } from "@/lib/SessionManager"
 import { Toaster } from "./ui/toaster"
 
+
 const categories = ['Electronics', 'Clothing', 'Books', 'Other']
 
-export function ProductForm({ productId }) {
+export function ProductForm() {
   const { toast } = useToast()
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const productId = searchParams.get('id')
   const queryClient = useQueryClient()
   const [uploading, setUploading] = useState(false)
   const [files, setFiles] = useState([])
@@ -35,6 +38,7 @@ export function ProductForm({ productId }) {
     queryFn: () => fetchProduct(productId),
     enabled: !!productId
   })
+  
   const form = useForm({
     resolver: zodResolver(productSchema),
     defaultValues: {
@@ -44,6 +48,7 @@ export function ProductForm({ productId }) {
       category: productData?.category || "",
       images: productData?.images || [],
     },
+
   })
 
   // Initialize files state with existing images if editing
@@ -51,6 +56,13 @@ export function ProductForm({ productId }) {
     if (productData?.images) {
       setFiles(productData.images)
       form.setValue("images", productData.images)
+    }
+    if (productData)
+    {
+      form.setValue("title", productData.title??'')
+      form.setValue("description", productData.description??'')
+      form.setValue("price", productData.price??'')
+      form.setValue("category", productData.category??'')
     }
   }, [productData, form])
 
@@ -222,7 +234,9 @@ export function ProductForm({ productId }) {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Category</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}
+                    value={field.value}
+                  >
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Select a category" />

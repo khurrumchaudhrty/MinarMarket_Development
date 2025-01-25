@@ -1,7 +1,8 @@
 export async function fetchProduct(productId) {
-  const response = await fetch(`/api/products/${productId}`)
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/product-listings/fetch-product-details/${productId}`)
   if (!response.ok) throw new Error('Failed to fetch product')
-  return response.json()
+    const data = await response.json()
+  return data.product
 }
 
 export async function uploadToCloudinary(file) {
@@ -36,11 +37,22 @@ export async function createProduct(data) {
 }
 
 export async function updateProduct(productId, data) {
-  const response = await fetch(`/api/products/${productId}`, {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/product-listings/updateProduct/${productId}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
   })
   if (!response.ok) throw new Error('Failed to update product')
   return response.json()
+}
+
+export async function showMyProductListings(userId) { 
+const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/product-listings/buyer/my-product-listings`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ id: userId }),
+  })
+  if (!response.ok) throw new Error('Failed to fetch product listings')
+  return response.json()
+  
 }

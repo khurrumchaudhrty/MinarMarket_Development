@@ -1,4 +1,8 @@
+"use client";
 import { ProductCard } from "@/components/product-card-list"
+import { showMyProductListings } from "@/lib/api/product"
+import { getUserDetails } from "@/lib/SessionManager";
+import { useQuery } from "@tanstack/react-query";
 
 const SAMPLE_PRODUCTS = [
   {
@@ -39,9 +43,15 @@ const SAMPLE_PRODUCTS = [
 ]
 
 export function ProductList() {
+  const userId=  getUserDetails().userId;
+  const {data:products} = useQuery({
+    queryKey: ["product"],
+    queryFn: () => showMyProductListings(userId),
+  })
+  console.log(products)
   return (
     <div className="space-y-4">
-      {SAMPLE_PRODUCTS.map((product) => (
+      {products?.data.map((product) => (
         <ProductCard key={product.id} {...product} />
       ))}
     </div>
