@@ -37,7 +37,7 @@ const products = [
     seller: "Abdul Ahad Bin Ali",
     dateListed: "11/13/2024",
     title: "headphones",
-    status: "Rejected",
+    status: "Pending",
   },
   {
     id: "673b9fdd16d3da81cf31b94f",

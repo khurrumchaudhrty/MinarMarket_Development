@@ -10,10 +10,11 @@ export function ProductsTable({ products }) {
   return (
     <div className="w-full">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-semibold">Products</h1>
+        <h1 className="text-2xl font-semibold">Listing Requests</h1>
         <div className="space-x-2">
           <Button variant="secondary">Approve</Button>
           <Button variant="secondary">Reject</Button>
+          <Button variant="secondary">Pending</Button>
         </div>
       </div>
 
@@ -58,7 +59,9 @@ export function ProductsTable({ products }) {
                       ? "bg-green-100 text-green-700"
                       : product.status === "Rejected"
                         ? "bg-red-100 text-red-700"
-                        : "bg-gray-100 text-gray-700"
+                        : product.status === "Pending"
+                          ? "bg-yellow-100 text-yellow-700"
+                          : "bg-gray-100 text-gray-700"
                   }`}
                 >
                   {product.status}
