@@ -35,7 +35,7 @@ function SidebarNavComponent() {
     {
       label: "Settings",
       icon: Settings,
-      href: "/settings",
+      href: "/app/admin",
     },
   ]
 
@@ -44,7 +44,7 @@ function SidebarNavComponent() {
   }
 
   return (
-    <nav className="flex flex-col space-y-1">
+    <nav className="flex flex-col space-y-1 text-sm">
       <Accordion type="single" collapsible>
         {routes.map((route) => (
           <AccordionItem key={route.href} value={route.href}>
@@ -100,7 +100,7 @@ export function SidebarNav() {
   <aside className="fixed top-14 z-30 -ml-2 hidden h-[calc(100vh-3.5rem)] w-full shrink-0 overflow-y-auto border-r md:sticky md:block">
 
     <ScrollArea className="pb-6 pr-6 ">
-      <h1 className="mb-2  pl-2 text-l font-semibold">
+      <h1 className="mb-2   pl-2 text-xl font-semibold">
         {type === "buyer" ? "Buyer " : "Seller "}
         Dashboard</h1>
       <div className="pl-2">
