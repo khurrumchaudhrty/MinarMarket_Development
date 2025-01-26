@@ -12,6 +12,7 @@ import { ScrollArea } from "./ui/scroll-area"
 function SidebarNavComponent() {
   const pathname = usePathname()
   const [openDropdown, setOpenDropdown] = useState(null)
+  const [type, setType] = useLocalStorage("type", "buyer");
 
   const routes = [
     {
@@ -19,8 +20,14 @@ function SidebarNavComponent() {
       icon: ShoppingBag,
       href: "/my-listings",
       subitems: {
-        "Products": "/app/my-products",
-        "Services": "/app/my-services",
+        "buyer" : {
+        "Products": "/app/buyer/my-products",
+        "Services": "/app/buyer/my-services",
+        },
+        seller: {
+          "Products": "/app/seller/my-products",
+          "Services": "/app/seller/my-services",
+        }
       }
     },
     {
@@ -58,39 +65,41 @@ function SidebarNavComponent() {
                 </AccordionTrigger>
                 <AccordionContent>
                   <div className="pl-4">
-                    {/* {route.subitems.map((subitem) => (
-                      <Link 
-                        key={subitem}
-                        href={`${route.href}/${subitem.toLowerCase().replace(" ", "-")}`}
-                        className="block w-full pl-6 py-2 text-sm text-muted-foreground hover:bg-secondary"
-                      >
-                        {subitem}
-                      </Link>
-                    ))} */}
-                    {Object.entries(route.subitems).map(([label, href]) => (
-                      <Link
-                        key={href}
-                        href={href}
-                        className="block w-full pl-6 py-2 text-sm text-muted-foreground hover:bg-secondary"
-                      >
-                        {label}
-                      </Link>
-                    ))}
+                    {route.subitems[type] ? 
+                      // Handle buyer/seller specific subitems
+                      Object.entries(route.subitems[type]).map(([label, href]) => (
+                        <Link
+                          key={href}
+                          href={href}
+                          className="block w-full pl-6 py-2 text-sm text-muted-foreground hover:bg-secondary"
+                        >
+                          {label}
+                        </Link>
+                      ))
+                      : 
+                      // Handle regular subitems
+                      Object.entries(route.subitems).map(([label, href]) => (
+                        <Link
+                          key={href}
+                          href={href}
+                          className="block w-full pl-6 py-2 text-sm text-muted-foreground hover:bg-secondary"
+                        >
+                          {label}
+                        </Link>
+                      ))
+                    }
                   </div>
                 </AccordionContent>
               </>
             ) : (
-
               <Link href={route.href} className={`flex items-center py-3 ${pathname === route.href ? "bg-secondary" : ""}`}>
                 <route.icon className="mr-2 h-4 w-4" />
                 {route.label}
               </Link>
-
             )}
           </AccordionItem>
         ))}
       </Accordion>
-
     </nav>
   )
 }
