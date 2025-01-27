@@ -5,7 +5,8 @@ import { Button } from "@/components/ui/button"
 import { useState } from "react"
 
 export function ProductsTable({ products }) {
-    const [selectedProducts, setSelectedProducts] = useState([])
+  const [selectedProducts, setSelectedProducts] = useState([])
+
 
   return (
     <div className="w-full">
@@ -22,16 +23,17 @@ export function ProductsTable({ products }) {
         <TableHeader>
           <TableRow>
             <TableHead className="w-12">
-              <Checkbox
-                checked={selectedProducts.length === products.length}
-                onChange={(e) => {
-                  if (e.target.checked) {
-                    setSelectedProducts(products.map((product) => product.id))
-                  } else {
-                    setSelectedProducts([])
-                  }
-                }}
-              />
+            <Checkbox
+              checked={selectedProducts.length === products.length && products.length > 0}
+              indeterminate={selectedProducts.length > 0 && selectedProducts.length < products.length}
+              onCheckedChange={(checked) => {
+                if (checked) {
+                  setSelectedProducts(products.map(product => product.id))
+                } else {
+                  setSelectedProducts([])
+                }
+              }}
+            />
             </TableHead>
             <TableHead>Listing ID</TableHead>
             <TableHead>Seller</TableHead>
@@ -44,9 +46,16 @@ export function ProductsTable({ products }) {
           {products.map((product) => (
             <TableRow key={product.id}>
               <TableCell>
-                <Checkbox 
-                    
-                />
+              <Checkbox 
+                checked={selectedProducts.includes(product.id)}
+                onCheckedChange={(checked) => {
+                  if (checked) {
+                    setSelectedProducts([...selectedProducts, product.id])
+                  } else {
+                    setSelectedProducts(selectedProducts.filter(id => id !== product.id))
+                  }
+                }}
+              />
               </TableCell>
               <TableCell className="font-medium text-blue-600">{product.id}</TableCell>
               <TableCell>{product.seller}</TableCell>
