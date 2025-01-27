@@ -27,7 +27,7 @@ export function ProductCard({_id, title, description, images, price, category, c
           <span>•</span>
           <span>{status}</span>
         </div>
-          <Link  href={`/app/list-product?id=${_id}`}>
+          <Link  href={`/app/buyer/list-product?id=${_id}`}>
         <Button variant="secondary" size="sm">
           Edit
         </Button>
