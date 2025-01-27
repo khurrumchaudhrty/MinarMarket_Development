@@ -4,8 +4,6 @@ import { useCallback } from "react"
 import { useDropzone } from "react-dropzone"
 import { Cloud, Loader2 } from "lucide-react"
 
-
-
 export function ImageUpload({ onFilesSelected, uploading, setUploading }) {
   const onDrop = useCallback(
     async (acceptedFiles) => {
@@ -16,20 +14,19 @@ export function ImageUpload({ onFilesSelected, uploading, setUploading }) {
 
       setUploading(true)
       try {
-        // Here you would typically upload the files to your storage service
-        // For demo purposes, we'll create object URLs
-        const uploadedFiles = acceptedFiles.map((file) => ({
-          url: URL.createObjectURL(file),
+        const files = acceptedFiles.map((file) => ({
+          file: file,
+          preview: URL.createObjectURL(file),
           name: file.name,
         }))
-        onFilesSelected(uploadedFiles)
+        onFilesSelected(files)
       } catch (error) {
-        console.error("Error uploading files:", error)
+        console.error("Error processing files:", error)
       } finally {
         setUploading(false)
       }
     },
-    [onFilesSelected, setUploading],
+    [onFilesSelected, setUploading]
   )
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
