@@ -11,10 +11,10 @@ export function ProductsTable({ products }) {
     <div className="w-full">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-semibold">Listing Requests</h1>
-        <div className="space-x-2">
+        <div className="space-x-2 mr-8">
           <Button variant="secondary">Approve</Button>
           <Button variant="secondary">Reject</Button>
-          <Button variant="secondary">Pending</Button>
+          
         </div>
       </div>
 
