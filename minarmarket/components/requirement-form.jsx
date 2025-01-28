@@ -73,19 +73,6 @@ export function RequirementForm() {
       try {
         setUploading(true)
 
-        // // Handle file uploads first
-        // const uploadedImages = await Promise.all(
-        //   files.map(async (file) => {
-        //     // Check if the file is already an uploaded image URL
-        //     if (typeof file === 'string' || (file.url && typeof file.url === 'string')) {
-        //       return { url: typeof file === 'string' ? file : file.url };
-        //     }
-        //     const url = await uploadToCloudinary(file);
-        //     return {
-        //       name:file.name,url: url };
-        //   })
-        // );
-
         // Prepare final data for submission
         const finalData = {
           ...formData,
