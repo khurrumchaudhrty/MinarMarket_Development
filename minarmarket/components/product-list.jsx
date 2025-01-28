@@ -1,6 +1,6 @@
 "use client";
 import { ProductCard } from "@/components/product-card-list"
-import { showMyProductListings } from "@/lib/api/product"
+import { showMyProductListings, showMyRequirement } from "@/lib/api/product"
 import { getUserDetails } from "@/lib/SessionManager";
 import { useQuery } from "@tanstack/react-query";
 
@@ -52,6 +52,30 @@ export function ProductList() {
   return (
     <div className="space-y-4">
       {products?.data.map((product) => (
+        <ProductCard key={product.id} {...product} />
+      ))}
+    </div>
+  )
+}
+
+
+export function RequirementList() {
+  const userDetails = getUserDetails();
+  const userId = userDetails?.userId;
+
+  const {data:products, isError, error} = useQuery({
+    queryKey: ["requirement", userId],
+    queryFn: async () => await showMyRequirement(userId),
+    enabled: !!userId,
+  })
+
+  if (isError) {
+    return <div>Error: {error.message}</div>
+  }
+
+  return (
+    <div className="space-y-4">
+      {products?.data?.map((product) => (
         <ProductCard key={product.id} {...product} />
       ))}
     </div>

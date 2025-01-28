@@ -78,7 +78,7 @@ export function ProductsTable({ products }) {
                 </span>
               </TableCell>
             </TableRow>
-          ))}
+          ))}\
         </TableBody>
       </Table>
     </div>

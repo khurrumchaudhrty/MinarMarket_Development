@@ -32,7 +32,7 @@ export function ProductCard({
                 <CarouselItem key={image._id || index}>
                   <AspectRatio ratio={4/3}>
                     <Image
-                      src={image.url || "/placeholder.svg"}
+                      src={image.url || "https://placehold.co/600x400/png"}
                       alt={`${title} - Image ${index + 1}`}
                       fill
                       className="object-cover"

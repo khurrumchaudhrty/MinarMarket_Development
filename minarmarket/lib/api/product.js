@@ -56,3 +56,43 @@ const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/product-listing
   return response.json()
   
 }
+
+export async function showMyRequirement(userId)
+{
+  // console.log(userId)
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/buyer-requirement`, {
+
+    // body: JSON.stringify({ buyerId: userId }),
+    // query: { buyerid: userId },
+    headers: { 'buyerId': userId },
+  })
+  if (!response.ok) throw new Error('Failed to fetch product listings')
+  const data = await response.json()
+  console.log(data)
+  return data
+}
+export async function createRequirement(data) {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/buyer-requirement`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  })
+  if (!response.ok) throw new Error('Failed to create requirement')
+  return response.json()
+}
+
+
+export async function updateRequirement(requirementId,userId, data) {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/buyer-requirement/update`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      //const { buyerId, productId, updatedData } = req.body;
+      buyerId:userId,
+      productId:requirementId,
+      updatedData:data
+    }),
+  })
+  if (!response.ok) throw new Error('Failed to update requirement')
+  return response.json()
+}

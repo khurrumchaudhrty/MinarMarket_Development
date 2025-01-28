@@ -7,7 +7,7 @@ const formatDate = (dateString) => {
 }
 
 export function ProductCard({_id, title, description, images, price, category, createdAt, status }) {
-  const imageUrl = images?.[0]?.url || "/placeholder.svg"
+  const imageUrl = images?.[0]?.url || "https://placehold.co/600x400/png"
 
   return (
     <div className="flex gap-6 p-4 border rounded-lg">

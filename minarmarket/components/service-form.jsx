@@ -107,7 +107,7 @@ export function ServiceForm() {
         title: serviceId ? "Service updated" : "Service created",
         description: "Your service has been submitted for approval.",
       })
-      router.push('/app/my-services')
+      router.push('/app/seller/my-services')
     },
     onError: (error) => {
       toast({

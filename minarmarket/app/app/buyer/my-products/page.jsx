@@ -3,7 +3,7 @@ import { Header } from "@/components/header"
 import { SidebarNav } from "@/components/sidebar-nav"
 import { ProductCard } from "@/components/product-card"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { ProductList } from "@/components/product-list"
+import { ProductList, RequirementList } from "@/components/product-list"
 import { useLocalStorage } from "@uidotdev/usehooks"
 import Link from "next/link"
 
@@ -69,10 +69,10 @@ export default function MyproductPage() {
         <SidebarNav />
         <main className="flex-1 px-6">
           <div className="flex justify-between items-center mb-6">
-            <h1 className="text-2xl font-semibold">My Products</h1>
-            <Link href="/app/buyer/list-product" className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">List Product</Link>
+            <h1 className="text-2xl font-semibold">My Requirements</h1>
+            <Link href="/app/buyer/list-product" className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">List Requirement</Link>
           </div>
-          <ProductList />
+          <RequirementList />
         </main>
       </div>
     </div>
