@@ -42,10 +42,13 @@ export async function updateService(serviceId, data) {
 }
 
 export async function showMyServiceListings(userId) {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/service-listings/seller/my-service-listings`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ id: userId }),
+  console.log(userId)
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/service-listings/my-listings?listerId=${userId}`, {
+    // method: 'POST',
+    // headers: { 'Content-Type': 'application/json' },
+    // body: JSON.stringify({ id: userId }),
+    // query: { listerId: userId } 
+    
   })
   if (!response.ok) throw new Error('Failed to fetch service listings')
   return response.json()

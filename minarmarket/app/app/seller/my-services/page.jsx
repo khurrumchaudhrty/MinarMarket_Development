@@ -3,7 +3,7 @@
             import { SidebarNav } from "@/components/sidebar-nav"
             import { ProductCard } from "@/components/product-card"
             import { ScrollArea } from "@/components/ui/scroll-area"
-            import { ProductList } from "@/components/product-list"
+            import { ProductList, ServiceList } from "@/components/data-list"
             import { useLocalStorage } from "@uidotdev/usehooks"
             import Link from "next/link"
             
@@ -73,7 +73,9 @@
                             <h1 className="text-2xl font-semibold">My Services</h1>
                             <Link href="/app/seller/list-service" className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">List Service</Link>
                         </div>
-                        <ProductList />
+                        {/* <ProductList />
+                         */}
+                         <ServiceList />
                         </main>
                   </div>
                 </div>

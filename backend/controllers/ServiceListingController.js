@@ -1,6 +1,32 @@
 const ServiceListing = require("../models/ServiceListing");
 const mongoose = require("mongoose");
 
+exports.showMyServiceListings = async (req, res) => {
+  try{
+    const userId = req.query.listerId;
+    console.log(userId);
+    const serviceListings = await ServiceListing.find({
+      listerId: userId,
+
+    });
+
+    console.log(serviceListings);
+    return res.status(200).json({
+      success: true,
+      message: "Service Listings retrieved successfully.",
+      data: serviceListings,
+    });
+  }
+  catch (error) {
+    console.error("Error retrieving service listings: ", error);
+    return res.status(500).json({
+      success: false,
+      message: "An error occurred while retrieving service listings.",
+    });
+  }
+
+};
+
 exports.addServiceListing = async (req, res) => {
   try {
     const {

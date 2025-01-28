@@ -1,6 +1,7 @@
 "use client";
-import { ProductCard } from "@/components/product-card-list"
+import { ProductCard, ServiceCard } from "@/components/product-card-list"
 import { showMyProductListings, showMyRequirement } from "@/lib/api/product"
+import { showMyServiceListings } from "@/lib/api/service";
 import { getUserDetails } from "@/lib/SessionManager";
 import { useQuery } from "@tanstack/react-query";
 
@@ -47,8 +48,9 @@ export function ProductList() {
   const {data:products} = useQuery({
     queryKey: ["product"],
     queryFn: () => showMyProductListings(userId),
+    enabled: !!userId,
   })
-  console.log(products)
+  
   return (
     <div className="space-y-4">
       {products?.data.map((product) => (
@@ -82,3 +84,20 @@ export function RequirementList() {
   )
 }
 
+export function ServiceList()
+{
+  const userId=  getUserDetails().userId;
+  const {data:services} = useQuery({
+    queryKey: ["service"],
+    queryFn: () => showMyServiceListings(userId),
+    enabled: !!userId,
+  })
+  
+  return (
+    <div className="space-y-4">
+      {services?.data.map((service) => (
+        <ServiceCard key={service.id} {...service} />
+      ))}
+    </div>
+  )
+}

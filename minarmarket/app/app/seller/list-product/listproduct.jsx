@@ -3,7 +3,7 @@ import { Header } from "@/components/header"
 import { SidebarNav } from "@/components/sidebar-nav"
 import { ProductCard } from "@/components/product-card"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { ProductList } from "@/components/product-list"
+import { ProductList } from "@/components/data-list"
 
 import { ProductForm } from "@/components/product-form"
 
