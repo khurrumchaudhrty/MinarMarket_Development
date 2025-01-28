@@ -7,6 +7,7 @@ import { useState } from "react"
 export function ProductsTable({ products }) {
   const [selectedProducts, setSelectedProducts] = useState([])
 
+  
 
   return (
     <div className="w-full">
