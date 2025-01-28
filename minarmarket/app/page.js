@@ -6,7 +6,7 @@ import { CategoryIcon } from "@/components/category-icon"
 import { ProductCard } from "@/components/product-card"
 import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
-import { ProductGrid } from "@/components/product-grid"
+import { ProductGrid } from "@/components/data-grid"
 
 const categories = Array.from({ length: 9 }).map((_, i) => ({
   id: `category-${i + 1}`,

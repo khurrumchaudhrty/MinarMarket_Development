@@ -3,7 +3,7 @@ import { SidebarNav } from "@/components/sidebar-nav"
 import { ProductCard } from "@/components/product-card"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { useQuery } from "@tanstack/react-query"
-import { ProductGrid } from "@/components/product-grid"
+import { ProductGrid } from "@/components/data-grid"
 
 const categories = Array.from({ length: 9 }).map((_, i) => ({
   id: `category-${i + 1}`,
