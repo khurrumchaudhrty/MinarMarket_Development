@@ -37,6 +37,8 @@ export default function LoginPage() {
         },
         onSuccess: (data) => {
             localStorage.setItem('token', data.token)
+            //Combine the token array to a string
+            localStorage.setItem('tokenStatus', data.tokenStatus.join(','))
             router.push('/app/dashboard')
         },
         onError: (error) => {

@@ -1,29 +1,11 @@
-'use client'
-import { useEffect,useLayoutEffect,useState } from 'react'
-import { useRouter } from 'next/navigation'
+import AuthProvider from '@/components/providers/AuthProvider'
 
 export default function RootLayout({ children }) {
-    const router = useRouter()
-    const [loading,setLoading] = useState(true);
-
-    
-    useEffect(() => {
-        // Check for token in local Storage
-        setLoading(true)
-        const token = localStorage.getItem('token')
-
-        if (!token) {
-            // Redirect to signin if no token exists
-            router.push('/')
-        }
-        else{
-        setLoading(false)
-        }
-    }, [])
-
     return (
+        <AuthProvider>
         <>
-            {(!!!loading) && children}
-        </>
+            {children}
+            </>
+        </AuthProvider>
     )
 }
