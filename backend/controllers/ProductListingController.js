@@ -111,6 +111,7 @@ exports.showMyProductListings = async (req, res) => {
 };
 
 // Controller to fetch details of a specific product listing
+// 3.2.29 use case is completed here
 exports.fetchProductListing = async (req, res) => {
     try {
         // Extract the productId from the request parameters
