@@ -66,7 +66,7 @@ function SidebarNavComponent() {
                 <AccordionTrigger className={`flex items-center ${pathname === route.href ? "bg-secondary" : ""}`}>
                   <div className="flex items-center">
                     <route.icon className="mr-2 h-4 w-4" />
-                    {route.label}
+                    {route.label[type]}
                   </div>
                 </AccordionTrigger>
                 <AccordionContent>
