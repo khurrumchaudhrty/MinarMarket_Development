@@ -16,7 +16,10 @@ function SidebarNavComponent() {
 
   const routes = [
     {
-      label: "My Listings",
+      label: {
+        "seller": "My Listings",
+        "buyer": "My Requirements"
+      },
       icon: ShoppingBag,
       href: "/my-listings",
       subitems: {
@@ -31,7 +34,10 @@ function SidebarNavComponent() {
       }
     },
     {
-      label: "Proposals",
+      label: {
+        "seller": "My Offers",
+        "buyer": "My Proposals"
+      },
       icon: FileText,
       href: "/",
       subitems: {
