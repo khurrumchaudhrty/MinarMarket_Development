@@ -36,11 +36,10 @@ export default function LoginPage() {
             return data
         },
         onSuccess: (data) => {
-            localStorage.setItem('token', data.token)
-            //Combine the token array to a string
-            localStorage.setItem('tokenStatus', data.tokenStatus.join(','))
-            router.push('/app/dashboard')
-        },
+            localStorage.setItem('token', data.token);
+            localStorage.setItem('tokenStatus', data.tokenStatus ? data.tokenStatus.join(',') : '');
+            router.push('/app/dashboard');
+          },
         onError: (error) => {
             setFormError(error.message)
         },
