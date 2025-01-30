@@ -11,52 +11,6 @@ const categories = Array.from({ length: 9 }).map((_, i) => ({
   image: "https://placehold.co/600x600/png",
 }))
 
-// const topSellingProducts = [
-//   {
-//     id: "1",
-//     title: "T-shirt with Tape Details",
-//     image: "https://placehold.co/600x400/png",
-//     price: 120,
-//     rating: 4.5,
-//     type: "Product",
-//   },
-//   {
-//     id: "2",
-//     title: "Fit Shirt",
-//     image: "https://placehold.co/600x400/png",
-//     price: 230,
-//     originalPrice: 260,
-//     rating: 3.5,
-//     type: "Service",
-//   },
-//   {
-//     id: "3",
-//     title: "Fit Jeans",
-//     image: "https://placehold.co/600x400/png",
-//     price: 20,
-//     originalPrice: 260,
-//     rating: 3.5,
-//     type: "Service",
-//   },
-//   {
-//     id: "3",
-//     title: "Fit Jeans",
-//     image: "https://placehold.co/600x400/png",
-//     price: 20,
-//     originalPrice: 260,
-//     rating: 3.5,
-//     type: "Product",
-//   },
-//   {
-//     id: "3",
-//     title: "Fit Jeans",
-//     image: "https://placehold.co/600x400/png",
-//     price: 20,
-//     originalPrice: 260,
-//     rating: 3.5,
-//     type: "Product",
-//   },
-// ]
 
 export default function DashboardPage() {
   return (
@@ -68,7 +22,7 @@ export default function DashboardPage() {
           <section>
             <h2 className="mb-6 text-2xl font-bold">Product Categories</h2>
             <div className="grid grid-cols-3 gap-4 md:grid-cols-6 lg:grid-cols-9">
-              {categories.map((category) => (
+              {/* {categories.map((category) => (
                 <div
                   key={category.id}
                   className="flex aspect-square flex-col items-center justify-center gap-2 rounded-lg border bg-card p-4 text-card-foreground"
@@ -82,14 +36,14 @@ export default function DashboardPage() {
                   </div>
                   <span className="text-xs">{category.name}</span>
                 </div>
-              ))}
+              ))} */}
             </div>
           </section>
 
           <section>
             <h2 className="mb-6 text-2xl font-bold">Service Categories</h2>
             <div className="grid grid-cols-3 gap-4 md:grid-cols-6 lg:grid-cols-9">
-              {categories.map((category) => (
+              {/* {categories.map((category) => (
                 <div
                   key={category.id}
                   className="flex aspect-square flex-col items-center justify-center gap-2 rounded-lg border bg-card p-4 text-card-foreground"
@@ -103,7 +57,7 @@ export default function DashboardPage() {
                   </div>
                   <span className="text-xs">{category.name}</span>
                 </div>
-              ))}
+              ))} */}
             </div>
           </section>
           <ProductGrid />
