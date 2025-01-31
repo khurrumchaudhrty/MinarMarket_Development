@@ -1,10 +1,16 @@
+// 'use client'
+
 import { Header } from '@/components/header';
 import { SidebarNav } from '@/components/sidebar-nav';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Image from 'next/image';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
+import { getUserDetails } from "@/lib/SessionManager"
+import ContactSellerButton from '@/components/ContactSellerButton';
 
+
+// const user = getUserDetails()
 // Fetch product data on the server
 async function getProduct(id) {
   try {
@@ -20,6 +26,37 @@ async function getProduct(id) {
     return null;
   }
 }
+
+async function sendBuyerMessage(userId, productId) {
+  if (!userId) {
+    alert("Please log in to contact the seller.");
+    return;
+  }
+
+  const payload = {
+    id_of_buyer: userId,
+    id_of_product: productId,
+  };
+
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/buyer-messages`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+
+    const result = await response.json();
+    if (response.ok) {
+      alert("Message sent to the seller successfully!");
+    } else {
+      alert(`Error: ${result.message}`);
+    }
+  } catch (error) {
+    console.error("Error sending message:", error);
+    alert("Failed to contact the seller. Please try again.");
+  }
+}
+
 
 export default async function IndividualProductPage({ params }) {
   const { id } = params; // Get product ID from URL
@@ -77,9 +114,21 @@ export default async function IndividualProductPage({ params }) {
                   {product.product.category}
                 </div>
               </div>
-              <button className="w-full bg-black text-white py-3 rounded-md hover:bg-black/90 transition-colors">
+              {/* <button className="w-full bg-black text-white py-3 rounded-md hover:bg-black/90 transition-colors">
                 Contact the Seller
-              </button>
+              </button> */}
+              {/* <button
+                onClick={() => {
+                  const user = getUserDetails(); // Replace with actual user retrieval method
+                  console.log("--User:", user.userId, "Product:", id);
+                  sendBuyerMessage(user.userId, id);
+                }}
+                className="w-full bg-black text-white py-3 rounded-md hover:bg-black/90 transition-colors"
+              >
+                Contact the Seller
+              </button> */}
+              <ContactSellerButton productId={id} />
+
             </div>
           </div>
         </main>

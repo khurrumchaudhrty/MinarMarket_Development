@@ -4,5 +4,5 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
-  return <>{children}</>; // ✅ Return only children, no <html> or <body>
+  return <>{children}</>; //  Return only children, no <html> or <body>
 }
