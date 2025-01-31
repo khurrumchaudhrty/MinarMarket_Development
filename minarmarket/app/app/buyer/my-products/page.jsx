@@ -69,7 +69,7 @@ export default function MyproductPage() {
         <SidebarNav />
         <main className="flex-1 px-6">
           <div className="flex justify-between items-center mb-6">
-            <h1 className="text-2xl font-semibold">My Requirements</h1>
+            <h1 className="text-2xl font-semibold">Product Requirements</h1>
             <Link href="/app/buyer/list-product" className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">List Requirement</Link>
           </div>
           <RequirementList />
