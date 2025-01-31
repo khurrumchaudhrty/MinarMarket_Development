@@ -11,52 +11,6 @@ const categories = Array.from({ length: 9 }).map((_, i) => ({
   image: "https://placehold.co/600x600/png",
 }))
 
-// const topSellingProducts = [
-//   {
-//     id: "1",
-//     title: "T-shirt with Tape Details",
-//     image: "https://placehold.co/600x400/png",
-//     price: 120,
-//     rating: 4.5,
-//     type: "Product",
-//   },
-//   {
-//     id: "2",
-//     title: "Fit Shirt",
-//     image: "https://placehold.co/600x400/png",
-//     price: 230,
-//     originalPrice: 260,
-//     rating: 3.5,
-//     type: "Service",
-//   },
-//   {
-//     id: "3",
-//     title: "Fit Jeans",
-//     image: "https://placehold.co/600x400/png",
-//     price: 20,
-//     originalPrice: 260,
-//     rating: 3.5,
-//     type: "Service",
-//   },
-//   {
-//     id: "3",
-//     title: "Fit Jeans",
-//     image: "https://placehold.co/600x400/png",
-//     price: 20,
-//     originalPrice: 260,
-//     rating: 3.5,
-//     type: "Product",
-//   },
-//   {
-//     id: "3",
-//     title: "Fit Jeans",
-//     image: "https://placehold.co/600x400/png",
-//     price: 20,
-//     originalPrice: 260,
-//     rating: 3.5,
-//     type: "Product",
-//   },
-// ]
 
 export default function DashboardPage() {
   return (

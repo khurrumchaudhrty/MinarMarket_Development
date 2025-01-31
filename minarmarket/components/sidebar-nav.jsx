@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { useLocalStorage } from "@uidotdev/usehooks"
 import { ScrollArea } from "./ui/scroll-area"
+
 function SidebarNavComponent() {
   const pathname = usePathname()
   const [openDropdown, setOpenDropdown] = useState(null)
@@ -23,11 +24,10 @@ function SidebarNavComponent() {
       icon: ShoppingBag,
       href: "/my-listings",
       subitems: {
-        "buyer" : {
-        "List Requirement": "/app/buyer/my-products",
-        
+        "buyer": {
+          "List Requirement": "/app/buyer/my-products",
         },
-        seller: {
+        "seller": {
           "Products": "/app/seller/my-products",
           "Services": "/app/seller/my-services",
         }
@@ -66,7 +66,7 @@ function SidebarNavComponent() {
                 <AccordionTrigger className={`flex items-center ${pathname === route.href ? "bg-secondary" : ""}`}>
                   <div className="flex items-center">
                     <route.icon className="mr-2 h-4 w-4" />
-                    {route.label}
+                    {route.label[type]}  {/* Render based on 'type' */}
                   </div>
                 </AccordionTrigger>
                 <AccordionContent>
@@ -100,7 +100,7 @@ function SidebarNavComponent() {
             ) : (
               <Link href={route.href} className={`flex items-center py-3 ${pathname === route.href ? "bg-secondary" : ""}`}>
                 <route.icon className="mr-2 h-4 w-4" />
-                {route.label}
+                {route.label[type]}  {/* Render based on 'type' */}
               </Link>
             )}
           </AccordionItem>
@@ -109,20 +109,20 @@ function SidebarNavComponent() {
     </nav>
   )
 }
+
 export function SidebarNav() {
-  const [type,setType] = useLocalStorage("type", "buyer");
-  return(
-  <aside className="fixed top-14 z-30 -ml-2 hidden h-[calc(100vh-3.5rem)] w-full shrink-0 overflow-y-auto border-r md:sticky md:block">
-
-    <ScrollArea className="pb-6 pr-6 ">
-      <h1 className="mb-2   pl-2 text-xl font-semibold">
-        {type === "buyer" ? "Buyer " : "Seller "}
-        Dashboard</h1>
-      <div className="pl-2">
-        <SidebarNavComponent />
-      </div>
-    </ScrollArea>
-
-
-  </aside>)
+  const [type, setType] = useLocalStorage("type", "buyer");
+  return (
+    <aside className="fixed top-14 z-30 -ml-2 hidden h-[calc(100vh-3.5rem)] w-full shrink-0 overflow-y-auto border-r md:sticky md:block">
+      <ScrollArea className="pb-6 pr-6 ">
+        <h1 className="mb-2 pl-2 text-xl font-semibold">
+          {type === "buyer" ? "Buyer " : "Seller "}
+          Dashboard
+        </h1>
+        <div className="pl-2">
+          <SidebarNavComponent />
+        </div>
+      </ScrollArea>
+    </aside>
+  )
 }
