@@ -25,7 +25,8 @@ function SidebarNavComponent() {
       href: "/my-listings",
       subitems: {
         "buyer": {
-          "List Requirement": "/app/buyer/my-products",
+          "Product Requirements": "/app/buyer/my-products",
+          "Service Requirements": "/app/buyer/my-services",
         },
         "seller": {
           "Products": "/app/seller/my-products",
