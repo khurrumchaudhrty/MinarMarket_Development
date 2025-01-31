@@ -52,9 +52,7 @@ function SidebarNavComponent() {
     },
   ]
 
-  const toggleDropdown = (href) => {
-    setOpenDropdown(openDropdown === href ? null : href)
-  }
+ 
 
   return (
     <nav className="flex flex-col space-y-1 text-sm">
@@ -100,7 +98,7 @@ function SidebarNavComponent() {
             ) : (
               <Link href={route.href} className={`flex items-center py-3 ${pathname === route.href ? "bg-secondary" : ""}`}>
                 <route.icon className="mr-2 h-4 w-4" />
-                {route.label[type]}  {/* Render based on 'type' */}
+                {route.label}
               </Link>
             )}
           </AccordionItem>
