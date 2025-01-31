@@ -11,7 +11,7 @@ import { ProductGrid } from "@/components/data-grid"
 const categories = Array.from({ length: 9 }).map((_, i) => ({
   id: `category-${i + 1}`,
   name: `Category ${i + 1}`,
-  image: "",
+  image: "https://placehold.co/600x600/png",
 }))
 
 export default function Home() {
@@ -48,18 +48,18 @@ export default function Home() {
           <div className="grid grid-cols-3 gap-4 md:grid-cols-6 lg:grid-cols-9">
             {categories.map((category) => (
               <div
-                key={category.id}
-                className="flex aspect-square flex-col items-center justify-center gap-2 rounded-lg border bg-card p-4 text-card-foreground"
-              >
-                <div className="relative aspect-square w-12">
-                  <img
-                    src={category.image || "https://placehold.co/600x400/png"}
-                    alt={category.name}
-                    className="rounded-lg object-cover"
-                  />
-                </div>
-                <span className="text-xs">{category.name}</span>
+              key={category.id}
+              className="flex aspect-square flex-col items-center justify-center gap-2 rounded-lg border bg-card p-4 text-card-foreground"
+            >
+              <div className="relative aspect-square w-12">
+                <img
+                  src={category.image || ""}
+                  alt={category.name}
+                  className="rounded-lg object-cover"
+                />
               </div>
+              <span className="text-xs">{category.name}</span>
+            </div>
             ))}
           </div>
         </section>
@@ -69,18 +69,18 @@ export default function Home() {
           <div className="grid grid-cols-3 gap-4 md:grid-cols-6 lg:grid-cols-9">
             {categories.map((category) => (
               <div
-                key={category.id}
-                className="flex aspect-square flex-col items-center justify-center gap-2 rounded-lg border bg-card p-4 text-card-foreground"
-              >
-                <div className="relative aspect-square w-12">
-                  <img
-                    src={category.image || "https://placehold.co/600x400/png"}
-                    alt={category.name}
-                    className="rounded-lg object-cover"
-                  />
-                </div>
-                <span className="text-xs">{category.name}</span>
+              key={category.id}
+              className="flex aspect-square flex-col items-center justify-center gap-2 rounded-lg border bg-card p-4 text-card-foreground"
+            >
+              <div className="relative aspect-square w-12">
+                <img
+                  src={category.image || ""}
+                  alt={category.name}
+                  className="rounded-lg object-cover"
+                />
               </div>
+              <span className="text-xs">{category.name}</span>
+            </div>
             ))}
           </div>
         </section>
