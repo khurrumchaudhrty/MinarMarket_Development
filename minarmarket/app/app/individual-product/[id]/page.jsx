@@ -50,6 +50,7 @@ export default async function IndividualProductPage({ params }) {
                           alt={`${product.product.title} - Image ${index + 1}`}
                           fill
                           className="object-cover rounded-xl"
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         />
                       </AspectRatio>
                     </CarouselItem>
