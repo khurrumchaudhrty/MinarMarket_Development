@@ -1,4 +1,3 @@
-// 'use client'
 
 import { Header } from '@/components/header';
 import { SidebarNav } from '@/components/sidebar-nav';
@@ -69,6 +68,7 @@ export default async function IndividualProductPage({ params }) {
   }
 
   return (
+    // console.log('product : ',product),
     <div className="flex min-h-screen flex-col px-4">
       <Header />
       <div className="container flex-1 items-start md:grid md:grid-cols-[220px_1fr] md:gap-4 md:py-6">
@@ -114,21 +114,9 @@ export default async function IndividualProductPage({ params }) {
                   {product.product.category}
                 </div>
               </div>
-              {/* <button className="w-full bg-black text-white py-3 rounded-md hover:bg-black/90 transition-colors">
-                Contact the Seller
-              </button> */}
-              {/* <button
-                onClick={() => {
-                  const user = getUserDetails(); // Replace with actual user retrieval method
-                  console.log("--User:", user.userId, "Product:", id);
-                  sendBuyerMessage(user.userId, id);
-                }}
-                className="w-full bg-black text-white py-3 rounded-md hover:bg-black/90 transition-colors"
-              >
-                Contact the Seller
-              </button> */}
+              
               <ContactSellerButton productId={id} />
-
+              
             </div>
           </div>
         </main>

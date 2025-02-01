@@ -31,11 +31,11 @@ const buyermessagesschema = new mongoose.Schema({
         default: Date.now,
     },
 
-    // listerId: {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: 'users',  
-    //     required: true,
-    // },
+    id_of_lister: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'users',  
+        required: true,
+    },
     
     isActive:{
         type:Boolean,
