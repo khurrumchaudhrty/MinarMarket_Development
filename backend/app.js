@@ -56,5 +56,6 @@ app.use('/buyer-listings/update', BuyerRequirement);
 app.use('/proposals', require('./routes/ProposalRoutes'));
 // console.log("App.js wala API: ", process.env.REACT_APP_API_URL+"/api/buyer-requirement")
 app.use('/buyer-messages', BuyerMessages);
+app.use('/buyer-messages/check', BuyerMessages);
 
 module.exports = app;

@@ -43,21 +43,39 @@ const SAMPLE_PRODUCTS = [
   },
 ]
 
+// export function ProductList() {
+//   const userId=  getUserDetails().userId;
+//   const {data:products} = useQuery({
+//     queryKey: ["product"],
+//     queryFn: () => showMyProductListings(userId),
+//     enabled: !!userId,
+//   })
+  
+//   return (
+//     <div className="space-y-4">
+//       {products?.data.map((product) => (
+//         <ProductCard key={product.id} {...product} />
+//       ))}
+//     </div>
+//   )
+// }
 export function ProductList() {
-  const userId=  getUserDetails().userId;
-  const {data:products} = useQuery({
+  const userDetails = getUserDetails();  // Get user details safely
+  const userId = userDetails?.userId;   // Use optional chaining to prevent errors
+
+  const { data: products } = useQuery({
     queryKey: ["product"],
     queryFn: () => showMyProductListings(userId),
-    enabled: !!userId,
-  })
-  
+    enabled: !!userId,  // Only run query if userId exists
+  });
+
   return (
     <div className="space-y-4">
-      {products?.data.map((product) => (
+      {products?.data?.map((product) => (
         <ProductCard key={product.id} {...product} />
       ))}
     </div>
-  )
+  );
 }
 
 
@@ -84,20 +102,38 @@ export function RequirementList() {
   )
 }
 
-export function ServiceList()
-{
-  const userId=  getUserDetails().userId;
-  const {data:services} = useQuery({
+// export function ServiceList()
+// {
+//   const userId=  getUserDetails().userId;
+//   const {data:services} = useQuery({
+//     queryKey: ["service"],
+//     queryFn: () => showMyServiceListings(userId),
+//     enabled: !!userId,
+//   })
+  
+//   return (
+//     <div className="space-y-4">
+//       {services?.data.map((service) => (
+//         <ServiceCard key={service.id} {...service} />
+//       ))}
+//     </div>
+//   )
+// }
+export function ServiceList() {
+  const userDetails = getUserDetails();
+  const userId = userDetails?.userId;
+
+  const { data: services } = useQuery({
     queryKey: ["service"],
     queryFn: () => showMyServiceListings(userId),
     enabled: !!userId,
-  })
-  
+  });
+
   return (
     <div className="space-y-4">
-      {services?.data.map((service) => (
+      {services?.data?.map((service) => (
         <ServiceCard key={service.id} {...service} />
       ))}
     </div>
-  )
+  );
 }
