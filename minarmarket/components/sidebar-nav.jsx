@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Settings, ShoppingBag, FileText, ChevronDown, ChevronUp } from 'lucide-react'
+import { Settings, ShoppingBag, FileText, ChevronDown, ChevronUp, Settings2, MessageCircle } from 'lucide-react'
 import { useState } from 'react'
 
 import { Button } from "@/components/ui/button"
@@ -91,6 +91,16 @@ function SidebarNavComponent() {
       icon: Settings,
       href: "/app/admin",
     },
+
+    {
+      label: {
+        "seller": "Message Received",
+      },  
+      icon: MessageCircle,
+      href: "/app/seller/list-product",
+    },
+
+    
   ];
   
 

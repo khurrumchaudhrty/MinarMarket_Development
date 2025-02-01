@@ -59,13 +59,13 @@ export function ProductCard({
       {/* Keep the footer outside the main Link */}
       <CardFooter className="flex flex-col items-start gap-2 px-4">
         <div className="flex items-center gap-2">
-          <span className="text-lg font-bold">${price}</span>
+          <span className="text-lg font-bold">Rs. {price}</span>
           <Badge variant="secondary">Product</Badge>
         </div>
         {/* Separate Link for the "Send Proposal" button */}
         <Link href={`/send-proposal/${_id}`} className="w-full">
           <button className="w-full bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 rounded-md">
-            Send Proposal
+            View Details
           </button>
         </Link>
       </CardFooter>
@@ -127,12 +127,12 @@ export function ServiceCard({
       </CardContent>
       <CardFooter className="flex flex-col items-start gap-2 px-4">
         <div className="flex items-center gap-2">
-          <span className="text-lg font-bold">${rate}</span>
+          <span className="text-lg font-bold">Rs. {rate}/??</span>
           <Badge variant="secondary">Service</Badge>
         </div>
         <Link href={`/send-proposal/${_id}`} className="w-full">
           <button className="w-full bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 rounded-md">
-            Send Proposal 
+            View Details
           </button>
         </Link>
       </CardFooter>
