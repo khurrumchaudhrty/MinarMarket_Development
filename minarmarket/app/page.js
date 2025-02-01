@@ -21,13 +21,13 @@ export default function Home() {
       <main className="flex-1">
         <section className="relative">
           <div className="container relative min-h-[600px] flex items-center">
-            <Image
+            {/* <Image
               src=""
               alt="Hero Image"
               fill
               className="object-cover absolute inset-0 -z-10"
               priority
-            />
+            /> */}
             <div className="flex flex-col items-start gap-4 max-w-2xl relative z-10 bg-white/80 p-8 rounded-lg">
               <h1 className="text-3xl font-bold sm:text-5xl md:text-6xl">
                 FIND CLOTHES THAT MATCHES YOUR STYLE
@@ -53,7 +53,7 @@ export default function Home() {
               >
                 <div className="relative aspect-square w-12">
                   <img
-                    src={category.image || ""}
+                    src={category.image || "https://placehold.co/600x400/png"}
                     alt={category.name}
                     className="rounded-lg object-cover"
                   />
@@ -74,7 +74,7 @@ export default function Home() {
               >
                 <div className="relative aspect-square w-12">
                   <img
-                    src={category.image || ""}
+                    src={category.image || "https://placehold.co/600x400/png"}
                     alt={category.name}
                     className="rounded-lg object-cover"
                   />
