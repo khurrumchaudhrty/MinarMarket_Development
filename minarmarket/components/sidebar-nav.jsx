@@ -97,7 +97,7 @@ function SidebarNavComponent() {
         "seller": "Message Received",
       },  
       icon: MessageCircle,
-      href: "/app/seller/list-product",
+      href: "/app/seller/buyers-messages",
     },
 
     
