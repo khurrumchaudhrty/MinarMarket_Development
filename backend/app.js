@@ -2,6 +2,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
+// app.use(express.json());
+// app.use(express.urlencoded({ extended: true }));
 
 // Routes
 const UserAuthRoutes = require('./routes/UserAuthRoutes');
@@ -18,6 +20,7 @@ const BuyerProductRequirementController = require('./routes/BuyerProductRequirem
 const ServiceListingRoutes = require('./routes/ServiceListingRoutes');
 const ProductListingRoutes = require('./routes/ProductListingRoutes');
 const ComplaintRoutes = require('./routes/ComplaintRoutes');
+const BuyerMessages = require('./routes/BuyerMessages');
 
 const app = express();
 
@@ -54,5 +57,7 @@ app.use('/buyer-listings/update', BuyerRequirement);
 app.use('/proposals', require('./routes/ProposalRoutes'));
 app.use('/report', ComplaintRoutes);
 // console.log("App.js wala API: ", process.env.REACT_APP_API_URL+"/api/buyer-requirement")
+app.use('/buyer-messages', BuyerMessages);
+app.use('/buyer-messages/check', BuyerMessages);
 
 module.exports = app;
