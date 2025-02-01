@@ -17,6 +17,7 @@ const BuyerRequirement = require('./routes/BuyerRequirementRoutes');
 const BuyerProductRequirementController = require('./routes/BuyerProductRequirementRoutes');
 const ServiceListingRoutes = require('./routes/ServiceListingRoutes');
 const ProductListingRoutes = require('./routes/ProductListingRoutes');
+const ComplaintRoutes = require('./routes/ComplaintRoutes');
 
 const app = express();
 
@@ -51,6 +52,7 @@ app.use('/buyer-listings/delete', BuyerRequirement);
 app.use('/buyer-listings/update', BuyerRequirement);
 
 app.use('/proposals', require('./routes/ProposalRoutes'));
+app.use('/report', ComplaintRoutes);
 // console.log("App.js wala API: ", process.env.REACT_APP_API_URL+"/api/buyer-requirement")
 
 module.exports = app;
