@@ -73,26 +73,16 @@ function SidebarNavComponent() {
     },
     {
       label: {
-        "seller": "Proposals Sent",
-        "buyer": "Messages Sent"
+        "seller": "My Offers",
+        "buyer": "My Proposals"
       },
       icon: FileText,
       href: "/",
-      // subitems: {
-      //   "Received": "/app/received-proposals",
-      //   "Sent": "/app/sent-proposals",
-      // }
+      subitems: {
+        "Received": "/app/received-proposals",
+        "Sent": "/app/sent-proposals",
+      }
     },
-    
-    {
-      label: {
-        "seller": "Message Received",
-        "buyer": "Proposals Received"
-      },  
-      icon: MessageCircle,
-      href: "/app/seller/list-product",
-    },
-
     {
       label: {
         "seller": "Settings",
@@ -102,7 +92,13 @@ function SidebarNavComponent() {
       href: "/app/admin",
     },
 
-    
+    {
+      label: {
+        "seller": "Message Received",
+      },  
+      icon: MessageCircle,
+      href: "/app/seller/list-product",
+    },
 
     
   ];
