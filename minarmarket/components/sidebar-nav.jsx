@@ -100,7 +100,7 @@ function SidebarNavComponent() {
             ) : (
               <Link href={route.href} className={`flex items-center py-3 ${pathname === route.href ? "bg-secondary" : ""}`}>
                 <route.icon className="mr-2 h-4 w-4" />
-                {route.label}
+                {route.label[type]}
               </Link>
             )}
           </AccordionItem>
