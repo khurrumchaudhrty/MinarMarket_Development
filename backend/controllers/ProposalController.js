@@ -1,3 +1,4 @@
+const BuyerRequirement = require('../models/BuyerRequirement');
 const Proposal = require('../models/Proposal');
 const User = require('../models/User');
 
@@ -129,6 +130,60 @@ exports.getProposalsByUser = async (req, res) => {
       success: false,
       message: 'Error fetching proposals',
       error: error.message
+    });
+  }
+};
+
+exports.getReceivedProposals = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    console.log(userId)
+    const requirements = await BuyerRequirement.find({ listerId: userId });
+    // console.log("requirements", requirements)
+    const requirementIds = requirements.map(requirement => requirement._id);
+    // const proposals = await Proposal.find({ requirementId })
+    //   .populate('sellerId', 'name email')
+    //   .populate('sellerListingId')
+    //   .populate('requirementId');
+    const proposals = await Proposal.find({ requirementId: { $in: requirementIds } })
+      .populate('sellerId', 'name email')
+      .populate('sellerListingId')
+      .populate('requirementId');
+      console.log(proposals)
+    res.status(200).json({
+      success: true,
+      proposals
+    });
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error fetching proposals'
+    });
+  }
+};
+
+
+exports.updateProposalStatus = async (req, res) => {
+  try {
+    const { proposalId } = req.params;
+    const { status } = req.body;
+
+    const proposal = await Proposal.findByIdAndUpdate(
+      proposalId,
+      { status },
+      { new: true }
+    );
+
+    res.status(200).json({
+      success: true,
+      message: `Proposal ${status} successfully`,
+      proposal
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Error updating proposal'
     });
   }
 };

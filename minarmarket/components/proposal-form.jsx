@@ -49,8 +49,7 @@ const showMyProductListings = async (userId) => {
 };
 
 export function ProposalForm() {
-  const [price, setPrice] = useState("");
-  const [description, setDescription] = useState("");
+  
   const [selectedProduct, setSelectedProduct] = useState(null);
   const searchParams = useSearchParams();
   const productId = searchParams.get("id");
