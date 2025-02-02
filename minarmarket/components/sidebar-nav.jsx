@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Settings, ShoppingBag, FileText, ChevronDown, ChevronUp } from 'lucide-react'
+import { Settings, ShoppingBag, FileText, ChevronDown, ChevronUp, Settings2, MessageCircle } from 'lucide-react'
 import { useState } from 'react'
 
 import { Button } from "@/components/ui/button"
@@ -15,6 +15,43 @@ function SidebarNavComponent() {
   const [openDropdown, setOpenDropdown] = useState(null)
   const [type, setType] = useLocalStorage("type", "buyer");
 
+  // const routes = [
+  //   {
+  //     label: {
+  //       "seller": "My Listings",
+  //       "buyer": "My Requirements"
+  //     },
+  //     icon: ShoppingBag,
+  //     href: "/my-listings",
+  //     subitems: {
+  //       "buyer": {
+  //         "Product Requirements": "/app/buyer/my-products",
+  //         "Service Requirements": "/app/buyer/my-services",
+  //       },
+  //       "seller": {
+  //         "Products": "/app/seller/my-products",
+  //         "Services": "/app/seller/my-services",
+  //       }
+  //     }
+  //   },
+  //   {
+  //     label: {
+  //       "seller": "My Offers",
+  //       "buyer": "My Proposals"
+  //     },
+  //     icon: FileText,
+  //     href: "/",
+  //     subitems: {
+  //       "Received": "/app/received-proposals",
+  //       "Sent": "/app/sent-proposals",
+  //     }
+  //   },
+  //   {
+  //     label: "Settings",
+  //     icon: Settings,
+  //     href: "/app/admin",
+  //   },
+  // ]
   const routes = [
     {
       label: {
@@ -47,11 +84,25 @@ function SidebarNavComponent() {
       }
     },
     {
-      label: "Settings",
+      label: {
+        "seller": "Settings",
+        "buyer": "Settings"
+      },  
       icon: Settings,
       href: "/app/admin",
     },
-  ]
+
+    {
+      label: {
+        "seller": "Message Received",
+      },  
+      icon: MessageCircle,
+      href: "/app/seller/list-product",
+    },
+
+    
+  ];
+  
 
  
 
@@ -65,7 +116,10 @@ function SidebarNavComponent() {
                 <AccordionTrigger className={`flex items-center ${pathname === route.href ? "bg-secondary" : ""}`}>
                   <div className="flex items-center">
                     <route.icon className="mr-2 h-4 w-4" />
+                    
                     {route.label[type]}  {/* Render based on 'type' */}
+                    
+
                   </div>
                 </AccordionTrigger>
                 <AccordionContent>
@@ -99,7 +153,7 @@ function SidebarNavComponent() {
             ) : (
               <Link href={route.href} className={`flex items-center py-3 ${pathname === route.href ? "bg-secondary" : ""}`}>
                 <route.icon className="mr-2 h-4 w-4" />
-                {route.label}
+                {route.label[type]}
               </Link>
             )}
           </AccordionItem>

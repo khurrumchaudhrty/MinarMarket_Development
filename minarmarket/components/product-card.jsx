@@ -42,6 +42,7 @@ export function ProductCard({
                         alt={`${title} - Image ${index + 1}`}
                         fill
                         className="object-cover"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       />
                     </AspectRatio>
                   </CarouselItem>
@@ -58,13 +59,13 @@ export function ProductCard({
       {/* Keep the footer outside the main Link */}
       <CardFooter className="flex flex-col items-start gap-2 px-4">
         <div className="flex items-center gap-2">
-          <span className="text-lg font-bold">Rs.{price}</span>
+          <span className="text-lg font-bold">Rs. {price}</span>
           <Badge variant="secondary">Product</Badge>
         </div>
         {/* Separate Link for the "Send Proposal" button */}
         {/* <Link href={`/send-proposal/${_id}`} className="w-full">
           <button className="w-full bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 rounded-md">
-            Send Proposal
+            View Details
           </button>
         </Link> */}
       </CardFooter>
@@ -97,6 +98,7 @@ export function ServiceCard({
                       alt={`${title} - Image ${index + 1}`}
                       fill
                       className="object-cover"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     />
                   </AspectRatio>
                 </CarouselItem>
@@ -110,6 +112,7 @@ export function ServiceCard({
                         alt={`${title} - Image`}
                         fill
                         className="object-cover"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       />
                     </AspectRatio>
                   </CarouselItem>
@@ -124,12 +127,12 @@ export function ServiceCard({
       </CardContent>
       <CardFooter className="flex flex-col items-start gap-2 px-4">
         <div className="flex items-center gap-2">
-          <span className="text-lg font-bold">Rs.{rate}</span>
+          <span className="text-lg font-bold">Rs. {rate}/??</span>
           <Badge variant="secondary">Service</Badge>
         </div>
         {/* <Link href={`/send-proposal/${_id}`} className="w-full">
           <button className="w-full bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 rounded-md">
-            Send Proposal 
+            View Details
           </button>
         </Link> */}
       </CardFooter>
