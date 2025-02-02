@@ -3,20 +3,47 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Checkbox } from "@/components/ui/checkbox"
 import { Button } from "@/components/ui/button"
 import { useState } from "react"
+import { useMutation } from "@tanstack/react-query"
+import { updateProductListingsStatus } from "@/lib/api/admin"
 
-export function ProductsTable({ products }) {
+export function ProductsTable({ products, refetch }) {
   const [selectedProducts, setSelectedProducts] = useState([])
 
-  
+  const { mutate: updateStatus, isLoading } = useMutation({
+    mutationFn: ({ ids, status }) => updateProductListingsStatus(ids, status),
+    onSuccess: () => {
+      refetch()
+      setSelectedProducts([])
+    },
+    onError: (error) => {
+      console.error('Failed to update status:', error)
+    }
+  })
+
+  const handleStatusUpdate = (newStatus) => {
+    if (selectedProducts.length === 0) return
+    updateStatus({ ids: selectedProducts, status: newStatus })
+  }
 
   return (
     <div className="w-full">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-semibold">Listing Requests</h1>
         <div className="space-x-2 mr-8">
-          <Button variant="secondary">Approve</Button>
-          <Button variant="secondary">Reject</Button>
-          
+          <Button 
+            variant="secondary" 
+            onClick={() => handleStatusUpdate('Approved')}
+            disabled={selectedProducts.length === 0 || isLoading}
+          >
+            Approve
+          </Button>
+          <Button 
+            variant="secondary"
+            onClick={() => handleStatusUpdate('Rejected')}
+            disabled={selectedProducts.length === 0 || isLoading}
+          >
+            Reject
+          </Button>
         </div>
       </div>
 
@@ -29,7 +56,7 @@ export function ProductsTable({ products }) {
               indeterminate={selectedProducts.length > 0 && selectedProducts.length < products.length}
               onCheckedChange={(checked) => {
                 if (checked) {
-                  setSelectedProducts(products.map(product => product.id))
+                  setSelectedProducts(products.map(product => product._id))
                 } else {
                   setSelectedProducts([])
                 }
@@ -37,31 +64,35 @@ export function ProductsTable({ products }) {
             />
             </TableHead>
             <TableHead>Listing ID</TableHead>
+            <TableHead>Title</TableHead>
+            <TableHead>Category</TableHead>
+            <TableHead>Price</TableHead>
             <TableHead>Seller</TableHead>
             <TableHead>Date Listed</TableHead>
-            <TableHead>Title</TableHead>
             <TableHead>Status</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {products.map((product) => (
-            <TableRow key={product.id}>
+            <TableRow key={product._id}>
               <TableCell>
               <Checkbox 
-                checked={selectedProducts.includes(product.id)}
+                checked={selectedProducts.includes(product._id)}
                 onCheckedChange={(checked) => {
                   if (checked) {
-                    setSelectedProducts([...selectedProducts, product.id])
+                    setSelectedProducts([...selectedProducts, product._id])
                   } else {
-                    setSelectedProducts(selectedProducts.filter(id => id !== product.id))
+                    setSelectedProducts(selectedProducts.filter(id => id !== product._id))
                   }
                 }}
               />
               </TableCell>
-              <TableCell className="font-medium text-blue-600">{product.id}</TableCell>
-              <TableCell>{product.seller}</TableCell>
-              <TableCell>{product.dateListed}</TableCell>
+              <TableCell className="font-medium text-blue-600">{product._id}</TableCell>
               <TableCell>{product.title}</TableCell>
+              <TableCell>{product.category}</TableCell>
+              <TableCell>${product.price}</TableCell>
+              <TableCell>{product.listerId.name}</TableCell>
+              <TableCell>{new Date(product.createdAt).toLocaleDateString()}</TableCell>
               <TableCell>
                 <span
                   className={`inline-block rounded-full px-2 py-1 text-xs font-semibold ${
@@ -78,7 +109,7 @@ export function ProductsTable({ products }) {
                 </span>
               </TableCell>
             </TableRow>
-          ))}\
+          ))}
         </TableBody>
       </Table>
     </div>
