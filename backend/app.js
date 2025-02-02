@@ -59,6 +59,7 @@ app.use('/buyer-messages', BuyerMessages);
 app.use('/buyer-messages/check', BuyerMessages);
 
 app.use("/message-from-buyers", BuyerMessagesToSellers);
+app.use("/update-message-status", BuyerMessagesToSellers);
 
 
 module.exports = app;
