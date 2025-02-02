@@ -52,6 +52,7 @@ app.use('/buyer-product-requirement', BuyerProductRequirementController);
 app.use('/buyer-listings', BuyerRequirement);
 app.use('/buyer-listings/delete', BuyerRequirement);
 app.use('/buyer-listings/update', BuyerRequirement);
+// Add this line in your app.js or index.js
 
 
 

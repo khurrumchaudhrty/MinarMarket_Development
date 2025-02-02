@@ -65,7 +65,7 @@ export function BuyerProductCard({
           <Badge variant="secondary">Product</Badge>
         </div>
         {/* Separate Link for the "Send Proposal" button */}
-        <Link href={`/app/seller/proposal?id=${_id}`} className="w-full">
+        <Link href={`/send-proposal/${_id}`} className="w-full">
           <button className="w-full bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 rounded-md">
             Send Proposal
           </button>
