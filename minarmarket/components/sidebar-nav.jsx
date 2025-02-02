@@ -55,9 +55,9 @@ function SidebarNavComponent() {
         "buyer": "My Proposals"
       },
       icon: FileText,
-      href: "/proposals",
+      href: "/proposal",
       subitems: {
-        "Received": "/app/received-proposals",
+        "Received": "/app/seller/proposal",
         "Sent": "/app/sent-proposals",
       }
     },
