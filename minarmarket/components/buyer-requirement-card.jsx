@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/carousel";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 
-export function ProductCard({
+export function BuyerProductCard({
   _id,
   title,
   images,
@@ -63,17 +63,17 @@ export function ProductCard({
           <Badge variant="secondary">Product</Badge>
         </div>
         {/* Separate Link for the "Send Proposal" button */}
-        {/* <Link href={`/send-proposal/${_id}`} className="w-full">
+        <Link href={`/send-proposal/${_id}`} className="w-full">
           <button className="w-full bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 rounded-md">
             Send Proposal
           </button>
-        </Link> */}
+        </Link>
       </CardFooter>
     </Card>
   );
 }
 
-export function ServiceCard({
+export function BuyerServiceCard({
   _id,
   title,
   images,

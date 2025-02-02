@@ -1,7 +1,7 @@
 "use client"
 import { Header } from "@/components/header"
 import { SidebarNav } from "@/components/sidebar-nav"
-import { ProductCard } from "@/components/product-card"
+import { BuyerProductCard } from "@/components/buyer-requirement-card"
 import { useQuery } from "@tanstack/react-query"
 import { getBuyerRequirements } from "@/lib/api/buyer-requirement"
 import { getUserDetails } from "@/lib/SessionManager"
@@ -31,7 +31,7 @@ export default function BuyerRequirementsPage() {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {requirements?.data?.map((requirement) => (
-              <ProductCard 
+              <BuyerProductCard
                 key={requirement._id} 
                 {...requirement}
               />
