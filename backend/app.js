@@ -21,6 +21,8 @@ const ServiceListingRoutes = require('./routes/ServiceListingRoutes');
 const ProductListingRoutes = require('./routes/ProductListingRoutes');
 const BuyerMessages = require('./routes/BuyerMessages');
 
+const BuyerServiceRequirement = require('./routes/BuyerServiceRequirementRoutes');
+
 const app = express();
 
 app.use(cors());
@@ -53,7 +55,7 @@ app.use('/buyer-product-requirement', BuyerProductRequirementController);
 app.use('/buyer-listings', BuyerRequirement);
 app.use('/buyer-listings/delete', BuyerRequirement);
 app.use('/buyer-listings/update', BuyerRequirement);
-// Add this line in your app.js or index.js
+app.use('/buyer-service-requirement', BuyerServiceRequirement);
 
 
 

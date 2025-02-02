@@ -53,3 +53,19 @@ export async function showMyServiceListings(userId) {
   if (!response.ok) throw new Error('Failed to fetch service listings')
   return response.json()
 }
+
+export async function createServiceRequirement(data) {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/buyer-service-requirement`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+    })
+    if (!response.ok) throw new Error('Failed to create service requirement')
+    return response.json()
+}
+
+export async function getMyServiceRequirements(userId) {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/buyer-service-requirement?userId=${userId}`)
+    if (!response.ok) throw new Error('Failed to fetch service requirements')
+    return response.json()
+}

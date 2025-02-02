@@ -13,16 +13,16 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { ImageUpload } from "@/components/image-upload"
-import { productSchema } from "@/lib/validations/product"
+import { productSchema, requirementSchema } from "@/lib/validations/product"
 import { serviceSchema } from "@/lib/validations/service"
-import { fetchService, createService, updateService, uploadToCloudinary } from "@/lib/api/service"
+import { fetchService, createService, updateService, uploadToCloudinary, createServiceRequirement } from "@/lib/api/service"
 import { useToast } from "@/hooks/use-toast"
 import { getUserDetails } from "@/lib/SessionManager"
 import { Toaster } from "./ui/toaster"
 
 const categories = ["Electronics", "Clothing", "Books", "Home & Garden", "Sports", "Toys", "Other"]
 
-export function ServiceForm() {
+export function ServiceRequirementForm() {
   const { toast } = useToast()
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -40,7 +40,7 @@ export function ServiceForm() {
   })
 
   const form = useForm({
-    resolver: zodResolver(serviceSchema),
+    resolver: zodResolver(requirementSchema),
     defaultValues: {
       title: serviceData?.title || "",
       description: serviceData?.description || "",
@@ -54,10 +54,10 @@ export function ServiceForm() {
 
   // Initialize form with existing data
   useEffect(() => {
-    if (serviceData?.images) {
-      setFiles(serviceData.images)
-      form.setValue("images", serviceData.images)
-    }
+    // if (serviceData?.images) {
+    //   setFiles(serviceData.images)
+    //   form.setValue("images", serviceData.images)
+    // }
     if (serviceData) {
       form.setValue("title", serviceData.title ?? '')
       form.setValue("description", serviceData.description ?? '')
@@ -74,26 +74,26 @@ export function ServiceForm() {
       try {
         setUploading(true)
 
-        const uploadedImages = await Promise.all(
-          files.map(async (file) => {
-            if (typeof file === 'string' || (file.url && typeof file.url === 'string')) {
-              return { url: typeof file === 'string' ? file : file.url };
-            }
-            const url = await uploadToCloudinary(file);
-            return { name: file.name, url: url };
-          })
-        );
+        // const uploadedImages = await Promise.all(
+        //   files.map(async (file) => {
+        //     if (typeof file === 'string' || (file.url && typeof file.url === 'string')) {
+        //       return { url: typeof file === 'string' ? file : file.url };
+        //     }
+        //     const url = await uploadToCloudinary(file);
+        //     return { name: file.name, url: url };
+        //   })
+        // );
 
         const finalData = {
           ...formData,
           userId: user.userId,
-          images: uploadedImages,
+          // images: uploadedImages,
         }
 
-        if (serviceId) {
-          return await updateService(serviceId, finalData)
-        }
-        return await createService(finalData)
+        // if (serviceId) {
+        //   return await updateService(serviceId, finalData)
+        // }
+        return await createServiceRequirement(finalData)
       } catch (error) {
         console.error("Mutation error:", error)
         throw error
@@ -107,7 +107,7 @@ export function ServiceForm() {
         title: serviceId ? "Service updated" : "Service created",
         description: "Your service has been submitted for approval.",
       })
-      router.push('/app/seller/my-services')
+      router.push('/app/buyer/my-services')
     },
     onError: (error) => {
       toast({
@@ -149,7 +149,15 @@ export function ServiceForm() {
       <Form {...form}>
         <form onSubmit={(e) => {
           e.preventDefault()
-          form.handleSubmit(onSubmit)()
+          form.handleSubmit(onSubmit,(errors)=>{
+            toast({
+              title: "Error",
+              description: Object.keys(errors)
+              .map(key => `${key}: ${errors[key].message}`)
+              .join(', '),
+              variant: "destructive",
+            });
+          })()
         }} className="space-y-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-6">
@@ -267,7 +275,7 @@ export function ServiceForm() {
               />
             </div>
 
-            <div className="space-y-6">
+            {/* <div className="space-y-6">
               <div>
                 <FormLabel>Upload Images</FormLabel>
                 <ImageUpload onFilesSelected={handleFilesSelected} uploading={uploading} setUploading={setUploading} />
@@ -288,7 +296,7 @@ export function ServiceForm() {
                   </div>
                 </div>
               )}
-            </div>
+            </div> */}
           </div>
 
           <Button type="submit" className="w-full md:w-auto" disabled={mutation.isPending}>

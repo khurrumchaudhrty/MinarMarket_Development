@@ -4,8 +4,8 @@ import { SidebarNav } from "@/components/sidebar-nav"
 import { ProductCard } from "@/components/product-card"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { ProductList } from "@/components/data-list"
+import { ServiceRequirementForm } from "@/components/service-requirement-form"
 
-import { ServiceForm } from "@/components/service-form"
 
 export default function ListServicePage() {
   return (
@@ -15,7 +15,7 @@ export default function ListServicePage() {
       <SidebarNav />
         <main className="flex-1 px-6">
           <h1 className="text-2xl font-semibold mb-6">List your Service</h1>
-          <ServiceForm />
+          <ServiceRequirementForm />
         </main>
 
       </div>
