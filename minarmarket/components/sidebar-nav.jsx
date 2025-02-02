@@ -70,7 +70,7 @@ function SidebarNavComponent() {
       href: "/proposal",
       subitems: {
         
-        "Sent": "/app/sent-proposals",
+        "Sent": "/app/seller/sent-proposal",
       }
     },
     {

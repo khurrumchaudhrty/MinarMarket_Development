@@ -187,3 +187,26 @@ exports.updateProposalStatus = async (req, res) => {
     });
   }
 };
+
+exports.getSellerProposals = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    
+    const proposals = await Proposal.find({ sellerId: userId })
+      .populate('sellerId', 'name email')
+      .populate('requirementId')
+      .populate('sellerListingId')
+      .sort({ createdAt: -1 });
+
+    res.status(200).json({
+      success: true,
+      proposals
+    });
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error fetching seller proposals'
+    });
+  }
+};
