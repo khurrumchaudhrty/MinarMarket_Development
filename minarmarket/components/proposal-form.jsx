@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
+import { useSearchParams } from "next/navigation"
 
 // Simulated API call to fetch products
 
@@ -29,7 +30,8 @@ export function ProposalForm() {
   const [price, setPrice] = useState("")
   const [description, setDescription] = useState("")
   const [selectedProduct, setSelectedProduct] = useState(null)
-
+  const searchParams = useSearchParams()
+  const productId =  searchParams.get("id")
   const queryClient = useQueryClient()
 
   const { data: products = [] } = useQuery({
@@ -58,8 +60,8 @@ export function ProposalForm() {
   }
 
   return (
-    <div className="max-w-md mx-auto p-4">
-      <h2 className="text-2xl font-bold mb-4">Send Proposal</h2>
+    <div className="w-full max-w-md p-4">
+      
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label htmlFor="price" className="block text-sm font-medium text-gray-700">
@@ -88,7 +90,7 @@ export function ProposalForm() {
         </div>
         <Accordion type="single" collapsible className="w-full">
           <AccordionItem value="products">
-            <AccordionTrigger>Choose Product</AccordionTrigger>
+            <AccordionTrigger>Offer against product</AccordionTrigger>
             <AccordionContent>
               <ul className="space-y-2">
                 {products.map((product) => (

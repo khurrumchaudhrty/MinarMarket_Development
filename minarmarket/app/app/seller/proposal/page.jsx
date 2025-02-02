@@ -16,7 +16,8 @@ export default function Proposal() {
       <Header />
       <div className="container flex-1 items-start md:grid md:grid-cols-[220px_1fr] md:gap-4 md:py-6">
         <SidebarNav />
-        <main className="flex-1 px-6">
+        <main className="flex-1 px-6 ">
+        <h1 className="text-2xl font-semibold mb-6">Send Proposal</h1>
         <ProposalForm />
         </main>
       </div>
