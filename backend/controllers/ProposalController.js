@@ -3,25 +3,40 @@ const User = require('../models/User');
 
 exports.createProposal = async (req, res) => {
   try {
-    const { buyerId, sellerId, requirementId, price, description } = req.body;
+    console.log(req.body)
+    const { sellerId, requirementId, sellerListingId} = req.body;
 
-    if (!buyerId || !sellerId || !requirementId || !price || !description) {
+    // Check for missing required fields
+    if (!sellerId || !requirementId || !sellerListingId) {
       return res.status(400).json({
         success: false,
         message: 'Missing required fields'
       });
     }
 
-    const proposal = new Proposal({
-      buyerId,
-      sellerId,
+    const existingProposal = await Proposal.findOne({
       requirementId,
-      price,
-      description
+      sellerListingId,
     });
 
+    if (existingProposal) {
+      return res.status(400).json({
+        success: false,
+        message: 'This listing has already been offered against this requirement',
+      });
+    }
+
+    // Create a new proposal with the specified attributes
+    const proposal = new Proposal({
+      sellerId,
+      requirementId,
+      sellerListingId
+    });
+
+    // Save the proposal to the database
     await proposal.save();
 
+    // Respond with success message and the created proposal
     res.status(201).json({
       success: true,
       message: 'Proposal created successfully',
@@ -36,6 +51,43 @@ exports.createProposal = async (req, res) => {
       error: error.message
     });
   }
+
+
+  // try {
+    
+  //   const { buyerId, sellerId, requirementId, price, description } = req.body;
+
+  //   if (!buyerId || !sellerId || !requirementId || !price || !description) {
+  //     return res.status(400).json({
+  //       success: false,
+  //       message: 'Missing required fields'
+  //     });
+  //   }
+
+  //   const proposal = new Proposal({
+  //     buyerId,
+  //     sellerId,
+  //     requirementId,
+  //     price,
+  //     description
+  //   });
+
+  //   await proposal.save();
+
+  //   res.status(201).json({
+  //     success: true,
+  //     message: 'Proposal created successfully',
+  //     proposal
+  //   });
+
+  // } catch (error) {
+  //   console.error('Error creating proposal:', error);
+  //   res.status(500).json({
+  //     success: false, 
+  //     message: 'Error creating proposal',
+  //     error: error.message
+  //   });
+  // }
 };
 
 exports.getProposalsByUser = async (req, res) => {
