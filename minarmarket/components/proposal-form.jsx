@@ -1,120 +1,159 @@
 "use client"
 
-import { useState } from "react"
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import { useSearchParams } from "next/navigation"
+import { useState } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { Button } from "@/components/ui/button";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { useSearchParams } from "next/navigation";
+import { getUserDetails } from "@/lib/SessionManager";
+import { ProductCard } from "@/components/product-card";
 
-// Simulated API call to fetch products
-
-const fetchProducts = async () => {
-  // In a real application, this would be an API call
-  return [
-    { id: 1, name: "Product A" },
-    { id: 2, name: "Product B" },
-    { id: 3, name: "Product C" },
-  ]
-}
-
-// Simulated API call to submit proposal
 const submitProposal = async (proposalData) => {
-  // In a real application, this would be an API call
-  console.log("Submitting proposal:", proposalData)
-  return { success: true, message: "Proposal submitted successfully" }
-}
+
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/proposals/`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(proposalData),
+  });
+  const data = await response.json();
+  alert(data.message)
+  
+  if (!response.ok) {
+    setSelectedProduct(null)
+    throw new Error("Failed to submit proposal");
+  }
+  else{
+    window.location.href = '/app/seller/buyer-products';
+  }
+  
+  return response.json();
+  
+};
+
+const showMyProductListings = async (userId) => { 
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/product-listings/buyer/my-product-listings`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: userId }),
+    });
+
+  if (!response.ok) {
+    alert('Failed to fetch product listings');
+    return;
+  }
+
+  const data = await response.json();
+  return data;
+};
 
 export function ProposalForm() {
-  const [price, setPrice] = useState("")
-  const [description, setDescription] = useState("")
-  const [selectedProduct, setSelectedProduct] = useState(null)
-  const searchParams = useSearchParams()
-  const productId =  searchParams.get("id")
-  const queryClient = useQueryClient()
+  const [price, setPrice] = useState("");
+  const [description, setDescription] = useState("");
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const searchParams = useSearchParams();
+  const productId = searchParams.get("id");
+  const queryClient = useQueryClient();
+  
 
-  const { data: products = [] } = useQuery({
-    queryKey: ['products'],
-    queryFn: fetchProducts
-  })
 
+  const userDetails = getUserDetails();
+  const userId = userDetails?.userId;
+
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ['myProductListings', userId],
+    queryFn: () => showMyProductListings(userId),
+    enabled: !!userId,
+  });
+
+  const products = data?.data || []; 
 
   const mutation = useMutation({
     mutationFn: submitProposal,
     onSuccess: () => {
-      setPrice("")
-      setDescription("")
-      setSelectedProduct(null)
-      queryClient.invalidateQueries({ queryKey: ['products'] })
+      setPrice("");
+      setDescription("");
+      setSelectedProduct(null);
+      queryClient.invalidateQueries({ queryKey: ['myProductListings', userId] });
     },
-  })
+  });
 
   const handleSubmit = (e) => {
-    e.preventDefault()
-    mutation.mutate({
-      productId: selectedProduct,
-      price,
-      description
-    })
-  }
+    e.preventDefault();
+    if (!selectedProduct) return;
+
+
+    // mutation.mutate({
+    //   sellerId: userId,
+    //   requirementId: productId,
+    //   sellerListingId: selectedProduct._id,
+    // });
+  };
 
   return (
     <div className="w-full max-w-md p-4">
-      
+      {selectedProduct && (
+        <div className="mt-6">
+          <h2 className="text-lg font-semibold mb-2">Selected Product</h2>
+          <ProductCard {...selectedProduct} />
+        </div>
+      )}
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label htmlFor="price" className="block text-sm font-medium text-gray-700">
-            Price
-          </label>
-          <Input
-            id="price"
-            type="number"
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
-            placeholder="Enter price"
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="description" className="block text-sm font-medium text-gray-700">
-            Description
-          </label>
-          <Textarea
-            id="description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            placeholder="Enter description"
-            required
-          />
-        </div>
+        
+
         <Accordion type="single" collapsible className="w-full">
           <AccordionItem value="products">
             <AccordionTrigger>Offer against product</AccordionTrigger>
             <AccordionContent>
+              {isLoading && <p>Loading products...</p>}
+              {isError && <p className="text-red-600">Failed to load products</p>}
               <ul className="space-y-2">
-                {products.map((product) => (
-                  <li key={product.id}>
-                    <Button
-                      variant={selectedProduct?.id === product.id ? "default" : "outline"}
-                      onClick={() => setSelectedProduct(product)}
-                      className="w-full justify-start"
-                    >
-                      {product.name}
-                    </Button>
-                  </li>
-                ))}
+              {products.filter(product => product.status === "Approved").length > 0 ? (
+                products
+                  .filter(product => product.status === "Approved") // Filter approved products
+                  .map((product) => (
+                    <li key={product._id}>
+                      <Button
+                        variant={selectedProduct?._id === product._id ? "default" : "outline"}
+                        onClick={() => setSelectedProduct(product)}
+                        className="w-full justify-start"
+                      >
+                        {product.title}
+                      </Button>
+                    </li>
+                  ))
+              ) : (
+                <p>No products found</p>
+              )}
               </ul>
             </AccordionContent>
           </AccordionItem>
         </Accordion>
-        <Button type="submit" className="w-full" disabled={mutation.isLoading}>
+
+        {/* <Button type="submit" className="w-full" disabled={mutation.isLoading || !selectedProduct}>
+          onClick={() => submitProposal()}
+          {mutation.isLoading ? "Submitting..." : "Submit Proposal"}
+        </Button> */}
+        <Button 
+          className="w-full" 
+          onClick={() => {
+            if (selectedProduct) {
+              submitProposal({
+                sellerId: userId,
+                requirementId: productId,
+                sellerListingId: selectedProduct._id,
+              });
+            }
+          }}
+          disabled={mutation.isLoading || !selectedProduct}
+        >
           {mutation.isLoading ? "Submitting..." : "Submit Proposal"}
         </Button>
       </form>
-      {mutation.isError && <div className="mt-4 text-red-600">An error occurred: {mutation.error.message}</div>}
-      {mutation.isSuccess && <div className="mt-4 text-green-600">{mutation.data.message}</div>}
+
+      
     </div>
-  )
+  );
 }
+
+
 
