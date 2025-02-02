@@ -45,6 +45,7 @@ app.use('/service-listings', AllServicesListing);
 // Unified Product and Service Listings Routes
 app.use('/product-listings', ProductListingRoutes);
 app.use('/service-listings', ServiceListingRoutes);
+app.use('/proposals', require('./routes/ProposalRoutes'));
 //for Buyer Bids
 app.use('/bids/', Bids);
 app.use('/buyer-requirement', BuyerRequirement);
