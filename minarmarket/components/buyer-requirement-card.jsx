@@ -51,7 +51,9 @@ export function BuyerProductCard({
               <CarouselPrevious className="left-2" onClick={handleCarouselButtonClick} />
             <CarouselNext className="right-2" onClick={handleCarouselButtonClick} />
             </Carousel>
-            <h3 className="font-semibold py-4 px-2">{title}</h3>
+            
+
+            <h3 className="font-semibold py-10 px-2">{title}</h3>
           </div>
         </CardContent>
       </Link>
