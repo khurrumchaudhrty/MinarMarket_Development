@@ -20,7 +20,7 @@ const BuyerProductRequirementController = require('./routes/BuyerProductRequirem
 const ServiceListingRoutes = require('./routes/ServiceListingRoutes');
 const ProductListingRoutes = require('./routes/ProductListingRoutes');
 const BuyerMessages = require('./routes/BuyerMessages');
-
+const BuyerMessagesToSellers = require("./routes/BuyerMessagesToSellers");
 const app = express();
 
 app.use(cors());
@@ -57,5 +57,8 @@ app.use('/proposals', require('./routes/ProposalRoutes'));
 // console.log("App.js wala API: ", process.env.REACT_APP_API_URL+"/api/buyer-requirement")
 app.use('/buyer-messages', BuyerMessages);
 app.use('/buyer-messages/check', BuyerMessages);
+
+app.use("/message-from-buyers", BuyerMessagesToSellers);
+
 
 module.exports = app;

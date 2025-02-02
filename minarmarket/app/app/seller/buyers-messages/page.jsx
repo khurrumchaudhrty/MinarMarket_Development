@@ -1,21 +1,33 @@
+
 "use client";
 
-import { Header } from '@/components/header';
 import { SidebarNav } from '@/components/sidebar-nav';
 import { useState, useEffect } from "react";
+import { Header } from '@/components/header';
+import { getUserDetails } from "@/lib/SessionManager"; // Fetch logged-in user info
 
 export default function MessageChat() {
     const [messages, setMessages] = useState([]);
+    const [sellerId, setSellerId] = useState(null);
 
     useEffect(() => {
-        setMessages([
-            { id: 1, product: "MacBook Pro", name: "John Doe", email: "john@example.com" },
-            { id: 2, product: "iPhone 15", name: "Jane Smith", email: "jane@example.com" },
-            { id: 3, product: "Samsung TV", name: "Alice Brown", email: "alice@example.com" },
-            { id: 4, product: "Sony PlayStation 5", name: "Bob Martin", email: "bob@example.com" },
-            { id: 5, product: "Nike Shoes", name: "Charlie Adams", email: "charlie@example.com" },
-            { id: 6, product: "Dell Monitor", name: "Emma Wilson", email: "emma@example.com" },
-        ]);
+        const fetchMessages = async () => {
+            try {
+                const user = await getUserDetails(); // Get logged-in seller details
+                if (!user || !user.userId) return;
+                
+                setSellerId(user.id);
+                const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/message-from-buyers/${user.userId}`);
+                if (!response.ok) throw new Error("Failed to fetch messages");
+
+                const data = await response.json();
+                setMessages(data.messages);
+            } catch (error) {
+                console.error("Error fetching messages:", error);
+            }
+        };
+
+        fetchMessages();
     }, []);
 
     return (
@@ -36,7 +48,7 @@ export default function MessageChat() {
                                 <p className="text-gray-700">{msg.name}</p>
                                 <p className="text-gray-500 text-sm">{msg.email}</p>
                                 <button className="mt-4 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition">
-                                    Contact Seller
+                                    Contact Buyer
                                 </button>
                             </div>
                         ))}
