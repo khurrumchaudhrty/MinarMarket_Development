@@ -51,11 +51,11 @@ function SidebarNavComponent() {
     },
     {
       label: {
-        "seller": "My Offers",
+        "seller": "My Proposals",
         "buyer": "My Proposals"
       },
       icon: FileText,
-      href: "/",
+      href: "/proposals",
       subitems: {
         "Received": "/app/received-proposals",
         "Sent": "/app/sent-proposals",
@@ -94,7 +94,7 @@ function SidebarNavComponent() {
 
           return (
             <AccordionItem key={route.href} value={route.href}>
-              {route.subitems && route.subitems[type] ? (
+              {route.subitems ? (
                 <>
                   <AccordionTrigger className={`flex items-center ${pathname === route.href ? "bg-secondary" : ""}`}>
                     <div className="flex items-center">
@@ -104,15 +104,29 @@ function SidebarNavComponent() {
                   </AccordionTrigger>
                   <AccordionContent>
                     <div className="pl-4">
-                      {Object.entries(route.subitems[type]).map(([label, href]) => (
-                        <Link
-                          key={href}
-                          href={href}
-                          className="block w-full pl-6 py-2 text-sm text-muted-foreground hover:bg-secondary"
-                        >
-                          {label}
-                        </Link>
-                      ))}
+                      {route.subitems[type] ? 
+                        // Handle type-specific subitems
+                        Object.entries(route.subitems[type]).map(([label, href]) => (
+                          <Link
+                            key={href}
+                            href={href}
+                            className="block w-full pl-6 py-2 text-sm text-muted-foreground hover:bg-secondary"
+                          >
+                            {label}
+                          </Link>
+                        ))
+                        : 
+                        // Handle regular subitems
+                        Object.entries(route.subitems).map(([label, href]) => (
+                          <Link
+                            key={href}
+                            href={href}
+                            className="block w-full pl-6 py-2 text-sm text-muted-foreground hover:bg-secondary"
+                          >
+                            {label}
+                          </Link>
+                        ))
+                      }
                     </div>
                   </AccordionContent>
                 </>
