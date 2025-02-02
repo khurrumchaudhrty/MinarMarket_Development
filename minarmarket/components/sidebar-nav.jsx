@@ -51,14 +51,26 @@ function SidebarNavComponent() {
     },
     {
       label: {
-        "seller": "My Proposals",
+        
         "buyer": "My Proposals"
       },
       icon: FileText,
       href: "/proposal",
       subitems: {
-        "Received": "/app/seller/proposal",
-        "Sent": "/app/sent-proposals",
+        "Received": "/app/buyer/received-proposals",
+        
+      }
+    },
+    {
+      label: {
+        "seller": "My Proposals",
+        
+      },
+      icon: FileText,
+      href: "/proposal",
+      subitems: {
+        
+        "Sent": "/app/seller/sent-proposal",
       }
     },
     {

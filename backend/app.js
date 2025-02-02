@@ -60,6 +60,7 @@ app.use('/buyer-service-requirement', BuyerServiceRequirement);
 
 
 app.use('/proposals', require('./routes/ProposalRoutes'));
+
 app.use('/report', ComplaintRoutes);
 // console.log("App.js wala API: ", process.env.REACT_APP_API_URL+"/api/buyer-requirement")
 app.use('/buyer-messages', BuyerMessages);

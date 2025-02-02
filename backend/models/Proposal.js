@@ -54,7 +54,7 @@ const proposalSchema = new mongoose.Schema({
     },
     sellerListingId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Product', // Change 'Product' to the correct model name if necessary
+        ref: 'ProductListing', // Change 'Product' to the correct model name if necessary
         required: true
     },
     status: {
