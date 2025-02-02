@@ -15,43 +15,6 @@ function SidebarNavComponent() {
   const [openDropdown, setOpenDropdown] = useState(null)
   const [type, setType] = useLocalStorage("type", "buyer");
 
-  // const routes = [
-  //   {
-  //     label: {
-  //       "seller": "My Listings",
-  //       "buyer": "My Requirements"
-  //     },
-  //     icon: ShoppingBag,
-  //     href: "/my-listings",
-  //     subitems: {
-  //       "buyer": {
-  //         "Product Requirements": "/app/buyer/my-products",
-  //         "Service Requirements": "/app/buyer/my-services",
-  //       },
-  //       "seller": {
-  //         "Products": "/app/seller/my-products",
-  //         "Services": "/app/seller/my-services",
-  //       }
-  //     }
-  //   },
-  //   {
-  //     label: {
-  //       "seller": "My Offers",
-  //       "buyer": "My Proposals"
-  //     },
-  //     icon: FileText,
-  //     href: "/",
-  //     subitems: {
-  //       "Received": "/app/received-proposals",
-  //       "Sent": "/app/sent-proposals",
-  //     }
-  //   },
-  //   {
-  //     label: "Settings",
-  //     icon: Settings,
-  //     href: "/app/admin",
-  //   },
-  // ]
   const routes = [
     {
       label: {
@@ -68,6 +31,21 @@ function SidebarNavComponent() {
         "seller": {
           "Products": "/app/seller/my-products",
           "Services": "/app/seller/my-services",
+        }
+      }
+    },
+    {
+      label: {
+        "seller": "Buyer Requirements",
+        
+      },
+      icon: ShoppingBag,
+      href: "/app/seller/buyer-requirements",
+      subitems: {
+        
+        "seller": {
+          "Products": "/app/seller/buyer-products",
+          "Services": "/app/seller/buyer-services",
         }
       }
     },
@@ -99,6 +77,7 @@ function SidebarNavComponent() {
       icon: MessageCircle,
       href: "/app/seller/list-product",
     },
+    
 
     
   ];
@@ -109,24 +88,23 @@ function SidebarNavComponent() {
   return (
     <nav className="flex flex-col space-y-1 text-sm">
       <Accordion type="single" collapsible>
-        {routes.map((route) => (
-          <AccordionItem key={route.href} value={route.href}>
-            {route.subitems ? (
-              <>
-                <AccordionTrigger className={`flex items-center ${pathname === route.href ? "bg-secondary" : ""}`}>
-                  <div className="flex items-center">
-                    <route.icon className="mr-2 h-4 w-4" />
-                    
-                    {route.label[type]}  {/* Render based on 'type' */}
-                    
+        {routes.map((route) => {
+          // Check if route should be shown for current type
+          if (!route.label[type]) return null;
 
-                  </div>
-                </AccordionTrigger>
-                <AccordionContent>
-                  <div className="pl-4">
-                    {route.subitems[type] ? 
-                      // Handle buyer/seller specific subitems
-                      Object.entries(route.subitems[type]).map(([label, href]) => (
+          return (
+            <AccordionItem key={route.href} value={route.href}>
+              {route.subitems && route.subitems[type] ? (
+                <>
+                  <AccordionTrigger className={`flex items-center ${pathname === route.href ? "bg-secondary" : ""}`}>
+                    <div className="flex items-center">
+                      <route.icon className="mr-2 h-4 w-4" />
+                      {route.label[type]}
+                    </div>
+                  </AccordionTrigger>
+                  <AccordionContent>
+                    <div className="pl-4">
+                      {Object.entries(route.subitems[type]).map(([label, href]) => (
                         <Link
                           key={href}
                           href={href}
@@ -134,30 +112,19 @@ function SidebarNavComponent() {
                         >
                           {label}
                         </Link>
-                      ))
-                      : 
-                      // Handle regular subitems
-                      Object.entries(route.subitems).map(([label, href]) => (
-                        <Link
-                          key={href}
-                          href={href}
-                          className="block w-full pl-6 py-2 text-sm text-muted-foreground hover:bg-secondary"
-                        >
-                          {label}
-                        </Link>
-                      ))
-                    }
-                  </div>
-                </AccordionContent>
-              </>
-            ) : (
-              <Link href={route.href} className={`flex items-center py-3 ${pathname === route.href ? "bg-secondary" : ""}`}>
-                <route.icon className="mr-2 h-4 w-4" />
-                {route.label[type]}
-              </Link>
-            )}
-          </AccordionItem>
-        ))}
+                      ))}
+                    </div>
+                  </AccordionContent>
+                </>
+              ) : (
+                <Link href={route.href} className={`flex items-center py-3 ${pathname === route.href ? "bg-secondary" : ""}`}>
+                  <route.icon className="mr-2 h-4 w-4" />
+                  {route.label[type]}
+                </Link>
+              )}
+            </AccordionItem>
+          );
+        })}
       </Accordion>
     </nav>
   )
