@@ -19,8 +19,10 @@ const BuyerRequirement = require('./routes/BuyerRequirementRoutes');
 const BuyerProductRequirementController = require('./routes/BuyerProductRequirementRoutes');
 const ServiceListingRoutes = require('./routes/ServiceListingRoutes');
 const ProductListingRoutes = require('./routes/ProductListingRoutes');
+const ComplaintRoutes = require('./routes/ComplaintRoutes');
 const BuyerMessages = require('./routes/BuyerMessages');
 const BuyerMessagesToSellers = require("./routes/BuyerMessagesToSellers");
+const BuyerServiceRequirement = require('./routes/BuyerServiceRequirementRoutes');
 const app = express();
 
 app.use(cors());
@@ -45,6 +47,7 @@ app.use('/service-listings', AllServicesListing);
 // Unified Product and Service Listings Routes
 app.use('/product-listings', ProductListingRoutes);
 app.use('/service-listings', ServiceListingRoutes);
+app.use('/proposals', require('./routes/ProposalRoutes'));
 //for Buyer Bids
 app.use('/bids/', Bids);
 app.use('/buyer-requirement', BuyerRequirement);
@@ -52,8 +55,12 @@ app.use('/buyer-product-requirement', BuyerProductRequirementController);
 app.use('/buyer-listings', BuyerRequirement);
 app.use('/buyer-listings/delete', BuyerRequirement);
 app.use('/buyer-listings/update', BuyerRequirement);
+app.use('/buyer-service-requirement', BuyerServiceRequirement);
+
+
 
 app.use('/proposals', require('./routes/ProposalRoutes'));
+app.use('/report', ComplaintRoutes);
 // console.log("App.js wala API: ", process.env.REACT_APP_API_URL+"/api/buyer-requirement")
 app.use('/buyer-messages', BuyerMessages);
 app.use('/buyer-messages/check', BuyerMessages);

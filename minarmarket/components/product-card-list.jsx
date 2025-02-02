@@ -21,7 +21,7 @@ export function ProductCard({ _id, title, description, images, price, category, 
       <div className="flex-1">
         <div className="flex justify-between items-start mb-2">
           <h3 className="text-lg font-semibold">{title}</h3>
-          <span className="text-lg font-bold">${price}</span>
+          <span className="text-lg font-bold">Rs.{price}</span>
         </div>
         <p className="text-muted-foreground mb-2">{description}</p>
         <div className="flex gap-2 text-sm text-muted-foreground mb-4">
@@ -57,7 +57,7 @@ export function ServiceCard({ _id, title, description, images, rate, category, c
       <div className="flex-1">
         <div className="flex justify-between items-start mb-2">
           <h3 className="text-lg font-semibold">{title}</h3>
-          <span className="text-lg font-bold">${rate}</span>
+          <span className="text-lg font-bold">Rs.{rate}</span>
         </div>
         <p className="text-muted-foreground mb-2">{description}</p>
         <div className="flex gap-2 text-sm text-muted-foreground mb-4">

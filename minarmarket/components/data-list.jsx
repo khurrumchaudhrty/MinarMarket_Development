@@ -4,6 +4,7 @@ import { showMyProductListings, showMyRequirement } from "@/lib/api/product"
 import { showMyServiceListings } from "@/lib/api/service";
 import { getUserDetails } from "@/lib/SessionManager";
 import { useQuery } from "@tanstack/react-query";
+import { getMyServiceRequirements } from "@/lib/api/service";
 
 const SAMPLE_PRODUCTS = [
   {
@@ -136,4 +137,23 @@ export function ServiceList() {
       ))}
     </div>
   );
+}
+
+export function ServiceRequirementList() {
+    const userDetails = getUserDetails();
+    const userId = userDetails?.userId;
+
+    const { data: services } = useQuery({
+        queryKey: ["serviceRequirements", userId],
+        queryFn: () => getMyServiceRequirements(userId),
+        enabled: !!userId,
+    });
+
+    return (
+        <div className="space-y-4">
+            {services?.data?.map((service) => (
+                <ServiceCard key={service._id} {...service} />
+            ))}
+        </div>
+    );
 }

@@ -1,29 +1,33 @@
-const express = require("express");
-const BuyerRequirement = require("../models/BuyerRequirement");
+const BuyerRequirement = require('../models/BuyerRequirement');
 
-// Controller function to handle product listing    
 exports.showbuyerProductListings = async (req, res) => {
     try {
+        const userId = req.query.userId;
         
-        const userId = req.query.userId; // Extract userId from query parameters
-        console.log("User ID from query:", userId);
-        // Find all approved product listings, excluding those created by the current user
         const productListings = await BuyerRequirement.find({
+            status: 'Approved',
             isActive: true,
-            listerId: { $ne: String(userId) }, // Exclude listings by the current user
-            status: 'Approved'  
+            listerId: { $ne: userId }
         });
+
+        if (!productListings || productListings.length === 0) {
+            return res.status(200).json({
+                success: true,
+                message: 'No requirements found',
+                data: []
+            });
+        }
 
         return res.status(200).json({
             success: true,
-            message: 'Product listings retrieved successfully.',
-            data: productListings,
+            message: 'Requirements retrieved successfully',
+            data: productListings
         });
     } catch (error) {
-        console.error('Error retrieving product listings:', error);
+        console.error('Error:', error);
         return res.status(500).json({
             success: false,
-            message: 'An error occurred while retrieving product listings.',
+            message: 'Server error'
         });
     }
 };
