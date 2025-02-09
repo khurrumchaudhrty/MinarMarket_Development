@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
+
 // app.use(express.json());
 // app.use(express.urlencoded({ extended: true }));
 
@@ -23,6 +24,7 @@ const ComplaintRoutes = require('./routes/ComplaintRoutes');
 const BuyerMessages = require('./routes/BuyerMessages');
 const BuyerMessagesToSellers = require("./routes/BuyerMessagesToSellers");
 const BuyerServiceRequirement = require('./routes/BuyerServiceRequirementRoutes');
+const UserProfileRoutes = require('./routes/userProfileRoutes');
 const app = express();
 
 app.use(cors());
@@ -58,7 +60,7 @@ app.use('/buyer-listings/update', BuyerRequirement);
 app.use('/buyer-service-requirement', BuyerServiceRequirement);
 
 
-
+app.use("/profile", UserProfileRoutes);
 app.use('/proposals', require('./routes/ProposalRoutes'));
 
 app.use('/report', ComplaintRoutes);
