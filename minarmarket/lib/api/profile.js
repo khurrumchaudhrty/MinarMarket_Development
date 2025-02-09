@@ -2,10 +2,10 @@ export async function getProfile() {
     try {
       const response = await fetch("http://localhost:4000/profile", {
         method: "GET",
-        credentials: "include", // Send cookies or credentials
+        credentials: "include", // Include cookies
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`, // Include the token
+          Authorization: `Bearer ${localStorage.getItem("token")}`, // Include token
         },
       });
   

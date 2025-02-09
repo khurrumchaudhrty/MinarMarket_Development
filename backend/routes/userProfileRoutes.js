@@ -5,9 +5,9 @@ const { verifyAPIRequest } = require("../middleware/authAPIRequest");
 
 const router = express.Router();
 
-// Custom CORS options for /profile routes
+// CORS options specific to this route
 const corsOptions = {
-  origin: "http://localhost:3000", // Allow frontend origin
+  origin: "http://localhost:3000", // Only allow the frontend origin
   credentials: true, // Allow cookies and credentials
 };
 
