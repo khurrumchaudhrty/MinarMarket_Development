@@ -40,40 +40,36 @@ export default function SignupForm() {
     message: "Passwords don't match",
     path: ["confirmPassword"]
   })
+    
+  
   const signUpMutation = useMutation({
-    mutationFn: async (credentials) => {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/authentication/signup`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          /**name: fullName,
-                email,
-                password,
-                admin: role.toLowerCase() === 'admin',
-                confirmPassword */
-            name: `${credentials.firstName} ${credentials.lastName}`,
-            email: credentials.email,
-            password: credentials.password,
-            admin: false,
-            confirmPassword: credentials.confirmPassword
-        }),
-      })
-      const data = await response.json()
-      if (!data.success) {
-        throw new Error(data.message)
-      }
-      return data
-    },
-    onSuccess: (data) => {
-      localStorage.setItem('token', data.token)
-      router.push('/app/dashboard') 
-    },
-    onError: (error) => {
-      setApiError(error.message)
-      // console.log() 
-    },
+      mutationFn: async (credentials) => {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/authentication/signup`, {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                  name: `${credentials.firstName} ${credentials.lastName}`,
+                  email: credentials.email,
+                  password: credentials.password,
+                  admin: false, // Ensure this is always false for new signups
+                  confirmPassword: credentials.confirmPassword
+              }),
+          })
+          const data = await response.json()
+          if (!data.success) {
+              throw new Error(data.message)
+          }
+          return data
+      },
+      onSuccess: (data) => {
+          localStorage.setItem('token', data.token)
+          router.push('/app/dashboard') // Regular users always go to dashboard
+      },
+      onError: (error) => {
+          setApiError(error.message)
+      },
   })
 
   const handleSubmit = async (e) => {
