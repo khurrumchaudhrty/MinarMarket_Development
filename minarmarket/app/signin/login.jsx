@@ -20,31 +20,40 @@ export default function LoginPage() {
         email: z.string().email('Invalid email address'),
         password: z.string().min(6, 'Password must be at least 6 characters'),
     })
-    const loginMutation = useMutation({
-        mutationFn: async (credentials) => {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/authentication/login`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(credentials),
-            })
-            const data = await response.json()
-            if (!data.success) {
-                throw new Error(data.message)
-            }
-            return data
-        },
-        onSuccess: (data) => {
-            localStorage.setItem('token', data.token);
-            localStorage.setItem('tokenStatus', data.tokenStatus ? data.tokenStatus.join(',') : '');
-            router.push('/app/dashboard');
-          },
-        onError: (error) => {
-            setFormError(error.message)
-        },
-    })
-
+        
+        const loginMutation = useMutation({
+            mutationFn: async (credentials) => {
+                const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/authentication/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(credentials),
+                })
+                const data = await response.json()
+                if (!data.success) {
+                    throw new Error(data.message)
+                }
+                return data
+            },
+            onSuccess: (data) => {
+                localStorage.setItem('token', data.token);
+                // Parse the JWT token to get user data
+                const decodedToken = JSON.parse(atob(data.token.split('.')[1]));
+                
+                // Redirect based on admin status
+                if (decodedToken.admin) {
+                    router.push('/app/admin');
+                } else {
+                    router.push('/app/dashboard');
+                }
+            },
+            onError: (error) => {
+                setFormError(error.message)
+            },
+        })
+    
+   
     const handleSubmit = async (e) => {
         e.preventDefault()
 
