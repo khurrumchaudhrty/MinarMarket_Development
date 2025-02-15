@@ -25,7 +25,8 @@ const serviceListingSchema = new mongoose.Schema({
     },
     category:{
         type: String,
-        required: true
+        required: true,
+        enum: ["Haircut", "Plumbing", "Carpentry", "Baking", "Electrical", "Gardening", "Catering", "House Help", "Web Development", "Design", "Other"]
     },
     rate: {
         type: Number,

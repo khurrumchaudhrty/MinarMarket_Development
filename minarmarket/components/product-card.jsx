@@ -79,6 +79,7 @@ export function ServiceCard({
   images,
   rate,
   category,
+  pricingModel,
   status
 }) {
   return (
@@ -127,14 +128,10 @@ export function ServiceCard({
       </CardContent>
       <CardFooter className="flex flex-col items-start gap-2 px-4">
         <div className="flex items-center gap-2">
-          <span className="text-lg font-bold">Rs. {rate}/??</span>
+          <span className="text-lg font-bold">Rs. {rate} / {pricingModel}</span>
           <Badge variant="secondary">Service</Badge>
         </div>
-        {/* <Link href={`/send-proposal/${_id}`} className="w-full">
-          <button className="w-full bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 rounded-md">
-            View Details
-          </button>
-        </Link> */}
+        
       </CardFooter>
     </Card>
   )
