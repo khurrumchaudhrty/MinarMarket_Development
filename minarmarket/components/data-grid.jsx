@@ -48,11 +48,18 @@ export function ProductGrid({userId}) {
 
     return (
         <section className="container py-8">
-            <h2 className="mb-8 text-2xl font-bold">TOP SELLING</h2>
+            <h2 className="mb-8 text-2xl font-bold">TOP SELLING PRODUCTS</h2>
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
                 {topSellingProducts?.map((product) => (
                     <ProductCard key={product._id} {...product} />
                 ))}
+            
+                
+            </div>
+            <h2 className="mb-8 mt-10 text-2xl font-bold">TOP SELLING SERVICES</h2>
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                
+            
                 {topSellingServices?.map((service) => (
                     <ServiceCard key={service._id} {...service} />
                 ))}
