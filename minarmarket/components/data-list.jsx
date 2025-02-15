@@ -6,60 +6,10 @@ import { getUserDetails } from "@/lib/SessionManager";
 import { useQuery } from "@tanstack/react-query";
 import { getMyServiceRequirements } from "@/lib/api/service";
 
-const SAMPLE_PRODUCTS = [
-  {
-    id: 1,
-    title: "Title",
-    description:
-      "Body text for whatever you'd like to say. Add main takeaway points, quotes, anecdotes, or even a very very short story.",
-    image: "",
-  },
-  {
-    id: 2,
-    title: "Title",
-    description:
-      "Body text for whatever you'd like to say. Add main takeaway points, quotes, anecdotes, or even a very very short story.",
-    image: "",
-  },
-  {
-    id: 3,
-    title: "Title",
-    description:
-      "Body text for whatever you'd like to say. Add main takeaway points, quotes, anecdotes, or even a very very short story.",
-    image: "",
-  },
-  {
-    id: 4,
-    title: "Title",
-    description:
-      "Body text for whatever you'd like to say. Add main takeaway points, quotes, anecdotes, or even a very very short story.",
-    image: "",
-  },
-  {
-    id: 5,
-    title: "Title",
-    description:
-      "Body text for whatever you'd like to say. Add main takeaway points, quotes, anecdotes, or even a very very short story.",
-    image: "",
-  },
-]
-
-// export function ProductList() {
-//   const userId=  getUserDetails().userId;
-//   const {data:products} = useQuery({
-//     queryKey: ["product"],
-//     queryFn: () => showMyProductListings(userId),
-//     enabled: !!userId,
-//   })
+export function AdminProductsList() {
   
-//   return (
-//     <div className="space-y-4">
-//       {products?.data.map((product) => (
-//         <ProductCard key={product.id} {...product} />
-//       ))}
-//     </div>
-//   )
-// }
+}
+
 export function ProductList() {
   const userDetails = getUserDetails();  // Get user details safely
   const userId = userDetails?.userId;   // Use optional chaining to prevent errors
@@ -103,23 +53,7 @@ export function RequirementList() {
   )
 }
 
-// export function ServiceList()
-// {
-//   const userId=  getUserDetails().userId;
-//   const {data:services} = useQuery({
-//     queryKey: ["service"],
-//     queryFn: () => showMyServiceListings(userId),
-//     enabled: !!userId,
-//   })
-  
-//   return (
-//     <div className="space-y-4">
-//       {services?.data.map((service) => (
-//         <ServiceCard key={service.id} {...service} />
-//       ))}
-//     </div>
-//   )
-// }
+
 export function ServiceList() {
   const userDetails = getUserDetails();
   const userId = userDetails?.userId;

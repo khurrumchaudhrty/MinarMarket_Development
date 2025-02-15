@@ -1,12 +1,58 @@
 const Complaint = require("../models/Complaint");
 const ProductListing = require("../models/ProductListing"); // Import Product schema
 const ServiceListing = require("../models/ServiceListing"); // Import Service schema
+const User = require("../models/User");
 
+// exports.getAllComplaints = async (req, res) => {
+//   try {
+//     // Fetch all complaints from the database (without sorting)
+//     const complaints = await Complaint.find();
 
+//     // Define a custom sorting order
+//     const sortOrder = {
+//       Pending: 1,
+//       "Under Review": 2,
+//       Resolved: 3,
+//       Rejected: 4,
+//     };
+
+//     // Manually sort complaints using the predefined order
+//     complaints.sort((a, b) => sortOrder[a.status] - sortOrder[b.status]);
+
+//     res.status(200).json({
+//       success: true,
+//       complaints,
+//     });
+//   } catch (error) {
+//     console.error("Error fetching all complaints: ", error);
+//     return res.status(500).json({
+//       success: false,
+//       message: "An error occurred while fetching all the complaints.",
+//     });
+//   }
+// };
 exports.getAllComplaints = async (req, res) => {
   try {
-    // Fetch all complaints from the database (without sorting)
-    const complaints = await Complaint.find();
+    // Fetch all complaints from the database
+    const complaints = await Complaint.find().lean();
+
+    // Fetch user details for reporterId and reportedUserId
+    const userIds = [
+      ...new Set(complaints.flatMap(c => [c.reporterId, c.reportedUserId]))
+    ]; // Get unique user IDs
+
+    const users = await User.find({ _id: { $in: userIds } }).select("name");
+    const userMap = users.reduce((acc, user) => {
+      acc[user._id] = user.name;
+      return acc;
+    }, {});
+
+    // Attach user names to complaints
+    const formattedComplaints = complaints.map(complaint => ({
+      ...complaint,
+      reporterName: userMap[complaint.reporterId] || "Unknown",
+      reportedUserName: userMap[complaint.reportedUserId] || "Unknown"
+    }));
 
     // Define a custom sorting order
     const sortOrder = {
@@ -17,11 +63,11 @@ exports.getAllComplaints = async (req, res) => {
     };
 
     // Manually sort complaints using the predefined order
-    complaints.sort((a, b) => sortOrder[a.status] - sortOrder[b.status]);
+    formattedComplaints.sort((a, b) => sortOrder[a.status] - sortOrder[b.status]);
 
     res.status(200).json({
       success: true,
-      complaints,
+      complaints: formattedComplaints,
     });
   } catch (error) {
     console.error("Error fetching all complaints: ", error);
@@ -132,7 +178,7 @@ exports.resolveComplaint = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      message: "Complaint has been registered successfully.",
+      message: "Complaint has been taken care of successfully.",
       complaint,
     });
   } catch (error) {
