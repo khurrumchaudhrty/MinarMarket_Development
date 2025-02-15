@@ -50,25 +50,35 @@ exports.addProductListing = async (req, res) => {
     }
 };
 
-// Controller to show all approved product listings
 exports.showProductListings = async (req, res) => {
     try {
-        // Find all approved product listings with status "Approved"
+
+        const userId = req.query.userId?.toString();
+
+        if (!userId) {
+            return res.status(400).json({
+                success: false,
+                message: "User ID is required",
+            });
+        }
+
+        // Find approved and active product listings excluding user's own listings
         const productListings = await ProductListing.find({
-            status: 'Approved',
+            status: "Approved",
             isActive: true,
+            listerId: { $ne: userId }, // Exclude products listed by the user
         });
 
         return res.status(200).json({
             success: true,
-            message: 'Product listings retrieved successfully.',
+            message: "Product listings retrieved successfully.",
             data: productListings,
         });
     } catch (error) {
-        console.error('Error retrieving product listings:', error);
+        console.error("Error retrieving product listings:", error);
         return res.status(500).json({
             success: false,
-            message: 'An error occurred while retrieving product listings.',
+            message: "An error occurred while retrieving product listings.",
         });
     }
 };

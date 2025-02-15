@@ -5,27 +5,39 @@ import { ProductCard, ServiceCard } from "./product-card";
 
 
 
-export function ProductGrid() {
+export function ProductGrid({userId}) {
+
     const { data: topSellingProducts } = useQuery({
-        queryKey: ["top-selling-products"],
+        queryKey: ["top-selling-products", userId], // Ensure re-fetch when userId changes
         queryFn: async () => {
-            const response = await fetch(process.env.NEXT_PUBLIC_API_URL + "/product-listings", {
-                method: 'GET',
-                headers: { 'Content-Type': 'application/json' },
-            })
-            const data = await response.json()
             
-            return data.data
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/product-listings?userId=${userId}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+    
+            if (!response.ok) {
+                throw new Error("Failed to fetch top-selling products");
+            }
+    
+            const data = await response.json();
+            return data.data;
         },
         initialData: [],
     });
     const {data: topSellingServices} = useQuery({
         queryKey: ["top-selling-services"],
         queryFn: async () => {
-            const response = await fetch(process.env.NEXT_PUBLIC_API_URL + "/service-listings", {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/service-listings?userId=${userId}`, {
                 method: 'GET',
                 headers: { 'Content-Type': 'application/json' },
             })
+
+            if (!response.ok) {
+                throw new Error("Failed to fetch top-selling services");
+            }
             const data = await response.json()
             
             return data.data

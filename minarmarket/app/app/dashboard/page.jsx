@@ -1,9 +1,15 @@
+"use client"
+
 import { Header } from "@/components/header"
 import { SidebarNav } from "@/components/sidebar-nav"
 import { ProductCard } from "@/components/product-card"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { useQuery } from "@tanstack/react-query"
 import { ProductGrid } from "@/components/data-grid"
+import { getUserDetails } from "@/lib/SessionManager"
+import { useEffect, useState } from "react"
+
+
 
 const categories = Array.from({ length: 9 }).map((_, i) => ({
   id: `category-${i + 1}`,
@@ -13,6 +19,10 @@ const categories = Array.from({ length: 9 }).map((_, i) => ({
 
 
 export default function DashboardPage() {
+
+  const [userDetails, setUserDetails] = useState(getUserDetails());
+  const userId = userDetails?.userId || null; // Extract userId safely
+
   return (
     <div className="flex min-h-screen flex-col px-4">
       <Header />
@@ -60,7 +70,7 @@ export default function DashboardPage() {
               ))}
             </div>
           </section>
-          <ProductGrid />
+          <ProductGrid userId={userId} />
 
           
         </main>
