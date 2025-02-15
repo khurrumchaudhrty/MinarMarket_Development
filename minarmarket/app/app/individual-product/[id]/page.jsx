@@ -106,7 +106,7 @@ export default async function IndividualProductPage({ params }) {
             {/* Product Details */}
             <div>
               <h1 className="text-2xl font-bold mb-2">{product.product.title}</h1>
-              <div className="text-2xl font-bold mb-6">${product.product.price}</div>
+              <div className="text-2xl font-bold mb-6">Rs. {product.product.price}</div>
               <p className="text-gray-600 mb-6">{product.product.description}</p>
               <div className="mb-6">
                 <div className="font-medium mb-2">Category</div>

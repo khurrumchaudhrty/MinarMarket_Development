@@ -7,61 +7,9 @@ import { ProductList } from "@/components/data-list"
 import { useLocalStorage } from "@uidotdev/usehooks"
 import Link from "next/link"
 
-const categories = Array.from({ length: 9 }).map((_, i) => ({
-  id: `category-${i + 1}`,
-  name: `Category ${i + 1}`,
-  image: "https://placehold.co/600x600/png",
-}))
-
-const topSellingProducts = [
-  {
-    id: "1",
-    title: "T-shirt with Tape Details",
-    image: "https://placehold.co/600x400/png",
-    price: 120,
-    rating: 4.5,
-    type: "Buyer",
-  },
-  {
-    id: "2",
-    title: "Fit Shirt",
-    image: "https://placehold.co/600x400/png",
-    price: 230,
-    originalPrice: 260,
-    rating: 3.5,
-    type: "Seller",
-  },
-  {
-    id: "3",
-    title: "Fit Jeans",
-    image: "https://placehold.co/600x400/png",
-    price: 20,
-    originalPrice: 260,
-    rating: 3.5,
-    type: "Seller",
-  },
-  {
-    id: "3",
-    title: "Fit Jeans",
-    image: "https://placehold.co/600x400/png",
-    price: 20,
-    originalPrice: 260,
-    rating: 3.5,
-    type: "Buyer",
-  },
-  {
-    id: "3",
-    title: "Fit Jeans",
-    image: "https://placehold.co/600x400/png",
-    price: 20,
-    originalPrice: 260,
-    rating: 3.5,
-    type: "Buyer",
-  },
-]
 
 export default function MyproductPage() {
-  const [type, setType] = useLocalStorage("type", "buyer")
+  // const [type, setType] = useLocalStorage("type", "buyer")
   return (
     <div className="flex min-h-screen flex-col px-4">
       <Header />

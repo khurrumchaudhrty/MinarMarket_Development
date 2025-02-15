@@ -91,7 +91,6 @@ exports.showMyProductListings = async (req, res) => {
 
         // Query the database for listings with the given listerId
         const productListings = await ProductListing.find({
-            status: 'Approved',
             isActive: true,
             listerId: objectId,
         });

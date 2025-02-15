@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Settings, Users, LayoutDashboard, ListIcon } from "lucide-react"
+import { Settings, Users, LayoutDashboard, ListIcon, FileWarning } from "lucide-react"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 
@@ -28,6 +28,11 @@ export const AdminSidebar = () => {
       label: "Users",
       icon: Users,
       href: "/admin/users",
+    },
+    {
+      label: "Reports",
+      icon: FileWarning,
+      href: "/app/admin/reports"
     },
     {
       label: "Settings",
