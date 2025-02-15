@@ -2,12 +2,11 @@ const ServiceListing = require("../models/ServiceListing");
 const mongoose = require("mongoose");
 
 exports.showMyServiceListings = async (req, res) => {
-  try{
+  try {
     const userId = req.query.listerId;
     console.log(userId);
     const serviceListings = await ServiceListing.find({
       listerId: userId,
-
     });
 
     console.log(serviceListings);
@@ -16,15 +15,13 @@ exports.showMyServiceListings = async (req, res) => {
       message: "Service Listings retrieved successfully.",
       data: serviceListings,
     });
-  }
-  catch (error) {
+  } catch (error) {
     console.error("Error retrieving service listings: ", error);
     return res.status(500).json({
       success: false,
       message: "An error occurred while retrieving service listings.",
     });
   }
-
 };
 
 exports.addServiceListing = async (req, res) => {
@@ -134,15 +131,8 @@ exports.updateServiceListing = async (req, res) => {
     // Convert serviceId to ObjectId
     const objectId = new mongoose.Types.ObjectId(serviceId);
 
-    const {
-      title,
-      description,
-      rate,
-      pricingModel,
-      city,
-      category,
-      images,
-    } = req.body;
+    const { title, description, rate, pricingModel, city, category, images } =
+      req.body;
 
     if (
       !title ||
@@ -154,7 +144,8 @@ exports.updateServiceListing = async (req, res) => {
     ) {
       return res.status(400).json({
         success: false,
-        message: "All fields are required, and at least one image must be provided.",
+        message:
+          "All fields are required, and at least one image must be provided.",
       });
     }
 
@@ -204,9 +195,19 @@ exports.updateServiceListing = async (req, res) => {
 // Controller to show all approved service listings
 exports.showServiceListings = async (req, res) => {
   try {
+    const userId = req.query.userId?.toString();
+
+    if (!userId) {
+      return res.status(400).json({
+        success: false,
+        message: "User ID is required",
+      });
+    }
+
     const serviceListings = await ServiceListing.find({
       status: "Approved",
       isActive: true,
+      listerId: { $ne: userId }
     });
 
     return res.status(200).json({
