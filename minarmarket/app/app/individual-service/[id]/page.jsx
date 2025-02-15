@@ -19,6 +19,7 @@ async function getService(id) {
     });
 
     const data = await response.json();
+    console.log("data: ", data);
     return data;
   } catch (error) {
     console.error("Fetch error: ", error);
@@ -26,65 +27,35 @@ async function getService(id) {
   }
 }
 
-async function sendBuyerMessage(userId, productId) {
-  if (!userId) {
-    alert("Please log in to contact the seller.");
-    return;
-  }
 
-  const payload = {
-    id_of_buyer: userId,
-    id_of_product: productId,
-  };
+export default async function IndividualServicePage({ params }) {
+  const { id } = params; // Get service ID from URL
+  let service;
 
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/buyer-messages`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
-
-    const result = await response.json();
-    if (response.ok) {
-      alert("Message sent to the seller successfully!");
-    } else {
-      alert(`Error: ${result.message}`);
-    }
+    service = await getService(id);
   } catch (error) {
-    console.error("Error sending message:", error);
-    alert("Failed to contact the seller. Please try again.");
-  }
-}
-
-
-export default async function IndividualProductPage({ params }) {
-  const { id } = params; // Get product ID from URL
-  let product;
-
-  try {
-    product = await getProduct(id);
-  } catch (error) {
-    return <div className="text-center text-red-500">Error loading product</div>;
+    return <div className="text-center text-red-500">Error loading service</div>;
   }
 
   return (
-    // console.log('product : ',product),
+    
     <div className="flex min-h-screen flex-col px-4">
       <Header />
       <div className="container flex-1 items-start md:grid md:grid-cols-[220px_1fr] md:gap-4 md:py-6">
         <SidebarNav />
         <main>
           <div className="lg:grid lg:grid-cols-[1fr,400px] gap-8">
-            {/* Product Image Carousel */}
+            {/* service Image Carousel */}
             <div className="relative aspect-square mb-6 lg:mb-0">
               <Carousel className="w-full">
                 <CarouselContent>
-                  {product.product.images?.map((image, index) => (
+                  {service.service.images?.map((image, index) => (
                     <CarouselItem key={image._id || index}>
                       <AspectRatio ratio={4 / 3}>
                         <Image
                           src={image.url || "https://placehold.co/600x400/png"}
-                          alt={`${product.product.title} - Image ${index + 1}`}
+                          alt={`${service.service.title} - Image ${index + 1}`}
                           fill
                           className="object-cover rounded-xl"
                           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -103,19 +74,19 @@ export default async function IndividualProductPage({ params }) {
               </Carousel>
             </div>
 
-            {/* Product Details */}
+            {/* service Details */}
             <div>
-              <h1 className="text-2xl font-bold mb-2">{product.product.title}</h1>
-              <div className="text-2xl font-bold mb-6">Rs. {product.product.price}</div>
-              <p className="text-gray-600 mb-6">{product.product.description}</p>
+              <h1 className="text-2xl font-bold mb-2">{service.service.title}</h1>
+              <div className="text-2xl font-bold mb-6">Rs. {service.service.rate} / {service.service.pricingModel}</div>
+              <p className="text-gray-600 mb-6">{service.service.description}</p>
               <div className="mb-6">
                 <div className="font-medium mb-2">Category</div>
                 <div className="inline-block px-3 py-1 bg-gray-100 rounded-full text-sm">
-                  {product.product.category}
+                  {service.service.category}
                 </div>
               </div>
               
-              <ContactSellerButton productId={id} />
+              <ContactSellerButton id={id} type={"Service"} />
               
             </div>
           </div>

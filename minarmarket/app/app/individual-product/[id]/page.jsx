@@ -26,36 +26,6 @@ async function getProduct(id) {
   }
 }
 
-async function sendBuyerMessage(userId, productId) {
-  if (!userId) {
-    alert("Please log in to contact the seller.");
-    return;
-  }
-
-  const payload = {
-    id_of_buyer: userId,
-    id_of_product: productId,
-  };
-
-  try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/buyer-messages`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
-
-    const result = await response.json();
-    if (response.ok) {
-      alert("Message sent to the seller successfully!");
-    } else {
-      alert(`Error: ${result.message}`);
-    }
-  } catch (error) {
-    console.error("Error sending message:", error);
-    alert("Failed to contact the seller. Please try again.");
-  }
-}
-
 
 export default async function IndividualProductPage({ params }) {
   const { id } = params; // Get product ID from URL
@@ -115,7 +85,7 @@ export default async function IndividualProductPage({ params }) {
                 </div>
               </div>
               
-              <ContactSellerButton productId={id} />
+              <ContactSellerButton id={id} type={"Product"} />
               
             </div>
           </div>
