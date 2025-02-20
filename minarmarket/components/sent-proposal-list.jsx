@@ -47,7 +47,7 @@ export function SentProposalList({ userId }) {
           <div className="grid md:grid-cols-2 gap-4">
             {/* Requirement Details */}
             <div className="bg-gray-50 p-3 rounded border">
-              <h4 className="text-sm font-semibold text-primary mb-2">Buyer's Requirement</h4>
+              <h4 className="text-sm font-semibold text-primary mb-2">Buyers Requirement</h4>
               <p className="text-sm font-medium">{proposal.requirementId.title}</p>
               <p className="text-xs text-gray-600 line-clamp-2 mb-2">
                 {proposal.requirementId.description}
