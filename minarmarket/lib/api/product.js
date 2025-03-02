@@ -2,6 +2,7 @@ export async function fetchProduct(productId) {
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/product-listings/fetch-product-details/${productId}`)
   if (!response.ok) throw new Error('Failed to fetch product')
     const data = await response.json()
+    console.log("data.product: ", data.product);
   return data.product
 }
 
@@ -84,7 +85,7 @@ export async function createRequirement(data) {
 
 export async function updateRequirement(requirementId,userId, data) {
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/buyer-requirement/update`, {
-    method: 'PUT',
+    method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       //const { buyerId, productId, updatedData } = req.body;

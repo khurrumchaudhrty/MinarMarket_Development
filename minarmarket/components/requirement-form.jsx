@@ -4,9 +4,7 @@ import { useState, useEffect, use } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
-import { X } from "lucide-react"
-import { usePathname, useRouter, useSearchParams } from "next/navigation"
-
+import { useRouter, useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
@@ -14,7 +12,8 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { ImageUpload } from "@/components/image-upload"
 import { productSchema, requirementSchema } from "@/lib/validations/product"
-import { fetchProduct, createProduct, updateProduct, uploadToCloudinary, updateRequirement, createRequirement } from "@/lib/api/product"
+import { updateRequirement, createRequirement } from "@/lib/api/product"
+import { fetchProductRequirements } from "@/lib/api/buyer-requirement"
 import { useToast } from "@/hooks/use-toast"
 import { getUserDetails } from "@/lib/SessionManager"
 import { Toaster } from "./ui/toaster"
@@ -26,18 +25,12 @@ export function RequirementForm() {
   const { toast } = useToast()
   const router = useRouter()
   const searchParams = useSearchParams()
-  const productId = searchParams.get('id')
+  const productRequirementId = searchParams.get('id')
   const queryClient = useQueryClient()
   const [uploading, setUploading] = useState(false)
   const [files, setFiles] = useState([])
   const user = getUserDetails()
 
-  // Fetch product data if editing
-  // const { data: productData } = useQuery({
-  //   queryKey: ['product', productId],
-  //   queryFn: () => fetchProduct(productId),
-  //   enabled: !!productId
-  // })
 
   const form = useForm({
     resolver: zodResolver(requirementSchema),
@@ -49,22 +42,29 @@ export function RequirementForm() {
       images: [],
     },
 
-  })
+  });
 
-  // Initialize files state with existing images if editing
-  // useEffect(() => {
-  //   if (productData?.images) {
-  //     setFiles(productData.images)
-  //     form.setValue("images", productData.images)
-  //   }
-  //   if (productData)
-  //   {
-  //     form.setValue("title", productData.title??'')
-  //     form.setValue("description", productData.description??'')
-  //     form.setValue("price", productData.price??'')
-  //     form.setValue("category", productData.category??'')
-  //   }
-  // }, [productData, form])
+  // Fetch product details if editing
+const { data: productRequirementData, isLoading } = useQuery({
+  queryKey: ['productRequirement', productRequirementId],
+  queryFn: () => fetchProductRequirements(productRequirementId),
+  enabled: !!productRequirementId, // Only fetch if productRequirementId exists
+});
+
+
+// Prefill form when product data is available
+useEffect(() => {
+  if (productRequirementData) {
+    form.reset({
+      title: productRequirementData.title || "",
+      description: productRequirementData.description || "",
+      price: productRequirementData.price || "",
+      category: productRequirementData.category || "",
+      images: productRequirementData.images || [],
+    });
+  }
+}, [productRequirementData, form]);
+
 
 
   // Mutations for creating/updating products
@@ -80,8 +80,8 @@ export function RequirementForm() {
           // images: uploadedImages,
         }
 
-        if (productId) {
-          return await updateRequirement(productId, user.userId, finalData)
+        if (productRequirementId) {
+          return await updateRequirement(productRequirementId, user.userId, finalData)
         }
         return await createRequirement(finalData)
       } catch (error) {
@@ -94,7 +94,7 @@ export function RequirementForm() {
     onSuccess: () => {
       queryClient.invalidateQueries(['products'])
       toast({
-        title: productId ? "Product updated" : "Product created",
+        title: productRequirementId ? "Product updated" : "Product created",
         description: "Your product has been submitted for approval.",
       })
       router.push('/app/buyer/my-products')
@@ -107,6 +107,8 @@ export function RequirementForm() {
       })
     },
   })
+
+  
 
   const handleFilesSelected = (newFiles) => {
     // Directly use the File objects
@@ -127,14 +129,6 @@ export function RequirementForm() {
 
   async function onSubmit() {
     try {
-      // if (files.length === 0) {
-      //   toast({
-      //     title: "Error",
-      //     description: "Please upload at least one image",
-      //     variant: "destructive",
-      //   });
-      //   return;
-      // }
       console.log("submitting");
       const data = form.getValues();
       console.log(data);  
@@ -246,28 +240,7 @@ export function RequirementForm() {
             />
           </div>
 
-          {/* <div className="space-y-6">
-            <div>
-              <FormLabel>Upload Images</FormLabel>
-              <ImageUpload onFilesSelected={handleFilesSelected} uploading={uploading} setUploading={setUploading} />
-            </div>
 
-            {files.length > 0 && (
-              <div className="space-y-2">
-                <div className="text-sm text-muted-foreground">Uploading - {files.length}/5 files</div>
-                <div className="space-y-2">
-                  {files.map((file, index) => (
-                    <div key={index} className="flex items-center justify-between p-2 border rounded-md">
-                      <span className="text-sm truncate">{file.name}</span>
-                      <Button type="button" variant="ghost" size="sm" onClick={() => removeFile(file.name)}>
-                        <X className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div> */}
         </div>
 
         <Button type="submit"
