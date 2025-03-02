@@ -3,7 +3,7 @@ const user = require('../models/User');
 
 exports.getAllProductListings = async (req, res) => {
     
-    console.log(process.env.REACT_APP_API_URL+"/api/buyer-requirement")
+    // console.log(process.env.REACT_APP_API_URL+"/api/buyer-requirement")
     
     try {
         // Find all active product listings and populate the lister's name from the User collection
