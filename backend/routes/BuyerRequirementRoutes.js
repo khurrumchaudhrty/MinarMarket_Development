@@ -6,7 +6,7 @@ const { listProduct, myListings, deleteListings, updateListings, fetchProductReq
 // Route for listing a product
 router.post("/", listProduct);
 router.get("/", myListings)
-router.get("/fetch-product-requirements/:productRequirementId", fetchProductRequirementDetails);
+router.get("/fetch-product-requirement-details/:productRequirementId", fetchProductRequirementDetails);
 router.post("/delete", deleteListings)
 router.post("/update", updateListings)
 

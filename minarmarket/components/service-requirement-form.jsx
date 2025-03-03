@@ -15,18 +15,18 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { ImageUpload } from "@/components/image-upload"
 import { productSchema, requirementSchema } from "@/lib/validations/product"
 import { serviceSchema } from "@/lib/validations/service"
-import { fetchService, createService, updateService, uploadToCloudinary, createServiceRequirement } from "@/lib/api/service"
+import { createService, updateService, uploadToCloudinary, createServiceRequirement } from "@/lib/api/service"
 import { useToast } from "@/hooks/use-toast"
 import { getUserDetails } from "@/lib/SessionManager"
 import { Toaster } from "./ui/toaster"
-
+import { fetchServiceRequirementDetail } from "@/lib/api/buyer-requirement"
 const categories = ["Electronics", "Clothing", "Books", "Home & Garden", "Sports", "Toys", "Other"]
 
 export function ServiceRequirementForm() {
   const { toast } = useToast()
   const router = useRouter()
   const searchParams = useSearchParams()
-  const serviceId = searchParams.get('id')
+  const serviceRequirementId = searchParams.get('id')
   const queryClient = useQueryClient()
   const [uploading, setUploading] = useState(false)
   const [files, setFiles] = useState([])
@@ -34,10 +34,12 @@ export function ServiceRequirementForm() {
 
   // Fetch service data if editing
   const { data: serviceData } = useQuery({
-    queryKey: ['service', serviceId],
-    queryFn: () => fetchService(serviceId),
-    enabled: !!serviceId
+    queryKey: ['service', serviceRequirementId],
+    queryFn: () => fetchServiceRequirementDetail(serviceRequirementId),
+    enabled: !!serviceRequirementId
   })
+
+  console.log("serviceData: ", serviceData);
 
   const form = useForm({
     resolver: zodResolver(requirementSchema),
@@ -54,45 +56,27 @@ export function ServiceRequirementForm() {
 
   // Initialize form with existing data
   useEffect(() => {
-    // if (serviceData?.images) {
-    //   setFiles(serviceData.images)
-    //   form.setValue("images", serviceData.images)
-    // }
     if (serviceData) {
-      form.setValue("title", serviceData.title ?? '')
-      form.setValue("description", serviceData.description ?? '')
-      form.setValue("price", serviceData.rate ?? '')
-      form.setValue("category", serviceData.category ?? '')
-      form.setValue("city", serviceData.city ?? '')
-      form.setValue("pricingModel", serviceData.pricingModel ?? '')
+      form.setValue("title", serviceData.title ?? '');
+      form.setValue("description", serviceData.description ?? '');
+      form.setValue("rate", serviceData.rate ?? '');  // ✅ Correct field name
+      form.setValue("category", serviceData.category ?? '');
+      form.setValue("city", serviceData.city ?? '');
+      form.setValue("pricingModel", serviceData.pricingModel ?? ''); // ✅ Ensures Select reflects value
     }
-  }, [serviceData, form])
+  }, [serviceData, form]);
 
   // Mutation for creating/updating services
   const mutation = useMutation({
     mutationFn: async (formData) => {
       try {
         setUploading(true)
-
-        // const uploadedImages = await Promise.all(
-        //   files.map(async (file) => {
-        //     if (typeof file === 'string' || (file.url && typeof file.url === 'string')) {
-        //       return { url: typeof file === 'string' ? file : file.url };
-        //     }
-        //     const url = await uploadToCloudinary(file);
-        //     return { name: file.name, url: url };
-        //   })
-        // );
-
         const finalData = {
           ...formData,
           userId: user.userId,
           // images: uploadedImages,
         }
 
-        // if (serviceId) {
-        //   return await updateService(serviceId, finalData)
-        // }
         return await createServiceRequirement(finalData)
       } catch (error) {
         console.error("Mutation error:", error)
@@ -104,7 +88,7 @@ export function ServiceRequirementForm() {
     onSuccess: () => {
       queryClient.invalidateQueries(['services'])
       toast({
-        title: serviceId ? "Service updated" : "Service created",
+        title: serviceRequirementId ? "Service updated" : "Service created",
         description: "Your service has been submitted for approval.",
       })
       router.push('/app/buyer/my-services')
@@ -149,12 +133,12 @@ export function ServiceRequirementForm() {
       <Form {...form}>
         <form onSubmit={(e) => {
           e.preventDefault()
-          form.handleSubmit(onSubmit,(errors)=>{
+          form.handleSubmit(onSubmit, (errors) => {
             toast({
               title: "Error",
               description: Object.keys(errors)
-              .map(key => `${key}: ${errors[key].message}`)
-              .join(', '),
+                .map(key => `${key}: ${errors[key].message}`)
+                .join(', '),
               variant: "destructive",
             });
           })()
@@ -183,7 +167,7 @@ export function ServiceRequirementForm() {
                     <FormLabel>Service Description (Max. 200 words)</FormLabel>
                     <FormControl>
                       <Textarea
-                        placeholder="Enter product description"
+                        placeholder="Enter service description"
                         className="min-h-[120px] resize-none"
                         {...field}
                       />
@@ -231,7 +215,7 @@ export function ServiceRequirementForm() {
                   render={({ field }) => (
                     <FormItem className="flex-1">
                       <FormLabel>Frequency</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <Select onValueChange={field.onChange} value={field.value}> {/* ✅ Ensure value is set */}
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Select frequency" />
@@ -255,7 +239,7 @@ export function ServiceRequirementForm() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Category</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <Select onValueChange={field.onChange} value={field.value}> {/* ✅ Ensure value is set */}
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Select a category" />
@@ -273,30 +257,8 @@ export function ServiceRequirementForm() {
                   </FormItem>
                 )}
               />
+
             </div>
-
-            {/* <div className="space-y-6">
-              <div>
-                <FormLabel>Upload Images</FormLabel>
-                <ImageUpload onFilesSelected={handleFilesSelected} uploading={uploading} setUploading={setUploading} />
-              </div>
-
-              {files.length > 0 && (
-                <div className="space-y-2">
-                  <div className="text-sm text-muted-foreground">Uploading - {files.length}/5 files</div>
-                  <div className="space-y-2">
-                    {files.map((file, index) => (
-                      <div key={index} className="flex items-center justify-between p-2 border rounded-md">
-                        <span className="text-sm truncate">{file.name}</span>
-                        <Button type="button" variant="ghost" size="sm" onClick={() => removeFile(file.name)}>
-                          <X className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div> */}
           </div>
 
           <Button type="submit" className="w-full md:w-auto" disabled={mutation.isPending}>

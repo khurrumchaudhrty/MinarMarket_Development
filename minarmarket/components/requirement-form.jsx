@@ -13,7 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { ImageUpload } from "@/components/image-upload"
 import { productSchema, requirementSchema } from "@/lib/validations/product"
 import { updateRequirement, createRequirement } from "@/lib/api/product"
-import { fetchProductRequirements } from "@/lib/api/buyer-requirement"
+import { fetchProductRequirementDetail} from "@/lib/api/buyer-requirement"
 import { useToast } from "@/hooks/use-toast"
 import { getUserDetails } from "@/lib/SessionManager"
 import { Toaster } from "./ui/toaster"
@@ -47,7 +47,7 @@ export function RequirementForm() {
   // Fetch product details if editing
 const { data: productRequirementData, isLoading } = useQuery({
   queryKey: ['productRequirement', productRequirementId],
-  queryFn: () => fetchProductRequirements(productRequirementId),
+  queryFn: () => fetchProductRequirementDetail(productRequirementId),
   enabled: !!productRequirementId, // Only fetch if productRequirementId exists
 });
 
