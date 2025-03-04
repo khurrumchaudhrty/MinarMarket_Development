@@ -285,3 +285,57 @@ exports.showProductCategoryListings = async (req, res) => {
     });
   }
 };
+
+
+exports.fetchLandingPageProducts = async (req, res) => {
+  try {
+    
+    const productListings = await ProductListing.find({
+      status:"Approved",
+      isActive:true,
+    });
+
+    return res.status(200).json({
+      success:true,
+      data:productListings
+    });
+
+  } catch (error) {
+    console.error("Error retrieving product listings for landing page:", error);
+    return res.status(500).json({
+      success: false,
+      message: "An error occurred while retrieving product listings for landing page.",
+    });
+  }
+};
+
+exports.fetchCategoryLandingPage = async (req,res) => {
+  try {
+    const { category } = req.params;
+
+    if (!category) {
+      return res.status(400).json({
+        success: false,
+        message: "Category must be Provided.",
+      });
+    }
+
+    const productListings = await ProductListing.find({
+      status:"Approved",
+      isActive:true,
+      category:category
+    });
+
+    return res.status(200).json({
+      success:true,
+      data:productListings
+    });
+
+  } catch (error) {
+    console.error("Error retrieving product listings of the speicfied category", error);
+    return res.status(500).json({
+      success:false,
+      message:"An error occurred while retrieving product listing for specified category on the landing page."
+    })
+  }
+}
