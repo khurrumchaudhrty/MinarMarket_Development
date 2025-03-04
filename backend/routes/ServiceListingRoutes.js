@@ -7,6 +7,7 @@ const {
   fetchServiceListing,
   updateServiceListing,
   showMyServiceListings,
+  fetchServiceCategoryListings,
 } = require("../controllers/ServiceListingController");
 
 // Route to add a new service listing
@@ -22,5 +23,7 @@ router.get("/fetch-service-details/:serviceId", fetchServiceListing);
 
 // Route to update a specific service listing
 router.put("/updateService/:serviceId", updateServiceListing);
+
+router.post('/fetch-category/:category', fetchServiceCategoryListings);
 
 module.exports = router;
