@@ -223,3 +223,41 @@ exports.showServiceListings = async (req, res) => {
     });
   }
 };
+
+
+
+
+
+exports.fetchServiceCategoryListings = async (req, res) => {
+  try {
+    const {userId} = req.body;
+    const {category} = req.params;
+
+    if (!category)
+    {
+      return res.status(400).json({
+        success:false,
+        message:"category is missing from the parameters"
+      });
+    }
+
+    const serviceListings = await ServiceListing.find({
+      status: "Approved",
+      isActive: true,
+      listerId: { $ne: userId },
+      category: category,
+    });
+
+    return res.status(200).json({
+      success:true,
+      data: serviceListings,
+    })
+
+  } catch (error) {
+    console.error("Error retrieving service listings from specified category: ", error);
+    return res.status(500).json({
+      success: false,
+      message: "An error occurred while retrieving service listings from specified category.",
+    });
+  }
+};

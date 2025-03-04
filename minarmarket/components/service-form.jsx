@@ -20,7 +20,7 @@ import { useToast } from "@/hooks/use-toast"
 import { getUserDetails } from "@/lib/SessionManager"
 import { Toaster } from "./ui/toaster"
 
-const categories = ["Electronics", "Clothing", "Books", "Home & Garden", "Sports", "Toys", "Other"]
+const categories = ["Haircut", "Plumbing", "Carpentry", "Electrical", "Gardening", "Catering", "House Help", "Web Development", "Design", "Other"]
 
 export function ServiceForm() {
   const { toast } = useToast()
@@ -160,7 +160,7 @@ export function ServiceForm() {
                   <FormItem>
                     <FormLabel>Service Title</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter product title" {...field} />
+                      <Input placeholder="Enter service title" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -175,7 +175,7 @@ export function ServiceForm() {
                     <FormLabel>Service Description (Max. 200 words)</FormLabel>
                     <FormControl>
                       <Textarea
-                        placeholder="Enter product description"
+                        placeholder="Enter service description"
                         className="min-h-[120px] resize-none"
                         {...field}
                       />
