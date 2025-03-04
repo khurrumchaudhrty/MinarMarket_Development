@@ -54,3 +54,30 @@ exports.getMyServiceRequirements = async (req, res) => {
         });
     }
 };
+
+
+exports.fetchServiceRequirementDetails = async (req, res) => {
+    try {
+        const { serviceRequirementId } = req.params;
+
+        const requirement = await BuyerServiceRequirement.findById(serviceRequirementId);
+
+        if (!requirement) {
+            return res.status(404).json({
+                success:false,
+                message: "Service Requirement Not Found."
+            });
+        }
+
+        res.status(200).json({
+            success:true,
+            data:requirement
+        });
+    } catch (error) {
+        console.error('Error fetching details of the serviceRequirement:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'An error occurred while fetching the details of the serviceRequirement.'
+        });
+    }
+};
