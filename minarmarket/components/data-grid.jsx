@@ -67,3 +67,69 @@ export function ProductGrid({userId}) {
         </section>
     );
 }
+
+
+
+
+export function LandingPageProductGrid() {
+
+    const { data: landingPageProducts } = useQuery({
+        queryKey:["top-selling-products"],
+        queryFn: async () => {
+            
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/product-listings/fetch-landing-page-products`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+    
+            if (!response.ok) {
+                throw new Error("Failed to fetch top-selling products");
+            }
+    
+            const data = await response.json();
+            return data.data;
+        },
+        initialData: [],
+    });
+    const {data: landingPageServices} = useQuery({
+        queryKey: ["top-selling-services"],
+        queryFn: async () => {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/service-listings/fetch-landing-page-services`, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' },
+            })
+
+            if (!response.ok) {
+                throw new Error("Failed to fetch top-selling services");
+            }
+            const data = await response.json()
+            
+            return data.data
+        },
+        initialData: [],
+    });
+
+
+    return (
+        <section className="container py-8">
+            <h2 className="mb-8 text-2xl font-bold">TOP SELLING PRODUCTS</h2>
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                {landingPageProducts?.map((product) => (
+                    <ProductCard key={product._id} {...product} />
+                ))}
+            
+                
+            </div>
+            <h2 className="mb-8 mt-10 text-2xl font-bold">TOP SELLING SERVICES</h2>
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                
+            
+                {landingPageServices?.map((service) => (
+                    <ServiceCard key={service._id} {...service} />
+                ))}
+            </div>
+        </section>
+    );
+}
