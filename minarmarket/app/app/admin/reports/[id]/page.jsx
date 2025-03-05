@@ -4,15 +4,14 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import { getIndividualComplaint, updateComplaintStatus } from "@/lib/api/admin";
 import { AdminSidebar } from "@/components/admin-sidebar";
 import { AdminHeader } from "@/components/admin-header";
-import { useRouter } from "next/navigation"; // Import useRouter
-import { useState } from "react";
-
+import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
 
 export default function IndividualReportsSection() {
   const { id } = useParams();
   const [adminNotes, setAdminNotes] = useState("");
-  const router = useRouter(); // Initialize router
-
+  const [action, setAction] = useState(""); // State to track selected action
+  const router = useRouter();
 
   const { data, refetch, isLoading, error } = useQuery({
     queryKey: ["individual-complaint", id],
@@ -20,29 +19,62 @@ export default function IndividualReportsSection() {
     enabled: !!id,
   });
 
+  console.log("data: ", data);
+
+  useEffect(() => {
+    if (data?.complaint?.reportedUserId?.accountStatus) {
+      // Map backend values to radio values
+      const actionMapping = {
+        "Active": "Activate",
+        "Suspended": "Suspend",
+        "Banned": "Ban"
+      };
+      setAction(actionMapping[data.complaint.reportedUserId.accountStatus] || "");
+    }
+  }, [data]);
+
+
   const mutation = useMutation({
-    mutationFn: ({ status, notes }) => updateComplaintStatus(id, status, notes),
+    mutationFn: ({ status, notes, action }) => updateComplaintStatus(id, status, notes, action),
     onSuccess: () => {
       alert("Complaint has been updated successfully.");
-      refetch(); // Refresh data
+      refetch();
       router.push("/app/admin/reports");
     },
     onError: (err) => {
       alert(`Error: ${err.message}`);
     },
   });
+
   const handleStatusUpdate = (status) => {
     if (!adminNotes.trim()) {
       alert("Admin notes are required.");
       return;
     }
-    mutation.mutate({ status, notes: adminNotes });
+    if (!action) {
+      alert("Please select an action for the reported user.");
+      return;
+    }
+  
+    // Map selected action to corresponding DB value
+    const actionMapping = {
+      "Activate": "Active",
+      "Suspend": "Suspended",
+      "Ban": "Banned"
+    };
+  
+    const mappedAction = actionMapping[action]; // Convert to recognized DB value
+  
+    mutation.mutate({ status, notes: adminNotes, action: mappedAction });
   };
+  
 
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p className="text-red-500">Error: {error.message}</p>;
 
   const { complaint } = data || {};
+
+
   return (
     <div className="flex min-h-screen flex-col px-4">
       <AdminHeader />
@@ -58,7 +90,6 @@ export default function IndividualReportsSection() {
             <p><strong>Status:</strong> {complaint.status}</p>
             <p><strong>Created At:</strong> {new Date(complaint.createdAt).toLocaleString()}</p>
 
-            {/* Only display admin notes if it's not null or empty */}
             {complaint.adminNotes && (
               <p><strong>Admin Notes:</strong> {complaint.adminNotes}</p>
             )}
@@ -66,7 +97,6 @@ export default function IndividualReportsSection() {
             {complaint.resolvedAt && (
               <p><strong>Resolved At:</strong> {new Date(complaint.resolvedAt).toLocaleString()}</p>
             )}
-
           </div>
 
           <div>
@@ -77,6 +107,42 @@ export default function IndividualReportsSection() {
               onChange={(e) => setAdminNotes(e.target.value)}
               placeholder="Enter admin notes here..."
             />
+          </div>
+
+          <div>
+            <label className="block font-semibold">Action on Reported User (Required)</label>
+            <div className="flex gap-4 mt-2">
+              <label className="flex items-center gap-2">
+                <input
+                  type="radio"
+                  value="Activate"
+                  checked={action === "Activate"}
+                  onChange={() => setAction("Activate")}
+                  className="accent-green-500"
+                />
+                Activate
+              </label>
+              <label className="flex items-center gap-2">
+                <input
+                  type="radio"
+                  value="Suspend"
+                  checked={action === "Suspend"}
+                  onChange={() => setAction("Suspend")}
+                  className="accent-yellow-500"
+                />
+                Suspend
+              </label>
+              <label className="flex items-center gap-2">
+                <input
+                  type="radio"
+                  value="Ban"
+                  checked={action === "Ban"}
+                  onChange={() => setAction("Ban")}
+                  className="accent-red-500"
+                />
+                Ban
+              </label>
+            </div>
           </div>
 
           <div className="flex gap-4">

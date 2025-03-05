@@ -119,18 +119,35 @@ export function ServiceForm() {
   })
 
   const handleFilesSelected = (newFiles) => {
-    setFiles((prev) => [...prev, ...newFiles])
-    form.setValue("images", [...files, ...newFiles])
+    // Directly use the File objects
+    setFiles(prevFiles => {
+      const updatedFiles = [...prevFiles, ...newFiles];
+      // Limit to 5 files
+      if (updatedFiles.length > 5) {
+        toast({
+          title: "Error",
+          description: "Maximum 5 images allowed",
+          variant: "destructive",
+        });
+        return prevFiles;
+      }
+      return updatedFiles;
+    });
   }
 
   const removeFile = (fileName) => {
-    const updatedFiles = files.filter((file) => file.name !== fileName)
-    setFiles(updatedFiles)
-    form.setValue("images", updatedFiles)
+    setFiles(prevFiles => 
+      prevFiles.filter(file => 
+        (file.name !== fileName) && 
+        (typeof file === 'string' ? file !== fileName : true)
+      )
+    );
   }
 
   async function onSubmit() {
     try {
+      console.log("Category before submission:", form.getValues().category);
+
       const data = form.getValues()
 
       mutation.mutate(data);
@@ -247,7 +264,8 @@ export function ServiceForm() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Category</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <Select onValueChange={(value) => form.setValue("category", value)} defaultValue={field.value}>
+
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Select a category" />
@@ -255,7 +273,7 @@ export function ServiceForm() {
                       </FormControl>
                       <SelectContent>
                         {categories.map((category) => (
-                          <SelectItem key={category} value={category.toLowerCase()}>
+                          <SelectItem key={category} value={category}>
                             {category}
                           </SelectItem>
                         ))}

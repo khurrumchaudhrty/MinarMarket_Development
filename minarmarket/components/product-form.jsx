@@ -244,7 +244,7 @@ export function ProductForm() {
                     </FormControl>
                     <SelectContent>
                       {categories.map((category) => (
-                        <SelectItem key={category} value={category.toLowerCase()}>
+                        <SelectItem key={category} value={category}>
                           {category}
                         </SelectItem>
                       ))}

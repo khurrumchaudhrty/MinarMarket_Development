@@ -6,31 +6,43 @@ export async function fetchService(serviceId) {
 }
 
 export async function uploadToCloudinary(file) {
-  const formData = new FormData()
-  formData.append("file", file)
-  formData.append("upload_preset", "xxy7dsyf")
+  console.log(file)
 
-  const response = await fetch(
-    "https://api.cloudinary.com/v1_1/dm56xy1oj/image/upload",
-    {
-      method: "POST",
-      body: formData,
-    }
-  )
-  const data = await response.json()
-  return data.secure_url
+const formData = new FormData()
+//Read blob data from url
+  const blob = await fetch(file.preview).then((r) => r.blob())
+formData.append("file", blob)
+formData.append("upload_preset", "xxy7dsyf")
+
+const response = await fetch(
+  "https://api.cloudinary.com/v1_1/dm56xy1oj/image/upload",
+  {
+    method: "POST",
+    body: formData,
+  }
+)
+const data = await response.json()
+console.log(data)
+return data.secure_url
 }
 
+
 export async function createService(data) {
+  console.log("DATA IN CREATESERVICE: ", data);
+  
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/addServiceListing`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
-  })
-  if (!response.ok) throw new Error('Failed to create service')
-  return response.json()
-}
+  });
 
+  if (!response.ok) throw new Error('Failed to create service');
+
+  const responseData = await response.json(); // Store the parsed JSON
+  console.log("RESPONSE.JSON: ", responseData); // Log it
+  
+  return responseData; // Return the stored response
+}
 export async function updateService(serviceId, data) {
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/service-listings/updateService/${serviceId}`, {
     method: 'PUT',
