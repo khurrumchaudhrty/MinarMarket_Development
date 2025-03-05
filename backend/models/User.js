@@ -19,6 +19,18 @@ const UserSchema = mongoose.Schema({
         validate: [validator.isEmail, 'Please enter a valid email']
     },
 
+    phone: {
+        type: String,
+        required: [true, 'Please enter your phone number'],
+        unique: true,
+        validate: {
+            validator: function(value) {
+                return /^\d{10,15}$/.test(value);
+            },
+            message: 'Phone number must be between 10 to 15 digits'
+        }
+    },
+
     password: {
         type: String,
         required: [true, 'Please enter the password'],

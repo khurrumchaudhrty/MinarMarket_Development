@@ -1,17 +1,14 @@
 'use client'
 
 import { useState } from 'react'
-
 import Link from 'next/link'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox"
 import { z } from 'zod'
-import {useMutation} from "@tanstack/react-query"
+import { useMutation } from "@tanstack/react-query"
 import { useRouter } from 'next/navigation'
-
 
 export default function SignupForm() {
   const [showPassword, setShowPassword] = useState(false)
@@ -23,6 +20,7 @@ export default function SignupForm() {
     firstName: '',
     lastName: '',
     email: '',
+    phone: '',
     password: '',
     confirmPassword: ''
   })
@@ -31,7 +29,7 @@ export default function SignupForm() {
     firstName: z.string().min(2, 'First name must be at least 2 characters'),
     lastName: z.string().min(2, 'Last name must be at least 2 characters'),
     email: z.string().email('Invalid email address'),
-    
+    phone: z.string().min(10, 'Phone number must be at least 10 digits'),
     password: z.string()
       .min(8, 'Password must be at least 8 characters')
       .max(100, 'Password must be at most 100 characters'),
@@ -40,47 +38,44 @@ export default function SignupForm() {
     message: "Passwords don't match",
     path: ["confirmPassword"]
   })
-    
-  
+
   const signUpMutation = useMutation({
-      mutationFn: async (credentials) => {
-          const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/authentication/signup`, {
-              method: 'POST',
-              headers: {
-                  'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                  name: `${credentials.firstName} ${credentials.lastName}`,
-                  email: credentials.email,
-                  password: credentials.password,
-                  admin: false, // Ensure this is always false for new signups
-                  confirmPassword: credentials.confirmPassword
-              }),
-          })
-          const data = await response.json()
-          if (!data.success) {
-              throw new Error(data.message)
-          }
-          return data
-      },
-      onSuccess: (data) => {
-          localStorage.setItem('token', data.token)
-          router.push('/app/dashboard') // Regular users always go to dashboard
-      },
-      onError: (error) => {
-          setApiError(error.message)
-      },
+    mutationFn: async (credentials) => {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/authentication/signup`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: `${credentials.firstName} ${credentials.lastName}`,
+          email: credentials.email,
+          phone: credentials.phone,
+          password: credentials.password,
+          confirmPassword: credentials.confirmPassword
+        }),
+      })
+      const data = await response.json()
+      if (!data.success) {
+        throw new Error(data.message)
+      }
+      return data
+    },
+    onSuccess: (data) => {
+      localStorage.setItem('token', data.token)
+      router.push('/app/dashboard')
+    },
+    onError: (error) => {
+      setApiError(error.message)
+    },
   })
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
       const validatedData = signUpSchema.parse(formData)
-      // Handle successful validation
       setError(null)
       signUpMutation.mutate(validatedData)
     } catch (error) {
-      // Handle validation errors
       if (error instanceof z.ZodError) {
         setError(error.errors)
       }
@@ -96,10 +91,7 @@ export default function SignupForm() {
 
   return (
     <div className="w-full max-w-md mx-auto p-6">
-      <div className="flex items-center gap-2 mb-6">
-        <div className="w-4 h-4 rounded-full bg-blue-600" />
-        <h1 className="text-2xl font-semibold">Create an account</h1>
-      </div>
+      <h1 className="text-2xl font-semibold mb-4">Create an account</h1>
       {error && ( 
         <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-md">
           <ul className="list-disc list-inside text-sm text-red-600">
@@ -114,12 +106,6 @@ export default function SignupForm() {
           <p className="text-sm text-red-600">{apiError}</p>
         </div>
       )}
-      <p className="text-sm text-muted-foreground mb-6">
-        Already have an account?{' '}
-        <Link href="/login" className="text-blue-600 hover:underline">
-          Log in
-        </Link>
-      </p>
 
       <form className="space-y-4" onSubmit={handleSubmit}>
         <div className="grid grid-cols-2 gap-4">
@@ -154,7 +140,16 @@ export default function SignupForm() {
           />
         </div>
 
-      
+        <div className="space-y-2">
+          <Label htmlFor="phone">Phone number</Label>
+          <Input 
+            id="phone" 
+            type="tel" 
+            required 
+            value={formData.phone}
+            onChange={handleChange('phone')}
+          />
+        </div>
 
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
@@ -168,7 +163,7 @@ export default function SignupForm() {
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="confirmPassword">Confirm your password</Label>
+            <Label htmlFor="confirmPassword">Confirm Password</Label>
             <Input 
               id="confirmPassword" 
               type={showPassword ? "text" : "password"} 
@@ -179,51 +174,10 @@ export default function SignupForm() {
           </div>
         </div>
 
-        <p className="text-sm text-muted-foreground">
-          Use 8 or more characters with a mix of letters, numbers & symbols
-        </p>
-
-        <div className="flex items-center space-x-2">
-          <Checkbox 
-            id="showPassword" 
-            checked={showPassword}
-            onCheckedChange={(checked) => setShowPassword(checked)}
-          />
-          <Label htmlFor="showPassword" className="text-sm font-normal">
-            Show password
-          </Label>
-        </div>
-
         <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700">
           Create an account
         </Button>
       </form>
-
-      <div className="flex items-center justify-between mt-6">
-        {/* <Select defaultValue="en">
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Language" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="en">English (United States)</SelectItem>
-            <SelectItem value="es">Español</SelectItem>
-            <SelectItem value="fr">Français</SelectItem>
-          </SelectContent>
-        </Select> */}
-
-        <div className="flex gap-4 text-sm">
-          <Link href="/help" className="text-muted-foreground hover:underline">
-            Help
-          </Link>
-          <Link href="/privacy" className="text-muted-foreground hover:underline">
-            Privacy
-          </Link>
-          <Link href="/terms" className="text-muted-foreground hover:underline">
-            Terms
-          </Link>
-        </div>
-      </div>
     </div>
   )
 }
-
