@@ -98,7 +98,7 @@ export default function Home() {
         {!selectedCategory ? (
           <>
             <section className="relative">
-              <div className="container relative min-h-[600px] flex items-center">
+              <div className="container relative min-h-[400px] flex items-center">
                 <div className="flex flex-col items-start gap-4 max-w-2xl relative z-10 bg-white/80 p-8 rounded-lg">
                   <h1 className="text-3xl font-bold sm:text-5xl md:text-6xl">
                     FIND THE ITEMS AND SERVICES THAT YOU NEED

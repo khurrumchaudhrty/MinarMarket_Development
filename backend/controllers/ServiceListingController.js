@@ -1,15 +1,14 @@
 const ServiceListing = require("../models/ServiceListing");
 const mongoose = require("mongoose");
+const User = require("../models/User");
 
 exports.showMyServiceListings = async (req, res) => {
   try {
     const userId = req.query.listerId;
-    console.log(userId);
     const serviceListings = await ServiceListing.find({
       listerId: userId,
     });
 
-    console.log(serviceListings);
     return res.status(200).json({
       success: true,
       message: "Service Listings retrieved successfully.",
@@ -208,6 +207,10 @@ exports.showServiceListings = async (req, res) => {
       status: "Approved",
       isActive: true,
       listerId: { $ne: userId },
+      $or: [
+        { listerAccountStatus: "Active" }, // Include explicitly "Active"
+        { listerAccountStatus: { $exists: false } }, // Include documents where listerAccountStatus is missing
+      ],
     });
 
     return res.status(200).json({
@@ -241,6 +244,10 @@ exports.fetchServiceCategoryListings = async (req, res) => {
       isActive: true,
       listerId: { $ne: userId },
       category: category,
+      $or: [
+        { listerAccountStatus: "Active" }, // Include explicitly "Active"
+        { listerAccountStatus: { $exists: false } }, // Include documents where listerAccountStatus is missing
+      ],
     });
 
     return res.status(200).json({
@@ -265,6 +272,10 @@ exports.fetchLandingPageServices = async (req, res) => {
     const serviceListings = await ServiceListing.find({
       status: "Approved",
       isActive: true,
+      $or: [
+        { listerAccountStatus: "Active" }, // Include explicitly "Active"
+        { listerAccountStatus: { $exists: false } }, // Include documents where listerAccountStatus is missing
+      ],
     });
 
     res.status(200).json({
@@ -296,16 +307,19 @@ exports.fetchCategoryLandingPage = async (req, res) => {
     }
 
     const serviceListings = await ServiceListing.find({
-      status:"Approved",
-      isActive:true,
-      category:category,
+      status: "Approved",
+      isActive: true,
+      category: category,
+      $or: [
+        { listerAccountStatus: "Active" }, // Include explicitly "Active"
+        { listerAccountStatus: { $exists: false } }, // Include documents where listerAccountStatus is missing
+      ],
     });
 
     return res.status(200).json({
-      success:true,
-      data:serviceListings
+      success: true,
+      data: serviceListings,
     });
-
   } catch (error) {
     console.error(
       "Error while retrieving services for specified category on the landing page"

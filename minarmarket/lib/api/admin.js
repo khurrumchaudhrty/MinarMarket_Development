@@ -49,14 +49,14 @@ export async function getIndividualComplaint(id) {
 }
 
 
-export async function updateComplaintStatus(complaintId, status, adminNotes) {
+export async function updateComplaintStatus(complaintId, status, adminNotes, action) {
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/report/resolve-complaint/${complaintId}`, {
       method: "POST", // Updated to POST as per backend route
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ status, adminNotes }),
+      body: JSON.stringify({ status, adminNotes, action }),
     });
 
     const data = await response.json();

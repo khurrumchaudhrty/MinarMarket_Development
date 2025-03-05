@@ -69,11 +69,14 @@ exports.showProductListings = async (req, res) => {
       });
     }
 
-    // Find approved and active product listings excluding user's own listings
     const productListings = await ProductListing.find({
       status: "Approved",
       isActive: true,
-      listerId: { $ne: userId }, // Exclude products listed by the user
+      listerId: { $ne: userId },
+      $or: [
+        { listerAccountStatus: "Active" }, // Include explicitly "Active"
+        { listerAccountStatus: { $exists: false } }, // Include documents where listerAccountStatus is missing
+      ],
     });
 
     return res.status(200).json({
@@ -268,48 +271,58 @@ exports.showProductCategoryListings = async (req, res) => {
       status: "Approved",
       isActive: true,
       listerId: { $ne: userId }, // Exclude products listed by the user
-      category: category
+      category: category,
+      $or: [
+        { listerAccountStatus: "Active" }, // Include explicitly "Active"
+        { listerAccountStatus: { $exists: false } }, // Include documents where listerAccountStatus is missing
+      ],
     });
-
 
     return res.status(200).json({
       success: true,
-      message: "Product listings of the specified category retrieved successfully.",
+      message:
+        "Product listings of the specified category retrieved successfully.",
       data: productListings,
     });
   } catch (error) {
-    console.error("Error retrieving product listings of the specified category:", error);
+    console.error(
+      "Error retrieving product listings of the specified category:",
+      error
+    );
     return res.status(500).json({
       success: false,
-      message: "An error occurred while retrieving product listings of the category specified.",
+      message:
+        "An error occurred while retrieving product listings of the category specified.",
     });
   }
 };
 
-
 exports.fetchLandingPageProducts = async (req, res) => {
   try {
-    
     const productListings = await ProductListing.find({
-      status:"Approved",
-      isActive:true,
+      status: "Approved",
+      isActive: true,
+      $or: [
+        { listerAccountStatus: "Active" }, // Include explicitly "Active"
+        { listerAccountStatus: { $exists: false } }, // Include documents where listerAccountStatus is missing
+      ],
     });
 
     return res.status(200).json({
-      success:true,
-      data:productListings
+      success: true,
+      data: productListings,
     });
-
   } catch (error) {
     console.error("Error retrieving product listings for landing page:", error);
     return res.status(500).json({
       success: false,
-      message: "An error occurred while retrieving product listings for landing page.",
+      message:
+        "An error occurred while retrieving product listings for landing page.",
     });
   }
 };
 
-exports.fetchCategoryLandingPage = async (req,res) => {
+exports.fetchCategoryLandingPage = async (req, res) => {
   try {
     const { category } = req.params;
 
@@ -321,21 +334,28 @@ exports.fetchCategoryLandingPage = async (req,res) => {
     }
 
     const productListings = await ProductListing.find({
-      status:"Approved",
-      isActive:true,
-      category:category
+      status: "Approved",
+      isActive: true,
+      category: category,
+      $or: [
+        { listerAccountStatus: "Active" }, // Include explicitly "Active"
+        { listerAccountStatus: { $exists: false } }, // Include documents where listerAccountStatus is missing
+      ],
     });
 
     return res.status(200).json({
-      success:true,
-      data:productListings
+      success: true,
+      data: productListings,
     });
-
   } catch (error) {
-    console.error("Error retrieving product listings of the speicfied category", error);
+    console.error(
+      "Error retrieving product listings of the speicfied category",
+      error
+    );
     return res.status(500).json({
-      success:false,
-      message:"An error occurred while retrieving product listing for specified category on the landing page."
-    })
+      success: false,
+      message:
+        "An error occurred while retrieving product listing for specified category on the landing page.",
+    });
   }
-}
+};
