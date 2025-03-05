@@ -57,57 +57,36 @@ exports.login = catchAsyncErrors(async (req, res, next) => {
 });
 
 exports.signup = catchAsyncErrors(async (req, res, next) => {
-  console.log("Received signup request"); // Debugging statement to confirm signup request is received
-  // console.log(req.body);
+  console.log("Received signup request");
 
   if (!req.body) {
-    console.log("Request body is missing"); // Debugging statement if body is not provided
-    return res.status(400).json({
-      success: false,
-      message: "Please enter your email and password",
-    });
+      return res.status(400).json({ success: false, message: "Missing request body" });
   }
 
-  const { email, password, confirmPassword, name } = req.body;
+  const { email, phone, password, confirmPassword, name } = req.body;
 
-  if (!email || !password || !confirmPassword || !name) {
-    console.log("Required fields missing"); // Debugging statement for missing fields
-    return res
-      .status(400)
-      .json({ success: false, message: "Please enter all required fields" });
+  if (!email || !phone || !password || !confirmPassword || !name) {
+      return res.status(400).json({ success: false, message: "Please enter all required fields" });
+  }
+
+  if (!/^\d{10,15}$/.test(phone)) {
+      return res.status(400).json({ success: false, message: "Invalid phone number format" });
   }
 
   if (password !== confirmPassword) {
-    console.log("Passwords do not match"); // Debugging statement for mismatched passwords
-    return res
-      .status(400)
-      .json({ success: false, message: "Passwords do not match" });
+      return res.status(400).json({ success: false, message: "Passwords do not match" });
   }
 
-  if (password.length < 8) {
-    console.log("Password is too short"); // Debugging statement for short password
-    return res.status(400).json({
-      success: false,
-      message: "Password must be at least 6 characters long",
-    });
-  }
-
-  const user = await User.findOne({ email });
-  if (user) {
-    console.log("User already exists with this email"); // Debugging statement if user exists
-    return res
-      .status(400)
-      .json({ success: false, message: "User already exists with this email" });
+  const existingUser = await User.findOne({ $or: [{ email }, { phone }] });
+  if (existingUser) {
+      return res.status(400).json({ success: false, message: "User with this email or phone number already exists" });
   }
 
   try {
-    const newUser = await User.create({ name, email, password });
-    console.log("User created successfully:", newUser); // Debugging statement for successful user creation
-    return res
-      .status(200)
-      .json({ success: true, message: "User registered successfully" });
+      const newUser = await User.create({ name, email, phone, password });
+      console.log("User created successfully:", newUser);
+      return res.status(200).json({ success: true, message: "User registered successfully" });
   } catch (error) {
-    console.log("Error creating user:", error); // Debugging statement for user creation error
-    return res.status(500).json({ success: false, message: error.message });
+      return res.status(500).json({ success: false, message: error.message });
   }
 });
