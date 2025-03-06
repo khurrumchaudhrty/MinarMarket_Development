@@ -18,28 +18,24 @@ export function SiteHeader() {
                 href="/products"
                 className="flex items-center gap-2 text-sm font-medium"
               >
-                {/* <span className="text-xl">🛍️</span> */}
                 Products
               </Link>
               <Link
                 href="/services" 
                 className="flex items-center gap-2 text-sm font-medium"
               >
-                {/* <span className="text-xl">🔧</span> */}
                 Services
               </Link>
               <Link
                 href="/contact" 
                 className="flex items-center gap-2 text-sm font-medium"
               >
-                {/* <span className="text-xl">📞</span> */}
                 Contact
               </Link>
               <Link
                 href="/about" 
                 className="flex items-center gap-2 text-sm font-medium"
               >
-                {/* <span className="text-xl">ℹ️</span> */}
                 About Us
               </Link>
             </nav>
@@ -52,9 +48,6 @@ export function SiteHeader() {
             </div>
           </div>
           <div className="flex items-center gap-4">
-            <Button variant="outline" asChild>
-              <Link href="/signin">Login</Link>
-            </Button>
             <Button asChild>
               <Link href="/signin">Buy/Sell</Link>
             </Button>
