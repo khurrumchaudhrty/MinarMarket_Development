@@ -33,7 +33,7 @@ export function SiteHeader() {
                 Contact
               </Link>
               <Link
-                href="/about" 
+                href="/aboutus" 
                 className="flex items-center gap-2 text-sm font-medium"
               >
                 About Us
