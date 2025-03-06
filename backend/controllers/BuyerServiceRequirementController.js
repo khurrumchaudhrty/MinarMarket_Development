@@ -81,3 +81,24 @@ exports.fetchServiceRequirementDetails = async (req, res) => {
         });
     }
 };
+exports.getAllServiceRequirements = async (req, res) => {
+    try {
+        const requirements = await BuyerServiceRequirement.find({ 
+            status: "Approved", 
+            isActive: true,
+            listerAccountStatus: "Active"
+        });
+
+        return res.status(200).json({
+            success: true,
+            data: requirements
+        });
+    } catch (error) {
+        console.error('Error fetching service requirements:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Server error'
+        });
+    }
+};
+
