@@ -27,7 +27,7 @@ export function SiteHeader() {
                 Services
               </Link>
               <Link
-                href="/contact" 
+                href="/contactus" 
                 className="flex items-center gap-2 text-sm font-medium"
               >
                 Contact
