@@ -4,7 +4,7 @@ const User = require("../models/User.js");
 const jwt = require('jsonwebtoken');
 
 exports.login = catchAsyncErrors(async (req, res, next) => {
-  console.log("Received login request"); // Debugging statement to confirm login request is received
+  // console.log("Received login request"); // Debugging statement to confirm login request is received
 
   if (!req.body) {
     console.log("Request body is missing"); // Debugging statement if body is not provided
@@ -44,15 +44,12 @@ exports.login = catchAsyncErrors(async (req, res, next) => {
     id: user._id,
     name: user.name, 
     email: user.email,
-    admin: user.admin
+    admin: user.admin,
+    accountStatus: user.accountStatus
   };
 
-  //   const token = user.getJWTToken();
   // Generate token with a payload that includes name and email
   const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "1h" });
-
-  console.log("JWT token generated:", token); // Debugging statement to confirm token generation
-
   return res.status(200).json({ success: true, token });
 });
 
