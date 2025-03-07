@@ -1,3 +1,4 @@
+
 'use client'
 
 import { useState } from 'react'
@@ -58,11 +59,20 @@ export default function SignupForm() {
       if (!data.success) {
         throw new Error(data.message)
       }
+      sessionStorage.setItem('signupdata',JSON.stringify({
+        name: `${credentials.firstName} ${credentials.lastName}`,
+        email: credentials.email,
+        phone: credentials.phone,
+        password: credentials.password,
+        confirmPassword: credentials.confirmPassword
+      }))
+      localStorage.setItem('email', credentials.email)
       return data
     },
     onSuccess: (data) => {
       localStorage.setItem('token', data.token)
-      router.push('/app/dashboard')
+      // router.push('/app/dashboard')
+      router.push(`/signup/verifyemail/${encodeURIComponent(localStorage.getItem("email"))}`)
     },
     onError: (error) => {
       setApiError(error.message)
