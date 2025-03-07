@@ -19,7 +19,7 @@ async function getService(id) {
     });
 
     const data = await response.json();
-    console.log("data: ", data);
+    // console.log("data: ", data);
     return data;
   } catch (error) {
     console.error("Fetch error: ", error);

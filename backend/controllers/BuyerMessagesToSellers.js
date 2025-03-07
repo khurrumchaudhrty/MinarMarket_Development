@@ -3,13 +3,12 @@ const express = require("express");
 const BuyerMessage = require("../models/BuyerMessages");
 const User = require("../models/User");
 const ProductListing = require("../models/ProductListing");
+const ServiceListing = require("../models/ServiceListing");
 
 // Fetch messages for a seller
 exports.getSellerMessages = async (req, res) => {
     try {
         const { sellerId } = req.params;
-
-        // console.log("Fetching messages for Seller ID:", sellerId);
 
         if (!sellerId) {
             return res.status(400).json({ success: false, message: "Seller ID is required." });
@@ -21,15 +20,26 @@ exports.getSellerMessages = async (req, res) => {
             return res.status(404).json({ success: false, message: "No messages found for this seller." });
         }
 
-        // Fetch buyer details and product names
+        // Fetch buyer details and corresponding product/service names
         const enrichedMessages = await Promise.all(
             messages.map(async (message) => {
                 const buyer = await User.findById(message.id_of_buyer).select("name email phone");
-                const product = await ProductListing.findById(message.id_of_product);
+
+                let listingTitle = "Unknown Listing";
+
+                if (message.id_of_product) {
+                    const product = await ProductListing.findById(message.id_of_product);
+                    if (product) listingTitle = product.title;
+                } else if (message.id_of_service) {
+                    const service = await ServiceListing.findById(message.id_of_service);
+                    if (service) listingTitle = service.title;
+                }
+
+                // console.log("Listing Title:", listingTitle);
 
                 return {
                     id: message._id,
-                    product: product ? product.title : "Unknown Product",
+                    title: listingTitle ,
                     name: buyer ? buyer.name : "Unknown Buyer",
                     email: buyer ? buyer.email : "Unknown Email",
                     phone: buyer ? buyer.phone : "Unknown Phone",
