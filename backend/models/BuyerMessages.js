@@ -10,13 +10,13 @@ const buyermessagesschema = new mongoose.Schema({
     id_of_product: {
         type: String,
         maxlength: 200,
-        default: null, // Make it optional
+        default: null, 
     },
 
     id_of_service: {
         type: String,
         maxlength: 200,
-        default: null, // Add this for service-based messages
+        default: null, 
     },
 
     status: {
