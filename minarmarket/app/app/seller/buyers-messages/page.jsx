@@ -64,7 +64,14 @@ export default function MessageChat() {
                             <div key={msg.id} className="bg-white p-4 rounded-lg shadow-lg flex flex-col items-center text-center">
                                 {msg.status === "Pending" ? (
                                     <>
-                                        <h2 className="text-md">You have a buyer who wants to connect for your lisited product, <h2 className="font-semibold text-lg"> {msg.product}!</h2> </h2>
+                                        {/* <h2 className="text-md">You have a buyer who wants to connect for your lisited product, <h2 className="font-semibold text-lg"> {msg.product}!</h2> </h2> */}
+                                        {/* <h2 className="text-md">You have a buyer who wants to connect for your listing, <h2 className="font-semibold text-lg">{msg.listing}!</h2></h2> */}
+                                        <h3 className="text-md">
+                                            You have a buyer who wants to connect for your listing, 
+                                            <span className="font-semibold text-lg">{msg.title}!</span>
+                                        </h3>
+
+
                                         <button
                                             onClick={() => handleStatusUpdate(msg.id, "Yes")}
                                             className="mt-4 bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition"
@@ -80,13 +87,13 @@ export default function MessageChat() {
                                     </>
                                 ) : msg.status === "Yes" ? (
                                     <>
-                                        <h2 className="text-lg font-semibold">{msg.product}</h2>
+                                        <h2 className="text-lg font-semibold">{msg.title}</h2>
                                         <p className="text-gray-700">Name: {msg.name}</p>
                                         <p className="text-gray-500 text-sm">Email: {msg.email}</p>
                                         <p className="text-gray-500 text-sm">Phone# {msg.phone}</p>
-                                        {/* <button className="mt-4 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition">
+                                        <button className="mt-4 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition">
                                             Contact Buyer
-                                        </button> */}
+                                        </button>
                                     </>
                                 ) : (
                                     <p className="text-red-600 font-semibold">You rejected the ask</p>

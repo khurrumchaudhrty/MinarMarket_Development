@@ -46,7 +46,7 @@ export default function LoginPage() {
         },
         body: JSON.stringify(credentials),
       })
-      const data = await response.json()
+      const data = await response.json()  
       if (!data.success) {
         throw new Error(data.message)
       }
@@ -54,9 +54,18 @@ export default function LoginPage() {
     },
     onSuccess: (data) => {
       localStorage.setItem("token", data.token)
-      // Parse the JWT token to get user data
+  
+      // Decode the JWT token
       const decodedToken = JSON.parse(atob(data.token.split(".")[1]))
-
+  
+      // Check for account status
+      if (decodedToken.accountStatus === "Banned" || decodedToken.accountStatus === "Suspended") {
+        console.warn("User is banned or suspended. Redirecting to /blocked.");
+        localStorage.removeItem("token") // Remove token to prevent access
+        router.push("/blocked") // Redirect to blocked page
+        return; // Stop further execution
+      }
+  
       // Redirect based on admin status
       if (decodedToken.admin) {
         router.push("/app/admin")
