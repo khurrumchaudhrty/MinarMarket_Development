@@ -34,26 +34,39 @@ export function BuyerProductCard({
           <div className="relative">
             <Carousel className="w-full">
               <CarouselContent>
-                {images?.map((image, index) => (
-                  <CarouselItem key={image._id || index}>
-                    <AspectRatio ratio={4 / 3}>
+                {images?.length > 0 ? (
+                  images.map((image, index) => (
+                    <CarouselItem key={image._id || index}>
+                      <AspectRatio ratio={4/3}>
+                        <Image
+                          src={image.url || "https://placehold.co/600x400/png"}
+                          alt={`${title} - Image ${index + 1}`}
+                          fill
+                          className="object-cover"
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        />
+                      </AspectRatio>
+                    </CarouselItem>
+                  ))
+                ) : (
+                  <CarouselItem>
+                    <AspectRatio ratio={4/3}>
                       <Image
-                        src={image.url || "https://placehold.co/600x400/png"}
-                        alt={`${title} - Image ${index + 1}`}
+                        src="https://placehold.co/600x400/png"
+                        alt={`${title} - Image`}
                         fill
                         className="object-cover"
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       />
                     </AspectRatio>
                   </CarouselItem>
-                ))}
+                )}
               </CarouselContent>
               <CarouselPrevious className="left-2" onClick={handleCarouselButtonClick} />
-            <CarouselNext className="right-2" onClick={handleCarouselButtonClick} />
+              <CarouselNext className="right-2" onClick={handleCarouselButtonClick} />
             </Carousel>
-            
 
-            <h3 className="font-semibold py-10 px-2">{title}</h3>
+            <h3 className="font-semibold py-4 px-2">{title}</h3>
           </div>
         </CardContent>
       </Link>
