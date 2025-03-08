@@ -42,6 +42,9 @@ app.use('/addServiceListing', AddServiceListing);
 app.use('/seller-listings', SellerListing);
 app.use('/deactivate-listings', DeleteSellerListing);
 app.use('/admin-product-listings', AllProductsListing);
+app.use('/admin', AllProductsListing);
+// app.use('/admin-service-listings', AdminServiceListings);
+
 app.use('/update-listings-status', UpdateProductsListing);
 app.use('/service-listings', AllServicesListing);
 

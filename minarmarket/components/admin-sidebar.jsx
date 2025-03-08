@@ -13,21 +13,31 @@ export const AdminSidebar = () => {
     {
       label: "Dashboard",
       icon: LayoutDashboard,
-      href: "/admin/dashboard",
+      href: "/app/admin/dashboard",
     },
     {
       label: "Manage Listings",
       icon: ListIcon,
-      href: "/admin/listings",
+      href: "/app/admin/listings",
       subitems: {
-        "Products": "/admin/listings/products",
-        "Services": "/admin/listings/services",
+        "Products": "/app/admin/listings/products",
+        "Services": "/app/admin/listings/services",
       }
     },
     {
+      label: "Manage Requirements",
+      icon: ListIcon,
+      href: "/app/admin/requirements",
+      subitems: {
+        "Product Requirements": "/app/admin/requirements/products",
+        "Service Requirements": "/app/admin/requirements/services",
+      }
+    },
+
+    {
       label: "Users",
       icon: Users,
-      href: "/admin/users",
+      href: "/app/admin/users",
     },
     {
       label: "Reports",
@@ -37,7 +47,7 @@ export const AdminSidebar = () => {
     {
       label: "Settings",
       icon: Settings,
-      href: "/admin/settings",
+      href: "/app/admin/settings",
     }
   ]
 
