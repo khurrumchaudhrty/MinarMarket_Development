@@ -1,6 +1,10 @@
 const BuyerRequirement = require('../models/BuyerRequirement');
 const Proposal = require('../models/Proposal');
 const User = require('../models/User');
+const BuyerServiceRequirement = require('../models/BuyerServiceRequirement');
+const ProductListing = require('../models/ProductListing');
+const ServiceListing = require('../models/ServiceListing');
+
 
 exports.createProposal = async (req, res) => {
   try {
@@ -118,7 +122,7 @@ exports.getProposalsByUser = async (req, res) => {
       .populate('sellerId', 'name email')
       .populate('requirementId', 'title description')
       .sort({ createdAt: -1 });
-
+     
     res.status(200).json({
       success: true,
       proposals
@@ -136,6 +140,7 @@ exports.getProposalsByUser = async (req, res) => {
 
 exports.getReceivedProposals = async (req, res) => {
   try {
+   
     const { userId } = req.params;
     console.log(userId)
     const requirements = await BuyerRequirement.find({ listerId: userId });
@@ -189,19 +194,66 @@ exports.updateProposalStatus = async (req, res) => {
 };
 
 exports.getSellerProposals = async (req, res) => {
+  // try {
+    
+  //   const { userId } = req.params;
+    
+  //   const proposals = await Proposal.find({ sellerId: userId })
+  //     .populate('sellerId', 'name email')
+  //     .populate('requirementId')
+  //     .populate('sellerListingId')
+  //     .sort({ createdAt: -1 });
+  //   console.log(proposals)
+  //   res.status(200).json({
+  //     success: true,
+  //     proposals
+  //   });
+  // } catch (error) {
+  //   console.error('Error:', error);
+  //   res.status(500).json({
+  //     success: false,
+  //     message: 'Error fetching seller proposals'
+  //   });
+  // }
+
   try {
     const { userId } = req.params;
-    
-    const proposals = await Proposal.find({ sellerId: userId })
-      .populate('sellerId', 'name email')
-      .populate('requirementId')
-      .populate('sellerListingId')
-      .sort({ createdAt: -1 });
 
+    // Step 1: Get proposals for the given sellerId
+    const proposals = await Proposal.find({ sellerId: userId }).sort({ createdAt: -1 });
+
+    // Step 2: Manually fetch related details for each proposal
+    const enrichedProposals = await Promise.all(proposals.map(async (proposal) => {
+      // Fetch seller details
+      const sellerDetails = await User.findById(proposal.sellerId).select('name email');
+
+      // Fetch requirement details (first from BuyerRequirement, if null, check BuyerServiceRequirement)
+      let requirementDetails = await BuyerRequirement.findById(proposal.requirementId);
+      if (!requirementDetails) {
+        requirementDetails = await BuyerServiceRequirement.findById(proposal.requirementId);
+      }
+
+      // Fetch seller listing details (first from ProductListing, if null, check ServiceListing)
+      let sellerListingDetails = await ProductListing.findById(proposal.sellerListingId);
+      if (!sellerListingDetails) {
+        sellerListingDetails = await ServiceListing.findById(proposal.sellerListingId);
+      }
+
+      return {
+        ...proposal.toObject(),
+        sellerId: sellerDetails,
+        requirementId: requirementDetails,
+        sellerListingId: sellerListingDetails
+      };
+    }));
+
+    // Step 3: Send response
+    console.log(enrichedProposals)
     res.status(200).json({
       success: true,
-      proposals
+      proposals: enrichedProposals
     });
+
   } catch (error) {
     console.error('Error:', error);
     res.status(500).json({
