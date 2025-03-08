@@ -47,22 +47,30 @@ export function SentProposalList({ userId }) {
           <div className="grid md:grid-cols-2 gap-4">
             {/* Requirement Details */}
             <div className="bg-gray-50 p-3 rounded border">
-              <h4 className="text-sm font-semibold text-primary mb-2">Buyers Requirement</h4>
-              <p className="text-sm font-medium">{proposal.requirementId.title}</p>
-              <p className="text-xs text-gray-600 line-clamp-2 mb-2">
-                {proposal.requirementId.description}
-              </p>
-              <div className="text-xs">
-                <span className="font-medium">
-                  Price: Rs.{proposal.requirementId.price}
-                </span>
-                <span className="mx-2">•</span>
-                <span>{proposal.requirementId.category}</span>
-              </div>
-            </div>
+  <h4 className="text-sm font-semibold text-primary mb-2">Buyer's Requirement</h4>
+  <p className="text-sm font-medium">{proposal.requirementId.title}</p>
+  <p className="text-xs text-gray-600 line-clamp-2 mb-2">
+    {proposal.requirementId.description}
+  </p>
+  <div className="text-xs">
+    <span className="font-medium">
+      {proposal.requirementId.rate
+        ? `Rate: Rs.${proposal.requirementId.rate}`
+        : `Price: Rs.${proposal.requirementId.price}`}
+    </span>
+    <span className="mx-2">•</span>
+    <span>{proposal.requirementId.category}</span>
+  </div>
+  {proposal.requirementId.rate && proposal.requirementId.pricingModel && (
+    <div className="text-xs text-gray-700 mt-1">
+      <span className="font-medium">Pricing Model:</span> {proposal.requirementId.pricingModel}
+    </div>
+  )}
+</div>
+
 
             {/* Your Product */}
-            <div className="bg-gray-50 p-3 rounded border">
+            {/* <div className="bg-gray-50 p-3 rounded border">
               <h4 className="text-sm font-semibold text-primary mb-2">Your Product</h4>
               <div className="flex gap-3">
                 {proposal.sellerListingId.images?.[0] && (
@@ -89,7 +97,46 @@ export function SentProposalList({ userId }) {
                   </div>
                 </div>
               </div>
+            </div> */}
+            <div className="bg-gray-50 p-3 rounded border">
+              <h4 className="text-sm font-semibold text-primary mb-2">
+                {proposal.requirementId.rate ? "Your Service" : "Your Product"}
+              </h4>
+              <div className="flex gap-3">
+                {proposal.sellerListingId.images?.[0] && (
+                  <div className="relative h-20 w-20 flex-shrink-0">
+                    <Image
+                      src={proposal.sellerListingId.images[0].url}
+                      alt={proposal.sellerListingId.title}
+                      fill
+                      className="object-cover rounded"
+                    />
+                  </div>
+                )}
+                <div className="flex-1">
+                  <p className="text-sm font-medium">{proposal.sellerListingId.title}</p>
+                  <p className="text-xs text-gray-600 line-clamp-2 mb-2">
+                    {proposal.sellerListingId.description}
+                  </p>
+                  <div className="text-xs">
+                    <span className="font-medium">
+                      {proposal.requirementId.rate
+                        ? `Rate: Rs.${proposal.requirementId.rate}`
+                        : `Price: Rs.${proposal.sellerListingId.price}`}
+                    </span>
+                    <span className="mx-2">•</span>
+                    <span>{proposal.sellerListingId.category}</span>
+                  </div>
+                  {proposal.requirementId.rate && proposal.requirementId.pricingModel && (
+                    <div className="text-xs text-gray-700 mt-1">
+                      <span className="font-medium">Pricing Model:</span> {proposal.requirementId.pricingModel}
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
+
+
           </div>
         </Card>
       ))}
