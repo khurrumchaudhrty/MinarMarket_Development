@@ -135,7 +135,7 @@ const [errorSellerContacts, setErrorSellerContacts] = useState(null);
 
 
   const pageNames = {
-    "1": "Seller Dashboard",
+    "1": "Buyer Dashboard",
     "2": "Landing Page",
     "3": "Seller Dashboard",
     "4": "Products",
