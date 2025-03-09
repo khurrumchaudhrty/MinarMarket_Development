@@ -31,10 +31,10 @@
 //         enum: ['pending', 'accepted', 'rejected'],
 //         default: 'pending'
 //     },
-//     createdAt: {
-//         type: Date,
-//         default: Date.now
-//     }
+    // createdAt: {
+    //     type: Date,
+    //     default: Date.now
+    // }
 // });
 
 // module.exports = mongoose.model('Proposal', proposalSchema);
@@ -54,13 +54,17 @@ const proposalSchema = new mongoose.Schema({
     },
     sellerListingId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'ProductListing', // Change 'Product' to the correct model name if necessary
+        ref: 'ProductListing', 
         required: true
     },
     status: {
         type: String,
         enum: ['pending', 'accepted', 'rejected'],
         default: 'pending'
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
     }
 });
 
