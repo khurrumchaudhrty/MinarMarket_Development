@@ -30,6 +30,7 @@ import { ProductCard } from "@/components/product-card"
 import { useLocalStorage } from "@uidotdev/usehooks"
 import { ArrowLeft } from "lucide-react"
 
+
 const productCategories = [
   { name: "Electronics", icon: <FaLaptop /> },
   { name: "Clothing", icon: <FaTshirt /> },
