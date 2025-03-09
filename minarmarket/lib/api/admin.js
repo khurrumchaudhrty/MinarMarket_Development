@@ -8,6 +8,48 @@ export async function getAllProductListings() {
   return response.json();
 }
 
+
+export async function getAllServiceListings() {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/admin-product-listings/seller-services`,
+    {
+      method: "POST",
+    }
+  );
+  if (!response.ok) {
+    throw new Error("Failed to fetch product listings");
+  }
+  return response.json();
+}
+
+
+export async function getAllProductRequirements() {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/admin-product-requirements`,
+    {
+      method: "POST",
+    }
+  );
+  if (!response.ok) {
+    throw new Error("Failed to fetch product listings");
+  }
+  return response.json();
+}
+
+export async function getAllBuyerServices() {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/admin-service-requirements`,
+    {
+      method: "PUT",
+    }
+  );
+  if (!response.ok) {
+    throw new Error("Failed to fetch product listings");
+  }
+  return response.json();
+}
+
+
 export async function updateProductListingsStatus(itemIds, newStatus) {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/admin-product-listings/update-listings-status`,
@@ -24,6 +66,60 @@ export async function updateProductListingsStatus(itemIds, newStatus) {
   }
   return response.json();
 }
+
+export async function updateServiceListingsStatus(serviceIds, newStatus) {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/admin-service-listings/seller-service`,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ serviceIds, newStatus }),
+    }
+  );
+  if (!response.ok) {
+    throw new Error("Failed to update service listings");
+  }
+  return response.json();
+}
+
+export async function updateRequirementStatus(requirementIds, newStatus) {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/admin-service-listings/buyer-product`,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ requirementIds, newStatus }),
+    }
+  );
+  if (!response.ok) {
+    throw new Error("Failed to update buyer product requirements");
+  }
+  return response.json();
+}
+
+
+export async function updateServiceRequirementStatus(requirementIds, newStatus) {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/admin-service-listings/buyer-service`,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ requirementIds, newStatus }),
+    }
+  );
+  if (!response.ok) {
+    throw new Error("Failed to update buyer service requirements");
+  }
+  return response.json();
+}
+
+
 
 export async function getAllComplaints() {
   const response = await fetch(
