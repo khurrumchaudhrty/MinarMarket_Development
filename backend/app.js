@@ -13,6 +13,10 @@ const DeleteSellerListing = require('./routes/DeleteSellerListingRoutes');
 const AllProductsListing = require('./routes/AdminListingRoutes');
 const UpdateProductsListing = require('./routes/AdminListingRoutes');
 const AllServicesListing = require('./routes/ServiceListingRoutes');
+const AllServiceListing = require('./routes/AdminListingRoutes');
+const AllBuyerProductListing = require('./routes/AdminListingRoutes');
+const AllBuyerServiceListing = require('./routes/AdminListingRoutes');
+
 const AddServiceListing = require('./routes/ServiceListingRoutes');
 const Bids = require('./routes/Bid'); // For Buyer Bids
 const BuyerRequirement = require('./routes/BuyerRequirementRoutes');
@@ -21,6 +25,7 @@ const ServiceListingRoutes = require('./routes/ServiceListingRoutes');
 const ProductListingRoutes = require('./routes/ProductListingRoutes');
 const ComplaintRoutes = require('./routes/ComplaintRoutes');
 const BuyerMessages = require('./routes/BuyerMessages');
+const Visits = require('./routes/VisitRoutes');
 const BuyerMessagesToSellers = require("./routes/BuyerMessagesToSellers");
 const BuyerServiceRequirement = require('./routes/BuyerServiceRequirementRoutes');
 const app = express();
@@ -46,6 +51,7 @@ app.use('/admin', AllProductsListing);
 // app.use('/admin-service-listings', AdminServiceListings);
 
 app.use('/update-listings-status', UpdateProductsListing);
+app.use('/seller-services', AllServiceListing);
 app.use('/service-listings', AllServicesListing);
 
 // Unified Product and Service Listings Routes
@@ -73,5 +79,6 @@ app.use('/buyer-messages/check', BuyerMessages);
 app.use("/message-from-buyers", BuyerMessagesToSellers);
 app.use("/update-message-status", BuyerMessagesToSellers);
 
-
+app.use("/webvisits", Visits)
 module.exports = app;
+

@@ -58,7 +58,6 @@ export async function updateProductListingsStatus(itemIds, newStatus) {
 }
 
 export async function updateServiceListingsStatus(itemIds, newStatus) {
-  console.log("I am being called");
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/admin/update-service-listing-status`,
     {

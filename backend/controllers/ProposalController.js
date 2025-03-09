@@ -35,7 +35,8 @@ exports.createProposal = async (req, res) => {
     const proposal = new Proposal({
       sellerId,
       requirementId,
-      sellerListingId
+      sellerListingId,
+      createdAt: new Date()
     });
 
     // Save the proposal to the database

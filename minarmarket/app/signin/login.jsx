@@ -16,6 +16,39 @@ export default function LoginPage() {
   const [formError, setFormError] = useState("")
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
 
+    const recordVisit = async () => {
+    try {
+      const token = localStorage.getItem("token") 
+      let userId = null
+      if (token) {
+        const payload = JSON.parse(atob(token.split(".")[1])); // Decode JWT payload
+        userId = payload.id; // Extract userId from JWT
+      
+      }
+      
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/webvisits`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId: userId || null,
+          userAgent: navigator.userAgent,
+        }),
+      });
+
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message);
+
+      console.log("Visit recorded successfully:", data);
+    } catch (error) {
+      console.error("Error recording visit:", error);
+    }
+  };
+
+  // ✅ Call recordVisit when the page loads
+  useEffect(() => {
+    recordVisit();
+  }, []);
+
   // Track mouse position for subtle interactive effects
   useEffect(() => {
     const handleMouseMove = (e) => {
@@ -68,7 +101,7 @@ export default function LoginPage() {
   
       // Redirect based on admin status
       if (decodedToken.admin) {
-        router.push("/app/admin")
+        router.push("/app/admin/dashboard")
       } else {
         router.push("/app/dashboard")
       }

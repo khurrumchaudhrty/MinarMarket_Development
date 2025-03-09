@@ -43,6 +43,7 @@ exports.getSellerMessages = async (req, res) => {
                     name: buyer ? buyer.name : "Unknown Buyer",
                     email: buyer ? buyer.email : "Unknown Email",
                     phone: buyer ? buyer.phone : "Unknown Phone",
+                    createdAt: message.createdAt,
                     status: message.status,
                 };
             })
