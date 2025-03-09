@@ -13,9 +13,10 @@ const DeleteSellerListing = require('./routes/DeleteSellerListingRoutes');
 const AllProductsListing = require('./routes/AdminListingRoutes');
 const UpdateProductsListing = require('./routes/AdminListingRoutes');
 const AllServicesListing = require('./routes/ServiceListingRoutes');
+const AllServiceListing = require('./routes/AdminListingRoutes');
 const AllBuyerProductListing = require('./routes/AdminListingRoutes');
 const AllBuyerServiceListing = require('./routes/AdminListingRoutes');
-const AllServicesListing = require('./routes/ServiceListingRoutes');
+
 const AddServiceListing = require('./routes/ServiceListingRoutes');
 const Bids = require('./routes/Bid'); // For Buyer Bids
 const BuyerRequirement = require('./routes/BuyerRequirementRoutes');
@@ -81,3 +82,4 @@ app.use("/update-message-status", BuyerMessagesToSellers);
 
 app.use("/webvisits", Visits)
 module.exports = app;
+
