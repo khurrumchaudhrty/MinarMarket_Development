@@ -1,68 +1,98 @@
-'use client'
 
-import { useState } from 'react'
-import Link from 'next/link'
+"use client"
+
+
+import { useState, useEffect } from "react"
+import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
-import { z } from 'zod'
+import { z } from "zod"
 import { useMutation } from "@tanstack/react-query"
-import { useRouter } from 'next/navigation'
+import { useRouter } from "next/navigation"
 
-export default function SignupForm() {
+export default function SignupPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState(null)
   const [apiError, setApiError] = useState(null)
   const router = useRouter()
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
+
+  // Track mouse position for subtle interactive effects
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      setMousePosition({
+        x: e.clientX,
+        y: e.clientY,
+      })
+    }
+
+    window.addEventListener("mousemove", handleMouseMove)
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove)
+    }
+  }, [])
 
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    password: '',
-    confirmPassword: ''
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    password: "",
+    confirmPassword: "",
   })
 
-  const signUpSchema = z.object({
-    firstName: z.string().min(2, 'First name must be at least 2 characters'),
-    lastName: z.string().min(2, 'Last name must be at least 2 characters'),
-    email: z.string().email('Invalid email address'),
-    phone: z.string().min(10, 'Phone number must be at least 10 digits'),
-    password: z.string()
-      .min(8, 'Password must be at least 8 characters')
-      .max(100, 'Password must be at most 100 characters'),
-    confirmPassword: z.string()
-  }).refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match",
-    path: ["confirmPassword"]
-  })
+  const signUpSchema = z
+    .object({
+      firstName: z.string().min(2, "First name must be at least 2 characters"),
+      lastName: z.string().min(2, "Last name must be at least 2 characters"),
+      email: z.string().email("Invalid email address"),
+      phone: z.string().min(10, "Phone number must be at least 10 digits"),
+      password: z
+        .string()
+        .min(8, "Password must be at least 8 characters")
+        .max(100, "Password must be at most 100 characters"),
+      confirmPassword: z.string(),
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+      message: "Passwords don't match",
+      path: ["confirmPassword"],
+    })
 
   const signUpMutation = useMutation({
     mutationFn: async (credentials) => {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/authentication/signup`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           name: `${credentials.firstName} ${credentials.lastName}`,
           email: credentials.email,
           phone: credentials.phone,
           password: credentials.password,
-          confirmPassword: credentials.confirmPassword
+          confirmPassword: credentials.confirmPassword,
         }),
       })
       const data = await response.json()
       if (!data.success) {
         throw new Error(data.message)
       }
+      sessionStorage.setItem("signupdata", JSON.stringify({
+        name: `${credentials.firstName} ${credentials.lastName}`,
+        email: credentials.email,
+        phone: credentials.phone,
+        password: credentials.password,
+        confirmPassword: credentials.confirmPassword
+      }))
+      localStorage.setItem("email", credentials.email)
       return data
     },
     onSuccess: (data) => {
-      localStorage.setItem('token', data.token)
-      router.push('/app/dashboard')
+      localStorage.setItem("token", data.token)
+      router.push(`/signup/verifyemail/${encodeURIComponent(localStorage.getItem("email"))}`)
     },
     onError: (error) => {
       setApiError(error.message)
@@ -83,101 +113,291 @@ export default function SignupForm() {
   }
 
   const handleChange = (field) => (e) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [field]: e.target.value
+      [field]: e.target.value,
     }))
   }
 
   return (
-    <div className="w-full max-w-md mx-auto p-6">
-      <h1 className="text-2xl font-semibold mb-4">Create an account</h1>
-      {error && ( 
-        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-md">
-          <ul className="list-disc list-inside text-sm text-red-600">
-            {error.map((err, index) => (
-              <li key={index}>{err.message}</li>
-            ))}
-          </ul>
-        </div>
-      )}
-      {apiError && (
-        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-md">
-          <p className="text-sm text-red-600">{apiError}</p>
-        </div>
-      )}
-
-      <form className="space-y-4" onSubmit={handleSubmit}>
-        <div className="grid grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <Label htmlFor="firstName">First name</Label>
-            <Input 
-              id="firstName" 
-              required 
-              value={formData.firstName}
-              onChange={handleChange('firstName')}
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="lastName">Last name</Label>
-            <Input 
-              id="lastName" 
-              required 
-              value={formData.lastName}
-              onChange={handleChange('lastName')}
-            />
+    <div className="min-h-screen grid lg:grid-cols-2">
+      {/* Enhanced Left Section with Darker Colors and Subtle Animations */}
+      <div className="hidden lg:flex flex-col justify-center p-12 relative overflow-hidden">
+        {/* Dark gradient background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-gray-800 via-gray-900 to-slate-900">
+          {/* Subtle noise texture overlay */}
+          <div className="absolute inset-0 opacity-5 mix-blend-soft-light">
+            <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+              <filter id="noise">
+                <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch" />
+                <feColorMatrix type="saturate" values="0" />
+              </filter>
+              <rect width="100%" height="100%" filter="url(#noise)" />
+            </svg>
           </div>
         </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="email">Email address</Label>
-          <Input 
-            id="email" 
-            type="email" 
-            required 
-            value={formData.email}
-            onChange={handleChange('email')}
-          />
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="phone">Phone number</Label>
-          <Input 
-            id="phone" 
-            type="tel" 
-            required 
-            value={formData.phone}
-            onChange={handleChange('phone')}
-          />
-        </div>
-
-        <div className="grid grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
-            <Input 
-              id="password" 
-              type={showPassword ? "text" : "password"} 
-              required 
-              value={formData.password}
-              onChange={handleChange('password')}
+        {/* Subtle animated particles */}
+        <div className="absolute inset-0 overflow-hidden">
+          {Array.from({ length: 20 }).map((_, i) => (
+            <div
+              key={i}
+              className="absolute rounded-full"
+              style={{
+                width: `${Math.random() * 4 + 1}px`,
+                height: `${Math.random() * 4 + 1}px`,
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                background: "rgba(255,255,255,0.3)",
+                boxShadow: "0 0 10px rgba(255,255,255,0.2)",
+                animation: `float-particle ${Math.random() * 20 + 30}s linear infinite`,
+                opacity: Math.random() * 0.5 + 0.2,
+              }}
             />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="confirmPassword">Confirm Password</Label>
-            <Input 
-              id="confirmPassword" 
-              type={showPassword ? "text" : "password"} 
-              required 
-              value={formData.confirmPassword}
-              onChange={handleChange('confirmPassword')}
-            />
-          </div>
+          ))}
         </div>
 
-        <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700">
-          Create an account
-        </Button>
-      </form>
+        {/* Very subtle light effect that follows mouse */}
+        <div
+          className="absolute w-[600px] h-[600px] rounded-full pointer-events-none"
+          style={{
+            background: "radial-gradient(circle at center, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0) 70%)",
+            left: `${mousePosition.x}px`,
+            top: `${mousePosition.y}px`,
+            transform: "translate(-50%, -50%)",
+            transition: "left 1s ease-out, top 1s ease-out",
+          }}
+        ></div>
+
+        {/* Slow moving gradient accent */}
+        <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-slate-400 to-transparent opacity-20 animate-slide-right-slow"></div>
+
+        {/* Content with subtle animations */}
+        <div className="max-w-lg relative z-10">
+          <div className="mb-10">
+            <div className="h-14 w-14 rounded-lg bg-white/5 backdrop-blur-sm flex items-center justify-center mb-10 animate-float-very-slow border border-white/10">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-7 w-7 text-white/80"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+            </div>
+          </div>
+          <h1 className="text-4xl font-bold text-white/90 mb-6 animate-fade-in" style={{ animationDuration: "1.5s" }}>
+            Join MinarMarket Today
+          </h1>
+          <div className="h-px w-24 bg-gradient-to-r from-transparent via-slate-400 to-transparent mb-8 animate-width-expand-slow"></div>
+          <h2
+            className="text-xl font-medium text-white/70 mb-6 animate-fade-in"
+            style={{ animationDuration: "2s", animationDelay: "0.5s" }}
+          >
+            Create Your Account
+          </h2>
+          <p
+            className="text-white/60 leading-relaxed animate-fade-in"
+            style={{ animationDuration: "2s", animationDelay: "1s" }}
+          >
+            Sign up to start buying and selling on MinarMarket. Our unique marketplace connects buyers and sellers in a
+            personalized way, allowing you to post what you need and receive tailored offers. Join our community today
+            and discover a better way to trade.
+          </p>
+        </div>
+      </div>
+
+      {/* Right Section - Signup Form */}
+      <div className="flex items-center justify-center p-6">
+        <div className="w-full max-w-md space-y-8 bg-white p-8 rounded-2xl shadow-lg">
+          <div className="space-y-2 text-center">
+            <h2 className="text-2xl font-bold">Create an Account</h2>
+            <p className="text-sm text-muted-foreground">
+              Join MinarMarket to start buying and selling with ease.
+            </p>
+          </div>
+
+          {error && (
+            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-md">
+              <ul className="list-disc list-inside text-sm text-red-600">
+                {error.map((err, index) => (
+                  <li key={index}>{err.message}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+          {apiError && (
+            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-md">
+              <p className="text-sm text-red-600">{apiError}</p>
+            </div>
+          )}
+
+          <form className="space-y-6" onSubmit={handleSubmit}>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="firstName">First name</Label>
+                <Input id="firstName" required value={formData.firstName} onChange={handleChange("firstName")} />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="lastName">Last name</Label>
+                <Input id="lastName" required value={formData.lastName} onChange={handleChange("lastName")} />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="email">Email address</Label>
+              <Input id="email" type="email" required value={formData.email} onChange={handleChange("email")} />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="phone">Phone number</Label>
+              <Input id="phone" type="tel" required value={formData.phone} onChange={handleChange("phone")} />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="password">Password</Label>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    className="text-xs text-slate-600 hover:text-slate-800"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? "HIDE" : "SHOW"}
+                  </Button>
+                </div>
+                <Input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  required
+                  value={formData.password}
+                  onChange={handleChange("password")}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="confirmPassword">Confirm Password</Label>
+                <Input
+                  id="confirmPassword"
+                  type={showPassword ? "text" : "password"}
+                  required
+                  value={formData.confirmPassword}
+                  onChange={handleChange("confirmPassword")}
+                />
+              </div>
+            </div>
+
+            <div className="flex items-center space-x-2">
+              <Checkbox id="terms" />
+              <Label htmlFor="terms" className="text-sm">
+                I agree to the{" "}
+                <Link href="/terms" className="text-slate-600 hover:text-slate-800">
+                  Terms of Service
+                </Link>{" "}
+                and{" "}
+                <Link href="/privacy" className="text-slate-600 hover:text-slate-800">
+                  Privacy Policy
+                </Link>
+              </Label>
+            </div>
+
+            <Button
+              type="submit"
+              className="w-full bg-gradient-to-r from-slate-700 to-slate-800 hover:from-slate-800 hover:to-slate-900 text-white"
+              disabled={signUpMutation.isPending}
+            >
+              {signUpMutation.isPending ? "Creating Account..." : "Create Account"}
+            </Button>
+
+            <div className="text-center text-sm">
+              Already have an account?{" "}
+              <Link href="/signin" className="text-slate-600 hover:text-slate-800">
+                Sign In
+              </Link>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      {/* CSS Animations - Slower and More Subtle */}
+      <style jsx global>{`
+        @keyframes float-particle {
+          0% {
+            transform: translateY(0) translateX(0);
+          }
+          25% {
+            transform: translateY(-20px) translateX(10px);
+          }
+          50% {
+            transform: translateY(-10px) translateX(20px);
+          }
+          75% {
+            transform: translateY(10px) translateX(-10px);
+          }
+          100% {
+            transform: translateY(0) translateX(0);
+          }
+        }
+
+        @keyframes float-very-slow {
+          0% {
+            transform: translateY(0px);
+          }
+          50% {
+            transform: translateY(-5px);
+          }
+          100% {
+            transform: translateY(0px);
+          }
+        }
+
+        @keyframes fade-in {
+          0% {
+            opacity: 0;
+          }
+          100% {
+            opacity: 1;
+          }
+        }
+
+        @keyframes width-expand-slow {
+          0% {
+            width: 0;
+            opacity: 0;
+          }
+          100% {
+            width: 24px;
+            opacity: 1;
+          }
+        }
+
+        @keyframes slide-right-slow {
+          0% {
+            transform: translateX(-100%);
+          }
+          100% {
+            transform: translateX(100%);
+          }
+        }
+
+        .animate-float-very-slow {
+          animation: float-very-slow 8s ease-in-out infinite;
+        }
+
+        .animate-fade-in {
+          opacity: 0;
+          animation: fade-in ease-out forwards;
+        }
+
+        .animate-width-expand-slow {
+          animation: width-expand-slow 2.5s ease-out forwards;
+        }
+
+        .animate-slide-right-slow {
+          animation: slide-right-slow 20s linear infinite;
+        }
+      `}</style>
     </div>
   )
 }

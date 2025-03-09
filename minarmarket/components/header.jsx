@@ -32,19 +32,18 @@ export function Header() {
   }
 
   return (
-    <header
-      className={`sticky top-0 z-50 w-full border-b transition-colors ${
-        type === "buyer" ? "bg-gray-900 border-gray-800" : "bg-gray-900 border-gray-800"
-      }`}
-    >
+    <header className="sticky top-0 z-50 w-full border-b bg-gray-900 border-gray-800">
       <div className="container flex h-16 items-center justify-between gap-4">
         <div className="flex items-center gap-2 md:gap-8">
+          {/* Mobile Menu Button */}
           <button
             className="block md:hidden text-gray-200 hover:text-white"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
             <Menu className="h-6 w-6" />
           </button>
+
+          {/* Logo */}
           <Link href="/app/dashboard" className="flex items-center gap-2">
             <div
               className={`h-8 w-8 rounded flex items-center justify-center ${
@@ -63,12 +62,16 @@ export function Header() {
             </div>
             <span className="font-bold text-xl text-white">MINAR MARKET</span>
           </Link>
+
+          {/* Navigation Menu */}
           <div className="hidden md:block">
             <MainNav />
           </div>
         </div>
 
+        {/* Search & Buttons */}
         <div className="flex items-center gap-4">
+          {/* Search Bar */}
           <div className="relative hidden md:block">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
             <Input
@@ -78,6 +81,7 @@ export function Header() {
             />
           </div>
 
+          {/* Switch Buyer/Seller Mode */}
           <Button
             onClick={() => setType(type === "buyer" ? "seller" : "buyer")}
             className={`hidden md:flex border-0 text-white ${
@@ -87,6 +91,7 @@ export function Header() {
             Switch to {type === "buyer" ? "Selling" : "Buying"}
           </Button>
 
+          {/* User Menu */}
           {token ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
