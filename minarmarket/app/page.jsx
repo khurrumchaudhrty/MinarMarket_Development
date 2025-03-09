@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { useEffect } from "react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { LandingPageProductGrid } from "@/components/data-grid";
