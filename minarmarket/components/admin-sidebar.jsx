@@ -34,21 +34,21 @@ export const AdminSidebar = () => {
       }
     },
 
-    {
-      label: "Users",
-      icon: Users,
-      href: "/app/admin/users",
-    },
+    // {
+    //   label: "Users",
+    //   icon: Users,
+    //   href: "/app/admin/users",
+    // },
     {
       label: "Reports",
       icon: FileWarning,
       href: "/app/admin/reports"
     },
-    {
-      label: "Settings",
-      icon: Settings,
-      href: "/app/admin/settings",
-    }
+    // {
+    //   label: "Settings",
+    //   icon: Settings,
+    //   href: "/app/admin/settings",
+    // }
   ]
 
   if (!pathname) return null

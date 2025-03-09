@@ -19,7 +19,6 @@ exports.recordVisit = async (req, res) => {
         const userAgent = req.body.userAgent || req.headers["user-agent"]; 
         const userId = req.body.userId || null;
         const page = req.body.page || "unknown"; 
-        console.log(userId)
         // Get today's date in YYYY-MM-DD format
         const today = new Date();
         const formattedDate = today.toISOString().split("T")[0]; // Extract YYYY-MM-DD
@@ -69,8 +68,6 @@ exports.getVisitStats = async (req, res) => {
       startDate.setUTCHours(0, 0, 0, 0);
       endDate.setUTCHours(23, 59, 59, 999);
   
-      //console.log("Adjusted Start & End Dates:", startDate, endDate);
-  
       // Convert start and end date to YYYY-MM-DD format for comparison
       const startDateString = startDate.toISOString().split("T")[0];
       const endDateString = endDate.toISOString().split("T")[0];
@@ -94,7 +91,6 @@ exports.getVisitStats = async (req, res) => {
         { $sort: { _id: 1 } },
       ]);
   
-      //console.log(visits);
       return res.status(200).json({
         success: true,
         message: "Visit statistics fetched successfully.",
@@ -132,7 +128,7 @@ exports.buyerContacts = async (req, res) => {
         startDate.setUTCDate(startDate.getUTCDate() + 1);
         endDate.setUTCDate(endDate.getUTCDate() + 2);
         endDate.setUTCHours(23, 59, 59, 999);
-        //console.log(startDate)
+
 
        
         const contacts = await BuyerMessage.aggregate([
@@ -156,7 +152,7 @@ exports.buyerContacts = async (req, res) => {
             date: new Date(c._id), // Convert back to Date object
             count: c.count
         }));
-        //console.log(formattedContacts)
+
       
 
         return res.status(200).json({ success: true, data: formattedContacts });
@@ -210,7 +206,6 @@ exports.sellerContacts = async (req, res) => {
             count: c.count
         }));
 
-        //console.log(formattedContacts);
 
         return res.status(200).json({ success: true, data: formattedContacts });
     } catch (error) {
@@ -257,8 +252,6 @@ exports.adVisits = async (req, res) => {
                 pageVisitDict[_id] = count;
             }
         });
-
-        console.log(pageVisitDict)
 
         return res.status(200).json({
             success: true,
