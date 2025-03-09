@@ -8,6 +8,7 @@ const ServiceListing = require('../models/ServiceListing');
 
 exports.createProposal = async (req, res) => {
   try {
+    console.log(req.body)
     const { sellerId, requirementId, sellerListingId} = req.body;
 
     // Check for missing required fields
@@ -34,7 +35,8 @@ exports.createProposal = async (req, res) => {
     const proposal = new Proposal({
       sellerId,
       requirementId,
-      sellerListingId
+      sellerListingId,
+      createdAt: new Date()
     });
 
     // Save the proposal to the database
@@ -141,12 +143,19 @@ exports.getReceivedProposals = async (req, res) => {
   try {
    
     const { userId } = req.params;
+    console.log(userId)
     const requirements = await BuyerRequirement.find({ listerId: userId });
+    // console.log("requirements", requirements)
     const requirementIds = requirements.map(requirement => requirement._id);
+    // const proposals = await Proposal.find({ requirementId })
+    //   .populate('sellerId', 'name email')
+    //   .populate('sellerListingId')
+    //   .populate('requirementId');
     const proposals = await Proposal.find({ requirementId: { $in: requirementIds } })
       .populate('sellerId', 'name email')
       .populate('sellerListingId')
       .populate('requirementId');
+      console.log(proposals)
     res.status(200).json({
       success: true,
       proposals
@@ -186,6 +195,27 @@ exports.updateProposalStatus = async (req, res) => {
 };
 
 exports.getSellerProposals = async (req, res) => {
+  // try {
+    
+  //   const { userId } = req.params;
+    
+  //   const proposals = await Proposal.find({ sellerId: userId })
+  //     .populate('sellerId', 'name email')
+  //     .populate('requirementId')
+  //     .populate('sellerListingId')
+  //     .sort({ createdAt: -1 });
+  //   console.log(proposals)
+  //   res.status(200).json({
+  //     success: true,
+  //     proposals
+  //   });
+  // } catch (error) {
+  //   console.error('Error:', error);
+  //   res.status(500).json({
+  //     success: false,
+  //     message: 'Error fetching seller proposals'
+  //   });
+  // }
 
   try {
     const { userId } = req.params;
@@ -219,6 +249,7 @@ exports.getSellerProposals = async (req, res) => {
     }));
 
     // Step 3: Send response
+    console.log(enrichedProposals)
     res.status(200).json({
       success: true,
       proposals: enrichedProposals
