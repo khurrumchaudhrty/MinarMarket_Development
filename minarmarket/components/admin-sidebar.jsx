@@ -13,32 +13,42 @@ export const AdminSidebar = () => {
     {
       label: "Dashboard",
       icon: LayoutDashboard,
-      href: "/admin/dashboard",
+      href: "/app/admin/dashboard",
     },
     {
       label: "Manage Listings",
       icon: ListIcon,
-      href: "/admin/listings",
+      href: "/app/admin/listings",
       subitems: {
-        "Products": "/admin/listings/products",
-        "Services": "/admin/listings/services",
+        "Products": "/app/admin/listings/products",
+        "Services": "/app/admin/listings/services",
       }
     },
     {
-      label: "Users",
-      icon: Users,
-      href: "/admin/users",
+      label: "Manage Requirements",
+      icon: ListIcon,
+      href: "/app/admin/requirements",
+      subitems: {
+        "Product Requirements": "/app/admin/requirements/products",
+        "Service Requirements": "/app/admin/requirements/services",
+      }
     },
+
+    // {
+    //   label: "Users",
+    //   icon: Users,
+    //   href: "/app/admin/users",
+    // },
     {
       label: "Reports",
       icon: FileWarning,
       href: "/app/admin/reports"
     },
-    {
-      label: "Settings",
-      icon: Settings,
-      href: "/admin/settings",
-    }
+    // {
+    //   label: "Settings",
+    //   icon: Settings,
+    //   href: "/app/admin/settings",
+    // }
   ]
 
   if (!pathname) return null

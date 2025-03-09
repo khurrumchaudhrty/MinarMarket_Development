@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import { AdminHeader } from "@/components/admin-header"
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { PieChart, Pie,  Cell } from "recharts";
+import { PieChart, Pie, Cell } from "recharts";
 import {
   Chart as ChartJS,
   LineElement,
@@ -35,25 +35,25 @@ const AdminDashboard = () => {
     date.setDate(date.getDate() - 7);
     return date.toISOString().split('T')[0]; // Format as YYYY-MM-DD
   });
-  
+
   const [toDate, setToDate] = useState(() => {
     return new Date().toISOString().split('T')[0]; // Today's date in YYYY-MM-DD
   });
 
 
   const [buyerContacts, setBuyerContacts] = useState([]);
-//const [fromDateContacts, setFromDateContacts] = useState(null);
-//const [toDateContacts, setToDateContacts] = useState(null);
-const [loadingContacts, setLoadingContacts] = useState(false);
-const [errorContacts, setErrorContacts] = useState(null);
-const [totalBuyerContacts, setTotalBuyerContacts] = useState(0);
+  //const [fromDateContacts, setFromDateContacts] = useState(null);
+  //const [toDateContacts, setToDateContacts] = useState(null);
+  const [loadingContacts, setLoadingContacts] = useState(false);
+  const [errorContacts, setErrorContacts] = useState(null);
+  const [totalBuyerContacts, setTotalBuyerContacts] = useState(0);
 
-const [fromDateContacts, setFromDateContacts] = useState(() => {
+  const [fromDateContacts, setFromDateContacts] = useState(() => {
     const date = new Date();
     date.setDate(date.getDate() - 7);
     return date.toISOString().split('T')[0]; // Format as YYYY-MM-DD
   });
-  
+
   const [toDateContacts, setToDateContacts] = useState(() => {
     return new Date().toISOString().split('T')[0]; // Today's date in YYYY-MM-DD
   });
@@ -61,19 +61,19 @@ const [fromDateContacts, setFromDateContacts] = useState(() => {
 
 
 
-const [sellerContacts, setSellerContacts] = useState([]);
-const [totalSellerContacts, setTotalSellerContacts] = useState(0);
-const [loadingSellerContacts, setLoadingSellerContacts] = useState(false);
-const [errorSellerContacts, setErrorSellerContacts] = useState(null);
+  const [sellerContacts, setSellerContacts] = useState([]);
+  const [totalSellerContacts, setTotalSellerContacts] = useState(0);
+  const [loadingSellerContacts, setLoadingSellerContacts] = useState(false);
+  const [errorSellerContacts, setErrorSellerContacts] = useState(null);
 
 
 
-  
+
   const today = new Date();
 
   // Ensure valid date selection
   const handleDateChange = (date, setDate) => {
-   
+
     if (date > today) {
       alert("End date cannot be greater than today.");
       return;
@@ -97,7 +97,7 @@ const [errorSellerContacts, setErrorSellerContacts] = useState(null);
   const fetchAdsData = async () => {
     setLoading(true);
     setError(null);
-  
+
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/webvisits/ads`, {
         method: "POST",
@@ -105,22 +105,15 @@ const [errorSellerContacts, setErrorSellerContacts] = useState(null);
           "Content-Type": "application/json",
         },
       });
-  
+
       const data = await response.json();
       if (!response.ok) throw new Error(data.message);
 
-    //   const rawData = data.find((item) => item.name === "data")?.value || {};
-    //     const transformedData = Object.entries(rawData).map(([key, value]) => ({
-    //       name: key === "null" ? "Unknown" : key, // Handle null case
-    //       value,
-    //     }));
-        //alert(JSON.stringify(transformedData, null, 2));
       // Convert dictionary to array format for Recharts
       const adsDataArray = Object.entries(data.data).map(([key, value]) => ({
         name: key,
         value,
       }));
-      //alert(JSON.stringify(adsDataArray, null, 2)); 
       setAdsData(adsDataArray);
 
 
@@ -128,7 +121,7 @@ const [errorSellerContacts, setErrorSellerContacts] = useState(null);
       console.error("Error fetching ad visit data:", error);
       setError("Failed to load ad visit data.");
     }
-  
+
     setLoading(false);
   };
 
@@ -141,26 +134,26 @@ const [errorSellerContacts, setErrorSellerContacts] = useState(null);
     "4": "Products",
     "5": "Services",
   };
-  
+
   const formattedAdsData = adsData.map(({ name, value }) => ({
     name: pageNames[name] || name, // Map key to name, fallback to original
     value,
   }));
-  
+
   const totalAdVisits = formattedAdsData.reduce((sum, entry) => sum + entry.value, 0); // Sum all values
-  
+
   const renderPieChart = () => {
     if (!formattedAdsData.length) return <p>No ad visit data available.</p>;
-  
+
     const COLORS = ["#8884d8", "#82ca9d", "#ff7300", "#ff6384", "#36a2eb"];
-  
+
     return (
       <div className="flex flex-col items-center">
         {/* Total Ad Visits */}
         <h3 className="text-xl font-semibold text-gray-800 mb-4">
           Total Ad Visits in Past 30 Days: {totalAdVisits}
         </h3>
-  
+
         {/* Pie Chart */}
         <PieChart width={600} height={400}>
           <Pie
@@ -178,7 +171,7 @@ const [errorSellerContacts, setErrorSellerContacts] = useState(null);
           </Pie>
           <Tooltip />
         </PieChart>
-  
+
         {/* Custom Legend */}
         <div className="mt-4 flex flex-wrap justify-center gap-4">
           {formattedAdsData.map((entry, index) => (
@@ -194,22 +187,6 @@ const [errorSellerContacts, setErrorSellerContacts] = useState(null);
       </div>
     );
   };
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -220,7 +197,7 @@ const [errorSellerContacts, setErrorSellerContacts] = useState(null);
 
 
   const fetchSellerContacts = async () => {
-    
+
     if (fromDateContacts && toDateContacts && fromDateContacts > toDateContacts) {
       setToDateContacts(null);
       alert("Start date cannot be greater than end date.");
@@ -229,7 +206,7 @@ const [errorSellerContacts, setErrorSellerContacts] = useState(null);
 
     setLoadingSellerContacts(true);
     setErrorSellerContacts(null);
-  
+
     try {
       const requestBody = {};
       //if (fromDateContacts) requestBody.from = fromDateContacts.toISOString();
@@ -237,10 +214,10 @@ const [errorSellerContacts, setErrorSellerContacts] = useState(null);
         const adjustedDate = new Date(fromDateContacts);
         adjustedDate.setDate(adjustedDate.getDate() - 1);
         requestBody.from = adjustedDate.toISOString();
-    }
-    if (toDateContacts) requestBody.to = new Date(toDateContacts).toISOString();
+      }
+      if (toDateContacts) requestBody.to = new Date(toDateContacts).toISOString();
 
-  
+
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/webvisits/seller-contacts`,
         {
@@ -251,69 +228,59 @@ const [errorSellerContacts, setErrorSellerContacts] = useState(null);
           body: JSON.stringify(requestBody),
         }
       );
-  
+
       const data = await response.json();
       const contacts = data.data || [];
-  
+
       // Group data by date
       const groupedContacts = contacts.reduce((acc, contact) => {
         const date = new Date(contact.date).toISOString().split("T")[0];
         acc[date] = (acc[date] || 0) + contact.count;
         return acc;
       }, {});
-    //   alert(JSON.stringify(groupedContacts, null, 2));
-  
-    //   const totalContacts = Object.values(groupedContacts).reduce((sum, count) => sum + count, 0);
-    //   setTotalSellerContacts(totalContacts);
-  
-    //   setSellerContacts(
-    //     Object.entries(groupedContacts).map(([date, count]) => ({
-    //       _id: date,
-    //       count,
-    //     }))
-    //   );
 
-    const generateDateLabels = (start, end) => {
+
+      const generateDateLabels = (start, end) => {
         let labels = [];
         let currentDate = new Date(start);
         // currentDate.setDate(currentDate.getDate() + 1);
         let endDate = new Date(end);
         // endDate.setDate(endDate.getDate() + 1);
-        
+
         while (currentDate <= endDate) {
-            labels.push(currentDate.toISOString().split("T")[0]); // YYYY-MM-DD
-            currentDate.setDate(currentDate.getDate() + 1);
+          labels.push(currentDate.toISOString().split("T")[0]); // YYYY-MM-DD
+          currentDate.setDate(currentDate.getDate() + 1);
         }
         return labels;
-    };
-    
-    const fromDate = new Date(fromDateContacts);
-    const toDate = new Date(toDateContacts);
-    const allDates = generateDateLabels(fromDate, toDate);
-    // 🛠️ Step 3: Fill in missing dates with count = 0
-    const filledContacts = allDates.map(date => ({
+      };
+
+      const fromDate = new Date(fromDateContacts);
+      const toDate = new Date(toDateContacts);
+      const allDates = generateDateLabels(fromDate, toDate);
+      // 🛠️ Step 3: Fill in missing dates with count = 0
+      const filledContacts = allDates.map(date => ({
         _id: date,
         count: groupedContacts[date] || 0, // Use existing count or default to 0
-    }));
+      }));
 
-    // 🛠️ Step 4: Calculate total contacts
-    const totalContacts = filledContacts.reduce((sum, { count }) => sum + count, 0);
-    setTotalSellerContacts(totalContacts);
-    setSellerContacts(filledContacts);
-    // ✅ Convert array to a readable string and alert
-//alert("Filled Contacts:\n" + filledContacts.map(c => `${c._id}: ${c.count}`).join("\n"));
+      // 🛠️ Step 4: Calculate total contacts
+      const totalContacts = filledContacts.reduce((sum, { count }) => sum + count, 0);
+      setTotalSellerContacts(totalContacts);
+      setSellerContacts(filledContacts);
+      // ✅ Convert array to a readable string and alert
+      //alert("Filled Contacts:\n" + filledContacts.map(c => `${c._id}: ${c.count}`).join("\n"));
 
     } catch (error) {
       console.error("Error fetching seller contacts:", error);
       setErrorSellerContacts("Failed to load seller contacts data.");
     }
-  
+
     setLoadingSellerContacts(false);
   };
-  
+
 
   const fetchBuyerContacts = async () => {
-   
+
     const today = new Date();
     const sevenDaysAgo = new Date();
     sevenDaysAgo.setDate(today.getDate() - 7);
@@ -330,19 +297,19 @@ const [errorSellerContacts, setErrorSellerContacts] = useState(null);
 
     setLoadingContacts(true);
     setErrorContacts(null);
-  
+
     try {
       const requestBody = {};
-    //   if (fromDateContacts) requestBody.from = fromDateContacts.toISOString();
-    if (fromDateContacts) {
+      //   if (fromDateContacts) requestBody.from = fromDateContacts.toISOString();
+      if (fromDateContacts) {
         const adjustedDate = new Date(fromDateContacts);
         adjustedDate.setDate(adjustedDate.getDate() - 1);
         requestBody.from = adjustedDate.toISOString();
-    }
-    
-    if (toDateContacts) requestBody.to = new Date(toDateContacts).toISOString();
+      }
 
-        
+      if (toDateContacts) requestBody.to = new Date(toDateContacts).toISOString();
+
+
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/webvisits/contacts`,
         {
@@ -353,69 +320,58 @@ const [errorSellerContacts, setErrorSellerContacts] = useState(null);
           body: JSON.stringify(requestBody),
         }
       );
-  
+
       const data = await response.json();
       const contacts = data.data || [];
-  
+
       // Process data to count contacts per date
       const groupedContacts = contacts.reduce((acc, contact) => {
         const date = new Date(contact.date).toISOString().split("T")[0]; // Convert to YYYY-MM-DD format
         acc[date] = (acc[date] || 0) + contact.count; // Add the count value instead of just incrementing by 1
         return acc;
       }, {});
-      
 
-      
-    //   const totalContacts = Object.values(groupedContacts).reduce((sum, count) => sum + count, 0);
-    //  setTotalBuyerContacts(totalContacts);
-     
-    //   setBuyerContacts(
-    //     Object.entries(groupedContacts).map(([date, count]) => ({
-    //       _id: date,
-    //       count,
-    //     }))
-    //   );
 
-    const generateDateLabels = (start, end) => {
+      const generateDateLabels = (start, end) => {
         let labels = [];
         let currentDate = new Date(start);
         // currentDate.setDate(currentDate.getDate() + 1);
         let endDate = new Date(end);
         // endDate.setDate(endDate.getDate() + 1);
-        
+
         while (currentDate <= endDate) {
-            labels.push(currentDate.toISOString().split("T")[0]); // YYYY-MM-DD
-            currentDate.setDate(currentDate.getDate() + 1);
+          labels.push(currentDate.toISOString().split("T")[0]); // YYYY-MM-DD
+          currentDate.setDate(currentDate.getDate() + 1);
         }
         return labels;
-    };
-    
-    const fromDate = new Date(fromDateContacts);
-    const toDate = new Date(toDateContacts);
-    const allDates = generateDateLabels(fromDate, toDate);
-    // 🛠️ Step 3: Fill in missing dates with count = 0
-    const filledContacts = allDates.map(date => ({
+      };
+
+      const fromDate = new Date(fromDateContacts);
+      const toDate = new Date(toDateContacts);
+      const allDates = generateDateLabels(fromDate, toDate);
+      // 🛠️ Step 3: Fill in missing dates with count = 0
+      const filledContacts = allDates.map(date => ({
         _id: date,
         count: groupedContacts[date] || 0, // Use existing count or default to 0
-    }));
+      }));
 
-    // 🛠️ Step 4: Calculate total contacts
-    const totalContacts = filledContacts.reduce((sum, { count }) => sum + count, 0);
-    setTotalBuyerContacts(totalContacts);
-    setBuyerContacts(filledContacts);
-    // ✅ Convert array to a readable string and alert
-//alert("Filled Contacts:\n" + filledContacts.map(c => `${c._id}: ${c.count}`).join("\n"));
+      // 🛠️ Step 4: Calculate total contacts
+      const totalContacts = filledContacts.reduce((sum, { count }) => sum + count, 0);
+      setTotalBuyerContacts(totalContacts);
+      setBuyerContacts(filledContacts);
+      // ✅ Convert array to a readable string and alert
+      //alert("Filled Contacts:\n" + filledContacts.map(c => `${c._id}: ${c.count}`).join("\n"));
 
     } catch (error) {
       console.error("Error fetching buyer contacts:", error);
       setErrorContacts("Failed to load buyer contacts data.");
     }
-  
+
     setLoadingContacts(false);
   };
-  
 
-  
+
+
 
 
   // Function to fetch visit data
@@ -428,94 +384,81 @@ const [errorSellerContacts, setErrorSellerContacts] = useState(null);
 
     setLoading(true);
     setError(null);
-    
+
     try {
-   
-    const requestBody = {};
 
-let adjustedFromDate = fromDate ? new Date(fromDate) : null;
-let adjustedToDate = toDate ? new Date(toDate) : null;
+      const requestBody = {};
 
-if (adjustedFromDate) {
-  adjustedFromDate.setDate(adjustedFromDate.getDate() ); // Add 1 day
-  requestBody.from = adjustedFromDate.toISOString();
-}
+      let adjustedFromDate = fromDate ? new Date(fromDate) : null;
+      let adjustedToDate = toDate ? new Date(toDate) : null;
 
-if (adjustedToDate) {
-  adjustedToDate.setDate(adjustedToDate.getDate() ); // Add 1 day
-  requestBody.to = adjustedToDate.toISOString();
-}
+      if (adjustedFromDate) {
+        adjustedFromDate.setDate(adjustedFromDate.getDate()); // Add 1 day
+        requestBody.from = adjustedFromDate.toISOString();
+      }
 
-const response = await fetch(
-  `${process.env.NEXT_PUBLIC_API_URL}/webvisits/visits`,
-  {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(requestBody),
-  }
-);
+      if (adjustedToDate) {
+        adjustedToDate.setDate(adjustedToDate.getDate()); // Add 1 day
+        requestBody.to = adjustedToDate.toISOString();
+      }
+
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/webvisits/visits`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(requestBody),
+        }
+      );
 
 
       const data = await response.json();
       const visits = data.data || [];
 
-    //   setVisitsData(visits);
 
-    //   // Calculate total visits and signed-in visits
-    //   const total = visits.reduce((sum, v) => sum + v.totalVisits, 0);
-    //   const signedIn = visits.reduce((sum, v) => sum + v.signedInVisits, 0);
-    //   setTotalVisits(total);
-    //   setSignedInVisits(signedIn);
-    // } catch (error) {
-    //   console.error("Error fetching visit data:", error);
-    //   setError("Failed to load visit data.");
-    // }
+      const visitMap = {};
+      let currentDate = new Date(adjustedFromDate);
+      const lastDate = new Date(adjustedToDate);
 
-    // setLoading(false);
+      while (currentDate <= lastDate) {
+        const formattedDate = currentDate.toISOString().split("T")[0]; // YYYY-MM-DD format
+        visitMap[formattedDate] = {
+          _id: formattedDate,
+          totalVisits: 0,
+          signedInVisits: 0
+        };
+        currentDate.setDate(currentDate.getDate() + 1);
+      }
 
-    const visitMap = {};
-  let currentDate = new Date(adjustedFromDate);
-  const lastDate = new Date(adjustedToDate);
+      // Populate the visitMap with actual visit data
+      visits.forEach(v => {
+        if (visitMap[v._id]) {
+          visitMap[v._id].totalVisits = v.totalVisits;
+          visitMap[v._id].signedInVisits = v.signedInVisits;
+        }
+      });
 
-  while (currentDate <= lastDate) {
-    const formattedDate = currentDate.toISOString().split("T")[0]; // YYYY-MM-DD format
-    visitMap[formattedDate] = { 
-      _id: formattedDate, 
-      totalVisits: 0, 
-      signedInVisits: 0 
-    };
-    currentDate.setDate(currentDate.getDate() + 1);
-  }
+      // Convert back to an array sorted by date
+      const completeVisits = Object.values(visitMap).sort((a, b) => a._id.localeCompare(b._id));
+      //alert(JSON.stringify(completeVisits, null, 2));
 
-  // Populate the visitMap with actual visit data
-  visits.forEach(v => {
-    if (visitMap[v._id]) {
-      visitMap[v._id].totalVisits = v.totalVisits;
-      visitMap[v._id].signedInVisits = v.signedInVisits;
+      setVisitsData(completeVisits);
+
+      // Calculate total visits and signed-in visits
+      const total = completeVisits.reduce((sum, v) => sum + v.totalVisits, 0);
+      const signedIn = completeVisits.reduce((sum, v) => sum + v.signedInVisits, 0);
+
+      setTotalVisits(total);
+      setSignedInVisits(signedIn);
+
+    } catch (error) {
+      console.error("Error fetching visit data:", error);
+      setError("Failed to load visit data.");
     }
-  });
 
-  // Convert back to an array sorted by date
-  const completeVisits = Object.values(visitMap).sort((a, b) => a._id.localeCompare(b._id));
-  //alert(JSON.stringify(completeVisits, null, 2));
-
-  setVisitsData(completeVisits);
-
-  // Calculate total visits and signed-in visits
-  const total = completeVisits.reduce((sum, v) => sum + v.totalVisits, 0);
-  const signedIn = completeVisits.reduce((sum, v) => sum + v.signedInVisits, 0);
-  
-  setTotalVisits(total);
-  setSignedInVisits(signedIn);
-
-} catch (error) {
-  console.error("Error fetching visit data:", error);
-  setError("Failed to load visit data.");
-}
-
-setLoading(false);
+    setLoading(false);
   };
 
   // Fetch initial data when the component first mounts (without any date filters)
@@ -530,11 +473,11 @@ setLoading(false);
 
   useEffect(() => {
     fetchAdsData();
-  }, []);   
+  }, []);
 
 
- 
-  
+
+
   // Prepare data for chart
   const chartData = {
     labels: visitsData.map((v) => new Date(v._id).toLocaleDateString()), // Format date
@@ -557,27 +500,27 @@ setLoading(false);
         pointRadius: 3,
         pointHoverRadius: 7,
       },
-      
+
     ],
   };
 
 
-  
-  
+
+
   const generateDateLabels = (start, end) => {
     let labels = [];
     let currentDate = new Date(start);
 
     while (currentDate <= new Date(end)) {
-        labels.push(currentDate.toISOString().split('T')[0]); // YYYY-MM-DD format
-        currentDate.setDate(currentDate.getDate() + 1); // Move to next day
+      labels.push(currentDate.toISOString().split('T')[0]); // YYYY-MM-DD format
+      currentDate.setDate(currentDate.getDate() + 1); // Move to next day
     }
 
     return labels;
-};
+  };
 
-// ✅ Generate labels from fromDateContacts to toDateContacts
-const labels = generateDateLabels(fromDateContacts, toDateContacts);
+  // ✅ Generate labels from fromDateContacts to toDateContacts
+  const labels = generateDateLabels(fromDateContacts, toDateContacts);
 
   const buyerContactsChartData = {
     labels: sellerContacts.map((v) => new Date(v._id).toLocaleDateString()), // Dates as labels
@@ -602,8 +545,8 @@ const labels = generateDateLabels(fromDateContacts, toDateContacts);
       },
     ],
   };
-  
-  
+
+
 
   // Chart Options
   const chartOptions = {
@@ -633,158 +576,151 @@ const labels = generateDateLabels(fromDateContacts, toDateContacts);
   };
 
   return (
-    <div className="flex min-h-screen">
-  
-    <div className="flex-1 p-6 bg-gray-100 overflow-auto">
-        
-        <AdminHeader />
+    <div className="flex min-h-screen flex-col px-4">
+      <AdminHeader />
+      <div className="container flex-1 items-start md:grid md:grid-cols-[220px_1fr] md:gap-4 md:py-6">
+        <AdminSidebar />
+        <main className="flex w-full flex-col gap-8">
 
-      <div className="flex justify-between items-center mb-6">
-    <h2 className="text-3xl font-bold text-gray-800">Admin Dashboard</h2>
-    <button 
-      className="bg-blue-600 text-white px-4 py-2 rounded-md shadow hover:bg-blue-700 transition duration-200"
-      onClick={() => window.location.href = "/app/admin"}
-    >
-      Browse Listings and Requirements
-    </button>
-  </div>
-      {/* Total Visits Display */}
-      <div className="flex justify-between items-center bg-white p-6 rounded-lg shadow-md mb-6">
-        <div className="text-center">
-          <p className="text-xl font-semibold text-gray-700">Total Visits</p>
-          <p className="text-3xl font-bold text-red-500">{totalVisits}</p>
-        </div>
-        <div className="text-center">
-          <p className="text-xl font-semibold text-gray-700">Signed-in Visits</p>
-          <p className="text-3xl font-bold text-blue-500">{signedInVisits}</p>
-        </div>
-      </div>
-
-      {/* Date Picker Filters */}
-      <div className="flex gap-4 mb-6 bg-white p-4 rounded shadow-md">
-        <div>
-          <label className="text-sm font-semibold text-gray-600">From: </label>
-          <DatePicker
-            selected={fromDate}
-            onChange={(date) => handleDateChange(date, setFromDate)}
-            className="p-2 border rounded-md"
-            placeholderText="Select Start Date"
-          />
-        </div>
-        <div>
-          <label className="text-sm font-semibold text-gray-600">To: </label>
-          <DatePicker
-            selected={toDate}
-            onChange={(date) => handleDateChange(date, setToDate)}
-            className="p-2 border rounded-md"
-            placeholderText="Select End Date"
-          />
-        </div>
-        <button
-          className="inline-block bg-blue-600 text-white px-4 py-2 rounded-md shadow hover:bg-blue-700"
-          onClick={fetchData} // Fetch data only when clicked
-        >
-          Visualize
-        </button>
-      </div>
-
-      {/* Chart Section */}
-      <div className="bg-white p-6 rounded-lg shadow-lg">
-        <h3 className="text-lg font-semibold mb-3 text-gray-700">Website Visits</h3>
-
-        {loading ? (
-          <p className="text-blue-600">Loading data...</p>
-        ) : error ? (
-          <p className="text-red-600">{error}</p>
-        ) : visitsData.length === 0 ? (
-          <p className="text-gray-500">No visit data available for the selected period.</p>
-        ) : (
-            <div className="w-[800px] h-[300px] mx-auto"> {/* Reduced size */}
-            <Line data={chartData} options={chartOptions} />
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-3xl font-bold text-gray-800">Admin Dashboard</h2>
           </div>
-        )}
+          {/* Total Visits Display */}
+          <div className="flex justify-between items-center bg-white p-6 rounded-lg shadow-md mb-6">
+            <div className="text-center">
+              <p className="text-xl font-semibold text-gray-700">Total Visits</p>
+              <p className="text-3xl font-bold text-red-500">{totalVisits}</p>
+            </div>
+            <div className="text-center">
+              <p className="text-xl font-semibold text-gray-700">Signed-in Visits</p>
+              <p className="text-3xl font-bold text-blue-500">{signedInVisits}</p>
+            </div>
+          </div>
+
+          {/* Date Picker Filters */}
+          <div className="flex gap-4 mb-6 bg-white p-4 rounded shadow-md">
+            <div>
+              <label className="text-sm font-semibold text-gray-600">From: </label>
+              <DatePicker
+                selected={fromDate}
+                onChange={(date) => handleDateChange(date, setFromDate)}
+                className="p-2 border rounded-md"
+                placeholderText="Select Start Date"
+              />
+            </div>
+            <div>
+              <label className="text-sm font-semibold text-gray-600">To: </label>
+              <DatePicker
+                selected={toDate}
+                onChange={(date) => handleDateChange(date, setToDate)}
+                className="p-2 border rounded-md"
+                placeholderText="Select End Date"
+              />
+            </div>
+            <button
+              className="inline-block bg-blue-600 text-white px-4 py-2 rounded-md shadow hover:bg-blue-700"
+              onClick={fetchData} // Fetch data only when clicked
+            >
+              Visualize
+            </button>
+          </div>
+
+          {/* Chart Section */}
+          <div className="bg-white p-6 rounded-lg shadow-lg">
+            <h3 className="text-lg font-semibold mb-3 text-gray-700">Website Visits</h3>
+
+            {loading ? (
+              <p className="text-blue-600">Loading data...</p>
+            ) : error ? (
+              <p className="text-red-600">{error}</p>
+            ) : visitsData.length === 0 ? (
+              <p className="text-gray-500">No visit data available for the selected period.</p>
+            ) : (
+              <div className="w-[800px] h-[300px] mx-auto"> {/* Reduced size */}
+                <Line data={chartData} options={chartOptions} />
+              </div>
+            )}
+          </div>
+          <hr className="my-4 border-gray-300" />
+
+          <div className="bg-white p-6 rounded-lg shadow-lg space-y-6">
+            {/* Date Pickers & Fetch Button */}
+            <div className="flex flex-wrap items-center gap-4">
+              <div className="flex flex-col">
+                <label className="text-sm font-semibold text-gray-700 mb-1">From (Contacts):</label>
+                <DatePicker
+                  selected={fromDateContacts}
+                  onChange={(date) => handleDateChange(date, setFromDateContacts)}
+                  className="p-2 border border-gray-300 rounded-md focus:ring focus:ring-blue-300"
+                  placeholderText="Select Start Date"
+                />
+              </div>
+
+              <div className="flex flex-col">
+                <label className="text-sm font-semibold text-gray-700 mb-1">To (Contacts):</label>
+                <DatePicker
+                  selected={toDateContacts}
+                  onChange={(date) => handleDateChange(date, setToDateContacts)}
+                  className="p-2 border border-gray-300 rounded-md focus:ring focus:ring-blue-300"
+                  placeholderText="Select End Date"
+                />
+              </div>
+
+              <button
+                className="bg-blue-500 text-white px-4 py-2 text-sm font-semibold rounded-md shadow-md hover:bg-blue-600 transition duration-200"
+                onClick={() => {
+                  fetchBuyerContacts();
+                  fetchSellerContacts();
+                }}
+              >
+                Fetch Contacts
+              </button>
+            </div>
+
+            {/* Total Contacts Display */}
+            <div className="bg-gray-100 p-6 rounded-lg shadow-md text-center">
+              <p className="text-lg font-semibold text-gray-800">Total Contacts</p>
+              <p className="text-sm text-gray-600">Contacts made by buyer: <span className="text-green-600 font-bold">{totalBuyerContacts}</span></p>
+              <p className="text-sm text-gray-600">Contacts made by seller: <span className="text-orange-600 font-bold">{totalSellerContacts}</span></p>
+            </div>
+
+          </div>
+
+
+
+
+
+
+          <div className="bg-white p-6 rounded-lg shadow-lg mt-6">
+            <h3 className="text-lg font-semibold mb-3 text-gray-700">Buyer & Seller Contacts</h3>
+
+            {loadingContacts || loadingSellerContacts ? (
+              <p className="text-blue-600">Loading contacts...</p>
+            ) : errorContacts || errorSellerContacts ? (
+              <p className="text-red-600">{errorContacts || errorSellerContacts}</p>
+            ) : buyerContacts.length === 0 && sellerContacts.length === 0 ? (
+              <p className="text-gray-500">No buyers or sellers contacted each other in this time frame.</p>
+            ) : (
+              <div className="w-[800px] h-[300px] mx-auto">
+                <Line data={buyerContactsChartData} options={chartOptions} />
+              </div>
+            )}
+          </div>
+          <hr className="my-4 border-gray-300" />
+
+          <div className="bg-white p-6 rounded-lg shadow-lg mt-6">
+            <h3 className="text-lg font-semibold mb-3 text-gray-700">Ad Visit Distribution</h3>
+            {loadingAds ? (
+              <p className="text-blue-600">Loading ad data...</p>
+            ) : errorAds ? (
+              <p className="text-red-600">{errorAds}</p>
+            ) : (
+              <div className="flex justify-center">{renderPieChart()}</div>
+            )}
+          </div>
+
+        </main>
       </div>
-      <hr className="my-4 border-gray-300" /> 
-
-      <div className="bg-white p-6 rounded-lg shadow-lg space-y-6">
-  {/* Date Pickers & Fetch Button */}
-  <div className="flex flex-wrap items-center gap-4">
-    <div className="flex flex-col">
-      <label className="text-sm font-semibold text-gray-700 mb-1">From (Contacts):</label>
-      <DatePicker
-        selected={fromDateContacts}
-        onChange={(date) => handleDateChange(date, setFromDateContacts)}
-        className="p-2 border border-gray-300 rounded-md focus:ring focus:ring-blue-300"
-        placeholderText="Select Start Date"
-      />
-    </div>
-
-    <div className="flex flex-col">
-      <label className="text-sm font-semibold text-gray-700 mb-1">To (Contacts):</label>
-      <DatePicker
-        selected={toDateContacts}
-        onChange={(date) => handleDateChange(date, setToDateContacts)}
-        className="p-2 border border-gray-300 rounded-md focus:ring focus:ring-blue-300"
-        placeholderText="Select End Date"
-      />
-    </div>
-
-    <button
-      className="bg-blue-500 text-white px-4 py-2 text-sm font-semibold rounded-md shadow-md hover:bg-blue-600 transition duration-200"
-      onClick={() => {
-        fetchBuyerContacts();
-        fetchSellerContacts();
-      }}
-    >
-      Fetch Contacts
-    </button>
-  </div>
-
-  {/* Total Contacts Display */}
-  <div className="bg-gray-100 p-6 rounded-lg shadow-md text-center">
-  <p className="text-lg font-semibold text-gray-800">Total Contacts</p>
-  <p className="text-sm text-gray-600">Contacts made by buyer: <span className="text-green-600 font-bold">{totalBuyerContacts}</span></p>
-  <p className="text-sm text-gray-600">Contacts made by seller: <span className="text-orange-600 font-bold">{totalSellerContacts}</span></p>
-</div>
-
-</div>
-
-
-
-
-
-
-<div className="bg-white p-6 rounded-lg shadow-lg mt-6">
-  <h3 className="text-lg font-semibold mb-3 text-gray-700">Buyer & Seller Contacts</h3>
-
-  {loadingContacts || loadingSellerContacts ? (
-    <p className="text-blue-600">Loading contacts...</p>
-  ) : errorContacts || errorSellerContacts ? (
-    <p className="text-red-600">{errorContacts || errorSellerContacts}</p>
-  ) : buyerContacts.length === 0 && sellerContacts.length === 0 ? (
-    <p className="text-gray-500">No buyers or sellers contacted each other in this time frame.</p>
-  ) : (
-    <div className="w-[800px] h-[300px] mx-auto">
-      <Line data={buyerContactsChartData} options={chartOptions} />
-    </div>
-  )}
-</div>
-<hr className="my-4 border-gray-300" /> 
-
-<div className="bg-white p-6 rounded-lg shadow-lg mt-6">
-        <h3 className="text-lg font-semibold mb-3 text-gray-700">Ad Visit Distribution</h3>
-        {loadingAds ? (
-          <p className="text-blue-600">Loading ad data...</p>
-        ) : errorAds ? (
-          <p className="text-red-600">{errorAds}</p>
-        ) : (
-          <div className="flex justify-center">{renderPieChart()}</div>
-        )}
-      </div>
-
-
-      
-    </div>
     </div>
   );
 };

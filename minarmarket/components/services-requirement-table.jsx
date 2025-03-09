@@ -1,26 +1,23 @@
-
-
-
 "use client"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Button } from "@/components/ui/button"
 import { useState } from "react"
 import { useMutation } from "@tanstack/react-query"
-import { updateProductListingsStatus } from "@/lib/api/admin"
+import { updateServicesRequirementListingsStatus } from "@/lib/api/admin"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
-export function ProductsTable({ products, refetch }) {
-  const [selectedProducts, setSelectedProducts] = useState([]);
+export function ServicesRequirementTable({ servicesRequirement, refetch }) {
+  const [selectedServicesRequirement, setSelectedServicesRequirement] = useState([]);
   const [sortOrder, setSortOrder] = useState("mostRecent");
   const [currentPage, setCurrentPage] = useState(1);
-  const productsPerPage = 12;
+  const servicesRequirementPerPage = 12;
 
   const { mutate: updateStatus, isLoading } = useMutation({
-    mutationFn: ({ ids, status }) => updateProductListingsStatus(ids, status),
+    mutationFn: ({ ids, status }) => updateServicesRequirementListingsStatus(ids, status),
     onSuccess: () => {
       refetch();
-      setSelectedProducts([]);
+      setSelectedServicesRequirement([]);
     },
     onError: (error) => {
       console.error("Failed to update status:", error);
@@ -28,26 +25,26 @@ export function ProductsTable({ products, refetch }) {
   });
 
   const handleStatusUpdate = (newStatus) => {
-    if (selectedProducts.length === 0) return;
-    updateStatus({ ids: selectedProducts, status: newStatus });
+    if (selectedServicesRequirement.length === 0) return;
+    updateStatus({ ids: selectedServicesRequirement, status: newStatus });
   };
 
-  const sortedProducts = [...products].sort((a, b) => {
+  const sortedServicesRequirement = [...servicesRequirement].sort((a, b) => {
     return sortOrder === "mostRecent"
       ? new Date(b.createdAt) - new Date(a.createdAt)
       : new Date(a.createdAt) - new Date(b.createdAt);
   });
 
-  const indexOfLastProduct = currentPage * productsPerPage;
-  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = sortedProducts.slice(indexOfFirstProduct, indexOfLastProduct);
+  const indexOfLastServiceRequirement = currentPage * servicesRequirementPerPage;
+  const indexOfFirstServiceRequirement = indexOfLastServiceRequirement - servicesRequirementPerPage;
+  const currentServicesRequirement = sortedServicesRequirement.slice(indexOfFirstServiceRequirement, indexOfLastServiceRequirement);
 
-  const totalPages = Math.ceil(products.length / productsPerPage);
+  const totalPages = Math.ceil(servicesRequirement.length / servicesRequirementPerPage);
 
   return (
     <div className="w-full">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-semibold">Listing Requests</h1>
+        <h1 className="text-2xl font-semibold">Services Requirement Listing Requests</h1>
         <div className="space-x-2 flex">
           <Select onValueChange={setSortOrder} value={sortOrder} className="">
             <SelectTrigger className="w-40">
@@ -58,10 +55,10 @@ export function ProductsTable({ products, refetch }) {
               <SelectItem value="mostOldest">Most Oldest</SelectItem>
             </SelectContent>
           </Select>
-          <Button variant="secondary" onClick={() => handleStatusUpdate("Approved")} disabled={isLoading || selectedProducts.length === 0}>
+          <Button variant="secondary" onClick={() => handleStatusUpdate("Approved")} disabled={isLoading || selectedServicesRequirement.length === 0}>
             Approve
           </Button>
-          <Button variant="secondary" onClick={() => handleStatusUpdate("Rejected")} disabled={isLoading || selectedProducts.length === 0}>
+          <Button variant="secondary" onClick={() => handleStatusUpdate("Rejected")} disabled={isLoading || selectedServicesRequirement.length === 0}>
             Reject
           </Button>
         </div>
@@ -72,53 +69,55 @@ export function ProductsTable({ products, refetch }) {
           <TableRow>
             <TableHead className="w-12">
               <Checkbox
-                checked={selectedProducts.length === currentProducts.length && currentProducts.length > 0}
-                indeterminate={selectedProducts.length > 0 && selectedProducts.length < currentProducts.length}
+                checked={selectedServicesRequirement.length === currentServicesRequirement.length && currentServicesRequirement.length > 0}
+                indeterminate={selectedServicesRequirement.length > 0 && selectedServicesRequirement.length < currentServicesRequirement.length}
                 onCheckedChange={(checked) => {
                   if (checked) {
-                    setSelectedProducts(currentProducts.map(product => product._id));
+                    setSelectedServicesRequirement(currentServicesRequirement.map(serviceRequirement => serviceRequirement._id));
                   } else {
-                    setSelectedProducts([]);
+                    setSelectedServicesRequirement([]);
                   }
                 }}
               />
             </TableHead>
             <TableHead>Title</TableHead>
             <TableHead>Category</TableHead>
-            <TableHead>Price</TableHead>
-            <TableHead>Seller</TableHead>
+            <TableHead>Rate</TableHead>
+            <TableHead>Pricing Model</TableHead>
+            <TableHead>Requester</TableHead>
             <TableHead>Date Listed</TableHead>
             <TableHead>Status</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {currentProducts.map((product) => (
-            <TableRow key={product._id}>
+          {currentServicesRequirement.map((serviceRequirement) => (
+            <TableRow key={serviceRequirement._id}>
               <TableCell>
                 <Checkbox
-                  checked={selectedProducts.includes(product._id)}
+                  checked={selectedServicesRequirement.includes(serviceRequirement._id)}
                   onCheckedChange={(checked) => {
-                    setSelectedProducts(prev =>
-                      checked ? [...prev, product._id] : prev.filter(id => id !== product._id)
+                    setSelectedServicesRequirement(prev =>
+                      checked ? [...prev, serviceRequirement._id] : prev.filter(id => id !== serviceRequirement._id)
                     );
                   }}
                 />
               </TableCell>
-              <TableCell>{product.title}</TableCell>
-              <TableCell>{product.category}</TableCell>
-              <TableCell>${product.price}</TableCell>
-              <TableCell>{product.listerId.name}</TableCell>
-              <TableCell>{new Date(product.createdAt).toLocaleDateString()}</TableCell>
+              <TableCell>{serviceRequirement.title}</TableCell>
+              <TableCell>{serviceRequirement.category}</TableCell>
+              <TableCell>Rs. {serviceRequirement.rate}</TableCell>
+              <TableCell>{serviceRequirement.pricingModel}</TableCell>
+              <TableCell>{serviceRequirement.listerId.name}</TableCell>
+              <TableCell>{new Date(serviceRequirement.createdAt).toLocaleDateString()}</TableCell>
               <TableCell>
                 <span
-                  className={`inline-block rounded-full px-2 py-1 text-xs font-semibold ${product.status === "Approved"
+                  className={`inline-block rounded-full px-2 py-1 text-xs font-semibold ${serviceRequirement.status === "Approved"
                       ? "bg-green-100 text-green-700"
-                      : product.status === "Rejected"
+                      : serviceRequirement.status === "Rejected"
                         ? "bg-red-100 text-red-700"
                         : "bg-yellow-100 text-yellow-700"
                     }`}
                 >
-                  {product.status}
+                  {serviceRequirement.status}
                 </span>
               </TableCell>
             </TableRow>

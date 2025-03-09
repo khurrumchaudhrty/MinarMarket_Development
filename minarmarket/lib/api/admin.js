@@ -8,43 +8,33 @@ export async function getAllProductListings() {
   return response.json();
 }
 
+export async function getAllServiceListings () {
+  const response = await fetch (`${process.env.NEXT_PUBLIC_API_URL}/admin/admin-service-listings`);
 
-export async function getAllServiceListings() {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/admin-product-listings/seller-services`,
-    {
-      method: "POST",
-    }
-  );
-  if (!response.ok) {
-    throw new Error("Failed to fetch product listings");
+  if(!response.ok) {
+    throw new Error("Failed to fetch service listings");
   }
+
   return response.json();
 }
 
 
-export async function getAllProductRequirements() {
+export async function getAllProductsRequirementListings() {
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/admin-product-requirements`,
-    {
-      method: "POST",
-    }
+    `${process.env.NEXT_PUBLIC_API_URL}/admin/admin-products-requirement-listings`
   );
   if (!response.ok) {
-    throw new Error("Failed to fetch product listings");
+    throw new Error("Failed to fetch product requirement listings");
   }
   return response.json();
 }
 
-export async function getAllBuyerServices() {
+export async function getAllServicesRequirementListings() {
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/admin-service-requirements`,
-    {
-      method: "PUT",
-    }
+    `${process.env.NEXT_PUBLIC_API_URL}/admin/admin-services-requirement-listings`
   );
   if (!response.ok) {
-    throw new Error("Failed to fetch product listings");
+    throw new Error("Failed to fetch services requirement listings");
   }
   return response.json();
 }
@@ -67,15 +57,15 @@ export async function updateProductListingsStatus(itemIds, newStatus) {
   return response.json();
 }
 
-export async function updateServiceListingsStatus(serviceIds, newStatus) {
+export async function updateServiceListingsStatus(itemIds, newStatus) {
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/admin-service-listings/seller-service`,
+    `${process.env.NEXT_PUBLIC_API_URL}/admin/update-service-listing-status`,
     {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ serviceIds, newStatus }),
+      body: JSON.stringify({ itemIds, newStatus }),
     }
   );
   if (!response.ok) {
@@ -84,37 +74,39 @@ export async function updateServiceListingsStatus(serviceIds, newStatus) {
   return response.json();
 }
 
-export async function updateRequirementStatus(requirementIds, newStatus) {
+
+
+export async function updateProductsRequirementListingsStatus(itemIds, newStatus) {
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/admin-service-listings/buyer-product`,
+    `${process.env.NEXT_PUBLIC_API_URL}/admin/update-products-requirement-listings-status`,
     {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ requirementIds, newStatus }),
+      body: JSON.stringify({ itemIds, newStatus }),
     }
   );
   if (!response.ok) {
-    throw new Error("Failed to update buyer product requirements");
+    throw new Error("Failed to update products requirement listings");
   }
   return response.json();
 }
 
 
-export async function updateServiceRequirementStatus(requirementIds, newStatus) {
+export async function updateServicesRequirementListingsStatus(itemIds, newStatus) {
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/admin-service-listings/buyer-service`,
+    `${process.env.NEXT_PUBLIC_API_URL}/admin/update-services-requirement-listings-status`,
     {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ requirementIds, newStatus }),
+      body: JSON.stringify({ itemIds, newStatus }),
     }
   );
   if (!response.ok) {
-    throw new Error("Failed to update buyer service requirements");
+    throw new Error("Failed to update services requirement listings");
   }
   return response.json();
 }
