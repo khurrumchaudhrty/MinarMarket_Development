@@ -16,12 +16,12 @@ export function Header() {
   const router = useRouter()
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background">
-      <div className="container flex h-16  items-center justify-between gap-8 ">
+      <div className="container flex h-16  items-center justify-between gap-16 ">
         <Link href="/app/dashboard" className="font-bold text-xl text-primary">
           MINAR MARKET
         </Link>
         <MainNav />
-        <div className="ml-auto flex items-center space-x-6 ">
+        <div className="ml-auto flex items-center space-x-10 ">
           <div className="relative ">
             <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input

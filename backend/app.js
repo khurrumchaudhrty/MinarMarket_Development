@@ -36,6 +36,7 @@ app.use(cookieParser());
 
 // LOCAL HOST TESTING
 app.use('/api/authentication', UserAuthRoutes);
+app.use('/send-otp', UserAuthRoutes);
 app.use('/addProductListing', AddProductListing);
 app.use('/addServiceListing', AddServiceListing);
 app.use('/seller-listings', SellerListing);

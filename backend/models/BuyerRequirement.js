@@ -1,5 +1,11 @@
 const mongoose = require("mongoose");
 
+// Define image schema (same as in ProductListing)
+const imageSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  url: { type: String, required: true },
+});
+
 // Product listing schema
 const buyerrequirementschema = new mongoose.Schema({
   title: {
@@ -24,6 +30,16 @@ const buyerrequirementschema = new mongoose.Schema({
     type: String,
     required: true,
     enum: ["Electronics", "Clothing", "Books", "Other"],
+  },
+
+  // Add images field
+  images: {
+    type: [imageSchema],
+    validate: {
+      validator: (images) => !images || images.length <= 6,
+      message: "A maximum of 6 images can be uploaded.",
+    },
+    default: [],
   },
 
   status: {

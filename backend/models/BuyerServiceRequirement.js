@@ -1,5 +1,11 @@
 const mongoose = require("mongoose");
 
+// Image schema for the service
+const imageSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  url: { type: String, required: true },
+});
+
 const buyerServiceRequirementSchema = new mongoose.Schema({
   title: {
     type: String,
@@ -30,6 +36,15 @@ const buyerServiceRequirementSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  // Add images field
+  images: {
+    type: [imageSchema],
+    validate: {
+      validator: (images) => !images || images.length <= 6,
+      message: "A maximum of 6 images can be uploaded.",
+    },
+    default: [],
+  },
   status: {
     type: String,
     default: "Pending",
@@ -40,13 +55,11 @@ const buyerServiceRequirementSchema = new mongoose.Schema({
     ref: "users",
     required: true,
   },
-
   listerAccountStatus: {
     type: String,
     default: "Active",
     enum: ["Active", "Suspended", "Banned"],
   },
-
   isActive: {
     type: Boolean,
     default: true,
@@ -61,6 +74,7 @@ const buyerServiceRequirementSchema = new mongoose.Schema({
   },
 });
 
+// Update timestamps on save
 buyerServiceRequirementSchema.pre("save", async function(next){
     this.updatedAt = Date.now();
 

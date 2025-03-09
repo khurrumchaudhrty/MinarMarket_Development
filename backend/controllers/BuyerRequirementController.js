@@ -4,16 +4,21 @@ const BuyerRequirement = require("../models/BuyerRequirement");
 // Controller function to handle product listing
 exports.listProduct = async (req, res) => {
   try {
-    // console.log("Controller wala API: ", process.env.REACT_APP_API_URL+"/api/buyer-requirement")
-
-    const { title, description, price, category, userId } = req.body;
+    const { title, description, price, category, userId, images } = req.body;
 
     // Validate required fields
     if (!title || !price || !category) {
       return res.status(400).json({
         success: false,
-        message:
-          "All fields are required, and at least one image must be provided.",
+        message: "Title, price, and category are required fields.",
+      });
+    }
+
+    // Check that no more than 6 images are being uploaded
+    if (images && images.length > 6) {
+      return res.status(400).json({
+        success: false,
+        message: "You can upload a maximum of 6 images.",
       });
     }
 
@@ -23,23 +28,24 @@ exports.listProduct = async (req, res) => {
       description,
       price,
       category,
+      images: images || [],
       listerId: userId,
     });
 
     await newProduct.save();
 
-    console.log("New Product: ", newProduct);
+    console.log("New Product Requirement: ", newProduct);
 
     return res.status(201).json({
       success: true,
-      message: "Product listing added successfully.",
+      message: "Product requirement added successfully.",
       data: newProduct,
     });
   } catch (error) {
-    console.error("Error adding product listing:", error);
+    console.error("Error adding product requirement:", error);
     return res.status(500).json({
       success: false,
-      message: "An error occurred while adding the product listing.",
+      message: "An error occurred while adding the product requirement.",
     });
   }
 };
@@ -111,6 +117,14 @@ exports.updateListings = async (req, res) => {
       return res.status(400).json({
         success: false,
         message: "Buyer ID, Product ID, and updated data are required.",
+      });
+    }
+
+    // Check that no more than 6 images are being uploaded
+    if (updatedData.images && updatedData.images.length > 6) {
+      return res.status(400).json({
+        success: false,
+        message: "You can upload a maximum of 6 images.",
       });
     }
 

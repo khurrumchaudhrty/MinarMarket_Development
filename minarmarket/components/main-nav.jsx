@@ -10,24 +10,20 @@ export function MainNav() {
 
   const routes = [
     {
-      href: "/products",
+      href: "/app/products",
       label: "Products",
-      active: pathname === "/products",
+      active: pathname === "/app/products",
     },
     {
-      href: "/services",
+      href: "/app/services",
       label: "Services",
-      active: pathname === "/services",
+      active: pathname === "/app/services",
     },
-    {
-      href: "/proposals",
-      label: "Proposals",
-      active: pathname === "/proposals",
-    },
+    
   ]
 
   return (
-    <nav className="flex items-center space-x-10">
+    <nav className="flex items-center space-x-16">
       {routes.map((route) => (
         <Link
           key={route.href}
