@@ -95,7 +95,7 @@ export default function LoginPage() {
       if (decodedToken.accountStatus === "Banned" || decodedToken.accountStatus === "Suspended") {
         console.warn("User is banned or suspended. Redirecting to /blocked.");
         localStorage.removeItem("token") // Remove token to prevent access
-        router.push("/blocked") // Redirect to blocked page
+        router.push("/banned") // Redirect to blocked page
         return; // Stop further execution
       }
   
