@@ -45,6 +45,7 @@ exports.getSellerMessages = async (req, res) => {
                     phone: buyer ? buyer.phone : "Unknown Phone",
                     createdAt: message.createdAt,
                     status: message.status,
+                    buyerid: message.id_of_buyer,
                 };
             })
         );

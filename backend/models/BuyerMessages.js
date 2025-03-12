@@ -25,6 +25,11 @@ const buyermessagesschema = new mongoose.Schema({
         enum: ["Yes", "No", "Pending"],
     },
 
+    category: {
+        type: String,
+        default: "Unknown",
+    },
+
     createdAt: {
         type: Date,
         default: Date.now,
