@@ -2,6 +2,8 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { useEffect } from "react";
+
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -24,7 +26,38 @@ export default function SignupForm() {
     password: '',
     confirmPassword: ''
   })
+  const recordVisit = async () => {
+    try {
+      const token = localStorage.getItem("token") 
+      let userId = null
+      if (token) {
+        const payload = JSON.parse(atob(token.split(".")[1])); // Decode JWT payload
+        userId = payload.id; // Extract userId from JWT
+      
+      }
+      
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/webvisits`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId: userId || null,
+          userAgent: navigator.userAgent,
+        }),
+      });
 
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message);
+
+      console.log("Visit recorded successfully:", data);
+    } catch (error) {
+      console.error("Error recording visit:", error);
+    }
+  };
+
+  // ✅ Call recordVisit when the page loads
+  useEffect(() => {
+    recordVisit();
+  }, []);
   const signUpSchema = z.object({
     firstName: z.string().min(2, 'First name must be at least 2 characters'),
     lastName: z.string().min(2, 'Last name must be at least 2 characters'),
@@ -58,11 +91,20 @@ export default function SignupForm() {
       if (!data.success) {
         throw new Error(data.message)
       }
+      sessionStorage.setItem('signupdata',JSON.stringify({
+        name: `${credentials.firstName} ${credentials.lastName}`,
+        email: credentials.email,
+        phone: credentials.phone,
+        password: credentials.password,
+        confirmPassword: credentials.confirmPassword
+      }))
+      localStorage.setItem('email', credentials.email)
       return data
     },
     onSuccess: (data) => {
       localStorage.setItem('token', data.token)
-      router.push('/app/dashboard')
+      // router.push('/app/dashboard')
+      router.push(`/signup/verifyemail/${encodeURIComponent(localStorage.getItem("email"))}`)
     },
     onError: (error) => {
       setApiError(error.message)

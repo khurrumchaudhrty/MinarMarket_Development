@@ -5,6 +5,7 @@ import { SidebarNav } from "@/components/sidebar-nav";
 import { MainNav } from "@/components/main-nav";
 import { getUserDetails } from "@/lib/SessionManager";
 import { useState } from "react";
+import { useEffect } from "react";
 import { ServiceOnlyGrid } from "@/components/data-grid";
 import {
   FaCut, FaWrench, FaHammer, FaBolt, FaLeaf, FaUtensils, FaBroom, FaCode, FaPaintBrush, FaTools
@@ -32,6 +33,43 @@ export default function ServicesPage() {
   const [categoryItems, setCategoryItems] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+
+
+  const recordVisit = async () => {
+    try {
+      const token = localStorage.getItem("token") 
+      let userId = null
+      if (token) {
+        const payload = JSON.parse(atob(token.split(".")[1])); // Decode JWT payload
+        userId = payload.id; // Extract userId from JWT
+      
+      }
+      
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/webvisits`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId: userId || null,
+          userAgent: navigator.userAgent,
+          page: 5, 
+        }),
+      });
+
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message);
+
+      console.log("Visit recorded successfully:", data);
+    } catch (error) {
+      console.error("Error recording visit:", error);
+    }
+  };
+
+  // ✅ Call recordVisit when the page loads
+  useEffect(() => {
+    recordVisit();
+  }, []);
+
 
   const fetchServicesByCategory = async (category) => {
     setLoading(true);
@@ -175,3 +213,4 @@ export default function ServicesPage() {
     </div>
   );
 }
+

@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const User = require('../models/User');
 
 const imageSchema = new mongoose.Schema({
   name: { type: String, required: true },
@@ -46,10 +45,11 @@ const productListingSchema = new mongoose.Schema({
 // Middleware to update `listerAccountStatus` before saving
 productListingSchema.pre("save", async function (next) {
   this.updatedAt = Date.now(); // Always update `updatedAt`
+  
+  // Lazy load User model inside the hook to avoid circular dependency
+  const User = require("../models/User");
 
-  const user = await User
-    .findById(this.listerId)
-    .select("accountStatus");
+  const user = await User.findById(this.listerId).select("accountStatus");
   if (user) {
     this.listerAccountStatus = user.accountStatus; // Automatically set from User Schema
   }

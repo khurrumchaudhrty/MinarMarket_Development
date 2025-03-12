@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { useEffect } from "react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { LandingPageProductGrid } from "@/components/data-grid";
@@ -41,6 +42,41 @@ export default function Home() {
   const [categoryItems, setCategoryItems] = useState([]);
   const [categoryType, setCategoryType] = useState(null);
 
+
+    const recordVisit = async () => {
+    try {
+      const token = localStorage.getItem("token") 
+      let userId = null
+      if (token) {
+        const payload = JSON.parse(atob(token.split(".")[1])); // Decode JWT payload
+        userId = payload.id; // Extract userId from JWT
+      
+      }
+      
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/webvisits`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId: userId || null,
+          userAgent: navigator.userAgent,
+          page: 2, 
+        }),
+      });
+
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message);
+
+      console.log("Visit recorded successfully:", data);
+    } catch (error) {
+      console.error("Error recording visit:", error);
+    }
+  };
+
+  // ✅ Call recordVisit when the page loads
+  useEffect(() => {
+    recordVisit();
+  }, []);
+  
   const fetchProductsByCategory = async (category) => {
     try {
       const response = await fetch(
