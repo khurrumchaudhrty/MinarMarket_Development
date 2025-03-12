@@ -93,7 +93,7 @@ exports.signup = catchAsyncErrors(async (req, res, next) => {
 
     const verificationData = hunterResponse.data.data;
 
-    if (verificationData.status !== "valid") {
+    if (verificationData.status === "invalid" && verificationData.result === "undeliverable" && !verificationData.mx_records ) {
         return res.status(400).json({ success: false, message: "Invalid email address" });
     }
 } catch (error) {
