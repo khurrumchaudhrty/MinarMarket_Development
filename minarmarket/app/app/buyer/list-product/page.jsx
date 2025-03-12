@@ -176,7 +176,7 @@ export default function ListProductPage() {
                     maxImages={6}
                   />
                   <p className="text-sm text-gray-500">
-                    Upload up to 6 images to show what you're looking for
+                    Upload up to 6 images to show what you&apos;re looking for
                   </p>
                 </div>
 

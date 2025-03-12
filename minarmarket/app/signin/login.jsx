@@ -184,7 +184,7 @@ export default function LoginPage() {
             style={{ animationDuration: "2s", animationDelay: "1s" }}
           >
             MinarMarket connects buyers and sellers in a unique way. Unlike traditional marketplaces, buyers can post
-            what they need, and sellers can respond with personalized offers. Whether you're looking to buy or sell,
+            what they need, and sellers can respond with personalized offers. Whether you&apos;re looking to buy or sell,
             MinarMarket ensures a seamless and interactive experience.
           </p>
         </div>

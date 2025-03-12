@@ -94,7 +94,7 @@ export default function CommunityGuidelines() {
                 style={{ animationDelay: "0.2s" }}
               >
                 <p>
-                  At MinarMarket, we're committed to creating a safe, respectful, and productive community for all
+                  At MinarMarket, we&apos;re committed to creating a safe, respectful, and productive community for all
                   users. These guidelines outline the behaviors and standards we expect from everyone who uses our
                   platform.
                 </p>
