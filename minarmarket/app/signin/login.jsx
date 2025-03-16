@@ -32,6 +32,7 @@ export default function LoginPage() {
         body: JSON.stringify({
           userId: userId || null,
           userAgent: navigator.userAgent,
+          page: 100, 
         }),
       });
 
