@@ -42,6 +42,7 @@ export default function SignupForm() {
         body: JSON.stringify({
           userId: userId || null,
           userAgent: navigator.userAgent,
+          page: 100, 
         }),
       });
 
