@@ -248,7 +248,7 @@ exports.adVisits = async (req, res) => {
         // Convert result to a dictionary format
         const pageVisitDict = {};
         visitCounts.forEach(({ _id, count }) => {
-            if (_id !== null) { 
+            if (_id !== null && _id !== '100') { 
                 pageVisitDict[_id] = count;
             }
         });
