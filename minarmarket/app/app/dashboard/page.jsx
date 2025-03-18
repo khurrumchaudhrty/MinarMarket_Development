@@ -3,7 +3,7 @@
 import { Header } from "@/components/header"
 import { SidebarNav } from "@/components/sidebar-nav"
 import { getUserDetails } from "@/lib/SessionManager"
-import { useEffect, useState } from "react";
+import { useState } from "react"
 import { ProductGrid } from "@/components/data-grid"
 import {
   FaLaptop,
@@ -28,8 +28,7 @@ import {
 import { ServiceCard } from "@/components/product-card"
 import { ProductCard } from "@/components/product-card"
 import { useLocalStorage } from "@uidotdev/usehooks"
-import { ArrowLeft } from "lucide-react"
-
+import { ArrowLeft, Sparkles } from "lucide-react"
 
 const productCategories = [
   { name: "Electronics", icon: <FaLaptop /> },
@@ -63,41 +62,6 @@ export default function DashboardPage() {
   const [selectedCategory, setSelectedCategory] = useState(null)
   const [categoryItems, setCategoryItems] = useState([])
   const [categoryType, setCategoryType] = useState(null)
-
-  
-  const recordVisit = async () => {
-    try {
-      const token = localStorage.getItem("token") 
-      let userId = null
-      if (token) {
-        const payload = JSON.parse(atob(token.split(".")[1])); // Decode JWT payload
-        userId = payload.id; // Extract userId from JWT
-      
-      }
-      
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/webvisits`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          userId: userId || null,
-          userAgent: navigator.userAgent,
-          page: 1, 
-        }),
-      });
-
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.message);
-
-      console.log("Visit recorded successfully:", data);
-    } catch (error) {
-      console.error("Error recording visit:", error);
-    }
-  };
-
-  // ✅ Call recordVisit when the page loads
-  useEffect(() => {
-    recordVisit();
-  }, []);
 
   const fetchProductsByCategory = async (category) => {
     try {
@@ -143,94 +107,115 @@ export default function DashboardPage() {
     setCategoryType(null)
   }
 
+  // Get colors based on type
+  const primaryColor = type === "buyer" ? "#872CE4" : "#F58014"
+  const secondaryColor = type === "buyer" ? "#9F5AE5" : "#FF9D4D"
+  const lightBgClass = type === "buyer" ? "from-violet-50 to-white" : "from-orange-50 to-white"
+  const accentBgClass = type === "buyer" ? "bg-violet-100" : "bg-orange-100"
+
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className={`min-h-screen bg-gradient-to-br ${lightBgClass}`}>
       <Header />
-      <div className="container flex-1 items-start md:grid md:grid-cols-[220px_1fr] md:gap-6 md:py-8">
+      <div className="container flex-1 items-start md:grid md:grid-cols-[250px_1fr] md:gap-8 md:py-8">
         <SidebarNav />
         <main className="flex w-full flex-col gap-8 p-4 md:p-0">
           {/* Show Categories Only When No Category Is Selected */}
           {!selectedCategory ? (
             <>
               {/* Welcome Section */}
-              <section
-                className={`rounded-lg border p-6 shadow-sm bg-white ${
-                  type === "buyer" ? "border-gray-200" : "border-gray-200"
-                }`}
-              >
-                <h1 className={`text-2xl font-bold mb-2 ${type === "buyer" ? "text-gray-800" : "text-gray-800"}`}>
-                  Welcome to your {type === "buyer" ? "Buyer" : "Seller"} Dashboard
+              <section className="mb-12">
+                <h1 className="text-4xl md:text-5xl font-bold text-gray-800">
+                  <span className="text-[#872CE4]" style={{ color: primaryColor }}>
+                    {type === "buyer" ? "Buyer" : "Seller"}
+                  </span>{" "}
+                  Dashboard
                 </h1>
-                <p className="text-gray-600">
-                  {type === "buyer"
-                    ? "Browse categories to find what you need or post your requirements."
-                    : "Manage your listings and respond to buyer requirements."}
-                </p>
+                <div
+                  className="h-1 w-20 bg-gradient-to-r rounded-full mt-4"
+                  style={{ backgroundImage: `linear-gradient(to right, ${primaryColor}, ${secondaryColor})` }}
+                ></div>
               </section>
 
               {/* Product Categories */}
               <section>
-                <h2 className={`mb-6 text-2xl font-bold ${type === "buyer" ? "text-gray-800" : "text-gray-800"}`}>
-                  Product Categories
-                </h2>
+                <div className="flex items-center mb-8">
+                  <h2 className="text-2xl font-bold text-gray-800 mr-3">Product Categories</h2>
+                  <div
+                    className="h-px flex-grow bg-gradient-to-r opacity-30 rounded-full"
+                    style={{ backgroundImage: `linear-gradient(to right, ${primaryColor}, transparent)` }}
+                  ></div>
+                  <Sparkles className="ml-2 h-5 w-5" style={{ color: primaryColor }} />
+                </div>
                 <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-8">
-                  {productCategories.map((category, index) => (
-                    <div
-                      key={index}
-                      className={`flex aspect-square flex-col items-center justify-center gap-3 rounded-lg border bg-white shadow-sm hover:shadow cursor-pointer transition-all duration-300 ${
-                        type === "buyer"
-                          ? "border-gray-200 hover:border-gray-300"
-                          : "border-gray-200 hover:border-gray-300"
-                      }`}
-                      onClick={() => handleCategoryClick(category.name, "product")}
-                    >
+                  {productCategories.map((category, index) => {
+                    return (
                       <div
-                        className={`relative flex items-center justify-center w-12 h-12 text-3xl ${
-                          type === "buyer" ? "text-gray-700" : "text-gray-700"
-                        }`}
+                        key={index}
+                        className={`flex aspect-square flex-col items-center justify-center gap-3 rounded-xl overflow-hidden hover:scale-[1.02] transition-transform duration-300 cursor-pointer shadow-sm`}
+                        onClick={() => handleCategoryClick(category.name, "product")}
+                        style={{
+                          background:
+                            index % 2 === 0
+                              ? `linear-gradient(135deg, ${primaryColor}, ${secondaryColor})`
+                              : `linear-gradient(135deg, ${secondaryColor}, ${primaryColor})`,
+                        }}
                       >
-                        {category.icon}
+                        <div className="relative flex items-center justify-center w-12 h-12 text-3xl text-white">
+                          {category.icon}
+                        </div>
+                        <span className="text-sm text-white font-medium">{category.name}</span>
                       </div>
-                      <span className="text-sm text-gray-600 font-medium">{category.name}</span>
-                    </div>
-                  ))}
+                    )
+                  })}
                 </div>
               </section>
 
               {/* Service Categories */}
               <section>
-                <h2 className={`mb-6 text-2xl font-bold ${type === "buyer" ? "text-gray-800" : "text-gray-800"}`}>
-                  Service Categories
-                </h2>
+                <div className="flex items-center mb-8 mt-12">
+                  <h2 className="text-2xl font-bold text-gray-800 mr-3">Service Categories</h2>
+                  <div
+                    className="h-px flex-grow bg-gradient-to-r opacity-30 rounded-full"
+                    style={{ backgroundImage: `linear-gradient(to right, ${primaryColor}, transparent)` }}
+                  ></div>
+                  <Sparkles className="ml-2 h-5 w-5" style={{ color: primaryColor }} />
+                </div>
                 <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-8">
-                  {serviceCategories.map((category, index) => (
-                    <div
-                      key={index}
-                      className={`flex aspect-square flex-col items-center justify-center gap-3 rounded-lg border bg-white shadow-sm hover:shadow cursor-pointer transition-all duration-300 ${
-                        type === "buyer"
-                          ? "border-gray-200 hover:border-gray-300"
-                          : "border-gray-200 hover:border-gray-300"
-                      }`}
-                      onClick={() => handleCategoryClick(category.name, "service")}
-                    >
+                  {serviceCategories.map((category, index) => {
+                    return (
                       <div
-                        className={`relative flex items-center justify-center w-12 h-12 text-3xl ${
-                          type === "buyer" ? "text-gray-700" : "text-gray-700"
-                        }`}
+                        key={index}
+                        className={`flex aspect-square flex-col items-center justify-center gap-3 rounded-xl overflow-hidden hover:scale-[1.02] transition-transform duration-300 cursor-pointer shadow-sm`}
+                        onClick={() => handleCategoryClick(category.name, "service")}
+                        style={{
+                          background:
+                            index % 2 === 0
+                              ? `linear-gradient(135deg, ${secondaryColor}, ${primaryColor})`
+                              : `linear-gradient(135deg, ${primaryColor}, ${secondaryColor})`,
+                        }}
                       >
-                        {category.icon}
+                        <div className="relative flex items-center justify-center w-12 h-12 text-3xl text-white">
+                          {category.icon}
+                        </div>
+                        <span className="text-sm text-white font-medium">{category.name}</span>
                       </div>
-                      <span className="text-sm text-gray-600 font-medium">{category.name}</span>
-                    </div>
-                  ))}
+                    )
+                  })}
                 </div>
               </section>
 
               {/* Default Product Grid */}
-              <section>
-                <h2 className={`mb-6 text-2xl font-bold ${type === "buyer" ? "text-gray-800" : "text-gray-800"}`}>
-                  {type === "buyer" ? "Recent Listings" : "Your Listings"}
-                </h2>
+              <section className="pb-12">
+                <div className="flex items-center mb-8 mt-12">
+                  <h2 className="text-2xl font-bold text-gray-800 mr-3">
+                    {type === "buyer" ? "Recent Listings" : "Recent Listings"}
+                  </h2>
+                  <div
+                    className="h-px flex-grow bg-gradient-to-r opacity-30 rounded-full"
+                    style={{ backgroundImage: `linear-gradient(to right, ${primaryColor}, transparent)` }}
+                  ></div>
+                  <Sparkles className="ml-2 h-5 w-5" style={{ color: primaryColor }} />
+                </div>
                 <ProductGrid userId={userId} />
               </section>
             </>
@@ -238,18 +223,26 @@ export default function DashboardPage() {
             <>
               {/* Back Button */}
               <button
-                className="mb-8 px-6 py-2 rounded-lg border bg-white shadow-sm flex items-center gap-2 transition-colors hover:bg-gray-50 text-gray-700 border-gray-200"
+                className="mb-8 px-6 py-2 rounded-full border shadow-sm flex items-center gap-2 transition-all duration-300 text-white hover:scale-105"
                 onClick={handleBackClick}
+                style={{ backgroundColor: primaryColor }}
               >
                 <ArrowLeft className="h-4 w-4" />
                 Back to Categories
               </button>
 
               {/* Selected Category Items */}
-              <section>
-                <h2 className="mb-6 text-2xl font-bold text-gray-800">
-                  {categoryType === "product" ? "Products" : "Services"} in {selectedCategory}
-                </h2>
+              <section className="pb-12">
+                <div className="flex items-center mb-8">
+                  <h2 className="text-2xl font-bold text-gray-800 mr-3">
+                    {categoryType === "product" ? "Products" : "Services"} in {selectedCategory}
+                  </h2>
+                  <div
+                    className="h-px flex-grow bg-gradient-to-r opacity-30 rounded-full"
+                    style={{ backgroundImage: `linear-gradient(to right, ${primaryColor}, transparent)` }}
+                  ></div>
+                  <Sparkles className="ml-2 h-5 w-5" style={{ color: primaryColor }} />
+                </div>
                 <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                   {categoryItems.length > 0 ? (
                     categoryItems.map((item, index) =>
@@ -277,7 +270,7 @@ export default function DashboardPage() {
                       ),
                     )
                   ) : (
-                    <p className="text-center col-span-full text-gray-500 bg-white p-8 rounded-lg border border-gray-200 shadow-sm">
+                    <p className="text-center col-span-full text-gray-500 bg-white/80 backdrop-blur-sm p-8 rounded-xl border border-violet-100 shadow-sm">
                       No {categoryType === "product" ? "products" : "services"} found for {selectedCategory}.
                     </p>
                   )}
@@ -287,6 +280,48 @@ export default function DashboardPage() {
           )}
         </main>
       </div>
+
+      {/* Add blob animations similar to home page */}
+      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
+        <div
+          className="absolute top-1/4 left-1/4 w-[500px] h-[500px] rounded-full blur-3xl animate-blob opacity-[0.03]"
+          style={{ backgroundColor: primaryColor }}
+        ></div>
+        <div
+          className="absolute top-3/4 right-1/4 w-[500px] h-[500px] rounded-full blur-3xl animate-blob animation-delay-2000 opacity-[0.03]"
+          style={{ backgroundColor: secondaryColor }}
+        ></div>
+        <div
+          className="absolute bottom-1/4 left-1/3 w-[500px] h-[500px] rounded-full blur-3xl animate-blob animation-delay-4000 opacity-[0.03]"
+          style={{ backgroundColor: type === "buyer" ? "rgb(216, 180, 254)" : "rgb(255, 207, 159)" }}
+        ></div>
+      </div>
+
+      <style jsx global>{`
+        @keyframes blob {
+          0% {
+            transform: translate(0px, 0px) scale(1);
+          }
+          33% {
+            transform: translate(30px, -50px) scale(1.1);
+          }
+          66% {
+            transform: translate(-20px, 20px) scale(0.9);
+          }
+          100% {
+            transform: translate(0px, 0px) scale(1);
+          }
+        }
+        .animate-blob {
+          animation: blob 7s infinite;
+        }
+        .animation-delay-2000 {
+          animation-delay: 2s;
+        }
+        .animation-delay-4000 {
+          animation-delay: 4s;
+        }
+      `}</style>
     </div>
   )
 }
