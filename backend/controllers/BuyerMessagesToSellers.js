@@ -46,6 +46,7 @@ exports.getSellerMessages = async (req, res) => {
                     createdAt: message.createdAt,
                     status: message.status,
                     buyerid: message.id_of_buyer,
+                    category: message.category
                 };
             })
         );
