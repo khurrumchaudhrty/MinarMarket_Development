@@ -118,6 +118,8 @@ export default function MessageChat() {
                                         <p className="text-gray-500 text-sm">Email: {msg.email}</p>
                                         <p className="text-gray-500 text-sm">Phone: {msg.phone}</p>
                                         <p className="text-gray-500 text-sm">Category: {msg.category}</p>
+                                        {/* <p className="text-gray-500 text-sm">Buyer Id: {msg.buyerid}</p> */}
+
                                         <button className="mt-4 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition">
                                             Contact Buyer
                                         </button>
