@@ -244,7 +244,7 @@ export default function MessageChat() {
                     </div>
 
                     {/* Right side - Buttons */}
-                    <div className="flex-shrink-0 flex mt-4 md:mt-0">
+                    <div className="flex-shrink-0 flex mt-4 md:mr-6">
                       {msg.status === "Pending" ? (
                         <div className="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
                           <Button
