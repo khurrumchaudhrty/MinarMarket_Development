@@ -7,7 +7,7 @@ const ServiceListing = require("../models/ServiceListing"); // Import ServiceLis
 // Controller function to handle buyer messages for products and services
 exports.createBuyerMessage = async (req, res) => {
     try {
-        console.log("Buyer message request:", req.body);
+        // console.log("Buyer message request:", req.body);
         const { id_of_buyer, id_of_product, id_of_service } = req.body; 
 
         if (!id_of_buyer || (!id_of_product && !id_of_service)) {
