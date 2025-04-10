@@ -227,7 +227,7 @@ export default function MessageChat() {
                           </div>
                           <div className="flex items-center gap-2">
                             <Phone className="h-4 w-4 text-gray-500" />
-                            <span className="text-gray-700">{msg.phone}</span>
+                            <span className="text-gray-700">{msg.buyerId}</span>
                           </div>
                           <div className="flex items-center gap-2">
                             <Tag className="h-4 w-4 text-gray-500" />
