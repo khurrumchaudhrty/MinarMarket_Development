@@ -40,7 +40,7 @@ export default function MessageChat() {
         const user = await getUserDetails();
         if (!user || !user.userId) return;
 
-        setSellerId(user.id);
+        setSellerId(user.userId);
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/message-from-buyers/${user.userId}`
         );
@@ -57,14 +57,15 @@ export default function MessageChat() {
   }, []);
 
   // Function to handle status update
-  const handleStatusUpdate = async (msgId, newStatus) => {
+  const handleStatusUpdate = async (msgId, newStatus, buyerId) => {
     try {
+      console.log(msgId, newStatus, buyerId, sellerId);
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/update-message-status/${msgId}`,
         {
-          method: "PATCH",
+          method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ status: newStatus }),
+          body: JSON.stringify({ status: newStatus, sellerId: sellerId,buyerId: buyerId }),
         }
       );
 
@@ -248,7 +249,7 @@ export default function MessageChat() {
                       {msg.status === "Pending" ? (
                         <div className="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
                           <Button
-                            onClick={() => handleStatusUpdate(msg.id, "Yes")}
+                            onClick={() => handleStatusUpdate(msg.id, "Yes", msg.buyerId)}
                             variant="default"
                             className="gap-1"
                           >
@@ -256,7 +257,7 @@ export default function MessageChat() {
                             Accept
                           </Button>
                           <Button
-                            onClick={() => handleStatusUpdate(msg.id, "No")}
+                            onClick={() => handleStatusUpdate(msg.id, "No", msg.buyerId)}
                             variant="outline"
                             className="gap-1"
                           >

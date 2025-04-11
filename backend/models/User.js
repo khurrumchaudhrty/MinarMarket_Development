@@ -48,6 +48,13 @@ const UserSchema = mongoose.Schema({
     default: false,
   },
 
+  chatConnections: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "user",
+    }
+  ],
+
   createdAt: {
     type: Date,
     default: Date.now,
@@ -55,20 +62,6 @@ const UserSchema = mongoose.Schema({
 
   resetPasswordToken: String,
   resetPasswordExpire: Date,
-
-  // Field to store complaints made against the user
-  complaints: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Complaint",
-    },
-  ],
-
-  accountStatus: {
-    type: String,
-    default: "Active",
-    enum: ["Active", "Suspended", "Banned"],
-  },
 });
 
 // Hash
