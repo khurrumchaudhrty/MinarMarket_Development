@@ -4,7 +4,7 @@ import { SidebarNav } from "@/components/sidebar-nav"
 import { ProductCard } from "@/components/product-card"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { ProductList } from "@/components/data-list"
-import { useLocalStorage } from "@uidotdev/usehooks"
+import { useLocalStorage } from 'usehooks-ts'
 import { ProposalForm } from "@/components/proposal-form"
 import Link from "next/link"
 

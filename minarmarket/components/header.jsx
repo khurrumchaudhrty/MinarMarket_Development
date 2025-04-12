@@ -1,8 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { Search, UserCircle, Menu } from "lucide-react"
-import { MainNav } from "@/components/main-nav"
+import { Search, UserCircle, Menu, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
@@ -13,23 +12,68 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { useRouter } from "next/navigation"
-import { useLocalStorage } from "@uidotdev/usehooks"
-import { useState, useEffect } from "react"
+import { useState, useEffect, Suspense } from "react"
+import { SearchBar } from "@/components/search-bar"
+import { useLocalStorage } from 'usehooks-ts'
+import { getUserDetails } from "@/lib/SessionManager"
 
-export function Header() {
-  const token = localStorage.getItem("token")
-  const [type, setType] = useLocalStorage("type", "buyer")
+function HeaderComponent() {
+  // For storing auth token
+  const [token, setToken] = useLocalStorage('token', null)
+  const [type,setType] = useLocalStorage("type", "buyer")
   const router = useRouter()
   const [mounted, setMounted] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const userdetail = getUserDetails()
 
-  useEffect(() => {
-    setMounted(true)
-  }, [])
+  // Initialize type from localStorage after component mounts
+  // useEffect(() => {
+  //   setMounted(true)
+  //   // Get localStorage values only after component is mounted on client
+  //   if (typeof window !== "undefined") {
+  //     const storedType = localStorage.getItem("type")
+  //     if (storedType) {
+  //       setType(storedType)
+  //     }
+  //     setToken(localStorage.getItem("token"))
+  //   }
+  // }, [])
 
-  if (!mounted) {
-    return null
+  // Subscribe to type-change events from other components
+  // useEffect(() => {
+  //   const handleTypeChange = (e) => {
+  //     setType(e.detail.type)
+  //   }
+    
+  //   window.addEventListener('user-type-changed', handleTypeChange)
+    
+  //   return () => {
+  //     window.removeEventListener('user-type-changed', handleTypeChange)
+  //   }
+  // }, [])
+
+  // Update localStorage when type changes
+  // useEffect(() => {
+  //   if (mounted && typeof window !== "undefined") {
+  //     localStorage.setItem("type", type)
+  //   }
+  // }, [type, mounted])
+
+  const handleTypeChange = (newType) => {
+    setType(newType)
+    
+    // Dispatch a custom event to notify other components
+    if (typeof window !== "undefined") {
+      const event = new CustomEvent('user-type-changed', { 
+        detail: { type: newType } 
+      })
+      window.dispatchEvent(event)
+    }
   }
+
+  // if (!mounted) {
+  //   return null
+  // }
 
   return (
     <header
@@ -43,7 +87,7 @@ export function Header() {
             className="block md:hidden text-gray-700 hover:text-[#872CE4]"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
-            <Menu className="h-6 w-6" />
+            {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </button>
           <Link href="/app/dashboard" className="flex items-center gap-2 ml-4">
             <span className={`font-bold text-xl ${type === "buyer" ? "text-[#872CE4]" : "text-[#F58014]"}`}>
@@ -51,30 +95,50 @@ export function Header() {
             </span>
           </Link>
           <div className="hidden md:block">
-            <MainNav />
+            <nav className="flex items-center gap-4 lg:gap-6">
+              <Link
+                href="/products"
+                className="text-sm font-medium text-gray-600 hover:text-[#872CE4] transition-colors"
+              >
+                Products
+              </Link>
+              <Link
+                href="/services"
+                className="text-sm font-medium text-gray-600 hover:text-[#872CE4] transition-colors"
+              >
+                Services
+              </Link>
+              <Link
+                href="/contactus"
+                className="text-sm font-medium text-gray-600 hover:text-[#872CE4] transition-colors"
+              >
+                Contact
+              </Link>
+              <Link
+                href="/aboutus"
+                className="text-sm font-medium text-gray-600 hover:text-[#872CE4] transition-colors"
+              >
+                About Us
+              </Link>
+            </nav>
           </div>
         </div>
 
-        <div className="flex items-center gap-4">
-          <div className="relative hidden md:block">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-            <Input
-              type="search"
-              placeholder="Search for products..."
-              className="w-[300px] lg:w-[500px] pl-10 bg-white border-violet-200 text-gray-800 placeholder:text-gray-400 focus:border-violet-300 focus:ring-violet-200"
-            />
-          </div>
+        <div className="hidden lg:flex flex-1 items-center justify-center">
+          <SearchBar className="max-w-md w-full" />
+        </div>
 
+        <div className="flex items-center gap-4">
           <Button
-            onClick={() => setType(type === "buyer" ? "seller" : "buyer")}
+            onClick={() => handleTypeChange(type === "buyer" ? "seller" : "buyer")}
             className={`hidden md:flex border-0 text-white ${
               type === "buyer" ? "bg-[#872CE4] hover:bg-[#872CE4]/90" : "bg-[#F58014] hover:bg-[#F58014]/90"
-            } rounded-full`}
+            } rounded-md`}
           >
             Switch to {type === "buyer" ? "Selling" : "Buying"}
           </Button>
 
-          {token ? (
+          {userdetail ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
@@ -95,11 +159,11 @@ export function Header() {
                 <DropdownMenuItem className="hover:bg-violet-50 hover:text-[#872CE4] rounded-lg my-1 cursor-pointer">
                   Settings
                 </DropdownMenuItem>
-                <DropdownMenuSeparator className="bg-violet-100" />
                 <DropdownMenuItem className="hover:bg-violet-50 hover:text-[#872CE4] rounded-lg my-1 cursor-pointer">
                   <Button
                     onClick={() => {
                       localStorage.removeItem("token")
+                      setToken(null)
                       router.push("/signin")
                     }}
                     variant="ghost"
@@ -129,20 +193,44 @@ export function Header() {
       {mobileMenuOpen && (
         <div className="md:hidden border-t border-violet-100 bg-white">
           <div className="container py-4 space-y-4">
-            <MainNav />
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-              <Input
-                type="search"
-                placeholder="Search for products..."
-                className="w-full pl-10 bg-white border-violet-200 text-gray-800 placeholder:text-gray-400 focus:border-violet-300"
-              />
+            <nav className="flex flex-col gap-4 mb-6">
+              <Link
+                href="/products"
+                className="text-sm font-medium text-gray-600 hover:text-[#872CE4]"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Products
+              </Link>
+              <Link
+                href="/services"
+                className="text-sm font-medium text-gray-600 hover:text-[#872CE4]"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Services
+              </Link>
+              <Link
+                href="/contactus"
+                className="text-sm font-medium text-gray-600 hover:text-[#872CE4]"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Contact
+              </Link>
+              <Link
+                href="/aboutus"
+                className="text-sm font-medium text-gray-600 hover:text-[#872CE4]"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                About Us
+              </Link>
+            </nav>
+            <div className="relative mb-6">
+              <SearchBar className="w-full" />
             </div>
             <Button
-              onClick={() => setType(type === "buyer" ? "seller" : "buyer")}
+              onClick={() => handleTypeChange(type === "buyer" ? "seller" : "buyer")}
               className={`w-full text-white ${
                 type === "buyer" ? "bg-[#872CE4] hover:bg-[#872CE4]/90" : "bg-[#F58014] hover:bg-[#F58014]/90"
-              } rounded-full`}
+              } rounded-md`}
             >
               Switch to {type === "buyer" ? "Selling" : "Buying"}
             </Button>
@@ -153,3 +241,9 @@ export function Header() {
   )
 }
 
+export function Header() {
+  return (
+    // <Suspense fallback={<div className="h-16" />}>
+      <HeaderComponent />
+      // </Suspense>
+  )}

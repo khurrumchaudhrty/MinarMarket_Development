@@ -5,19 +5,47 @@ import { usePathname } from "next/navigation"
 import { Settings, ShoppingBag, MessageCircle, Store, ClipboardList, Send, Inbox } from "lucide-react"
 import { useState, useEffect } from "react"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import { useLocalStorage } from "@uidotdev/usehooks"
 import { ScrollArea } from "./ui/scroll-area"
 import { motion } from "framer-motion"
+import { useLocalStorage } from 'usehooks-ts'
 
 function SidebarNavComponent() {
   const pathname = usePathname()
   const [openDropdown, setOpenDropdown] = useState(null)
-  const [type] = useLocalStorage("type", "buyer")
+  const [type, setType] = useLocalStorage("type", "buyer") // Default value
   const [mounted, setMounted] = useState(false)
 
-  useEffect(() => {
-    setMounted(true)
-  }, [])
+  // Initialize type from localStorage after component mounts
+  // useEffect(() => {
+  //   setMounted(true)
+  //   // Get localStorage values only after component is mounted on client
+  //   if (typeof window !== "undefined") {
+  //     const storedType = localStorage.getItem("type")
+  //     if (storedType) {
+  //       setType(storedType)
+  //     }
+  //   }
+  // }, [])
+
+  // // Subscribe to type-change events from other components
+  // useEffect(() => {
+  //   const handleTypeChange = (e) => {
+  //     setType(e.detail.type)
+  //   }
+    
+  //   window.addEventListener('user-type-changed', handleTypeChange)
+    
+  //   return () => {
+  //     window.removeEventListener('user-type-changed', handleTypeChange)
+  //   }
+  // }, [])
+
+  // // Update localStorage when type changes
+  // useEffect(() => {
+  //   if (mounted && typeof window !== "undefined") {
+  //     localStorage.setItem("type", type)
+  //   }
+  // }, [type, mounted])
 
   const routes = [
     {
@@ -88,7 +116,7 @@ function SidebarNavComponent() {
     },
   ]
 
-  if (!mounted) return null
+  // if (!mounted) return null
 
   return (
     <nav className="flex flex-col space-y-1">
@@ -105,8 +133,8 @@ function SidebarNavComponent() {
                     className={`flex items-center rounded-lg px-3 py-2 transition-all duration-300 ${
                       isActive
                         ? type === "buyer"
-                          ? "bg-violet-100 text-[#872CE4]"
-                          : "bg-orange-100 text-[#F58014]"
+                        ? "bg-orange-100 text-[#F58014]"
+                          : "bg-violet-100 text-[#872CE4]"
                         : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
                     }`}
                   >
@@ -201,14 +229,44 @@ function SidebarNavComponent() {
 }
 
 export function SidebarNav() {
-  const [type] = useLocalStorage("type", "buyer")
-  const [mounted, setMounted] = useState(false)
+  const [type, setType] = useLocalStorage("type", "buyer") // Default value
+  // const [mounted, setMounted] = useState(false)
 
-  useEffect(() => {
-    setMounted(true)
-  }, [])
+  // Initialize type from localStorage after component mounts
+  // useEffect(() => {
+  //   setMounted(true)
+  //   // Get localStorage values only after component is mounted on client
+  //   if (typeof window !== "undefined") {
+  //     const storedType = localStorage.getItem("type")
+  //     if (storedType) {
+  //       setType(storedType)
+  //     }
+  //   }
+  // }, [])
 
-  if (!mounted) return null
+  // // Subscribe to type-change events from other components
+  // useEffect(() => {
+  //   const handleTypeChange = (e) => {
+  //     setType(e.detail.type)
+  //   }
+    
+  //   window.addEventListener('user-type-changed', handleTypeChange)
+    
+  //   return () => {
+  //     window.removeEventListener('user-type-changed', handleTypeChange)
+  //   }
+  // }, [])
+
+  // // Update localStorage when type changes
+  // useEffect(() => {
+  //   if (mounted && typeof window !== "undefined") {
+  //     localStorage.setItem("type", type)
+  //   }
+  // }, [type, mounted])
+
+ 
+
+  // if (!mounted) return null
 
   return (
     <aside className="fixed left-0 top-16 z-30 h-[calc(100vh-4rem)] w-[250px] shrink-0 overflow-y-auto md:sticky md:block bg-white/80 backdrop-blur-sm border-r border-violet-100 rounded-r-xl">

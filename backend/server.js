@@ -5,6 +5,7 @@ const server = require('./app');
 // Setting upp the environment variables
 dotEnv.config({ path: './config/config.env' });
 
+
 // Connect to the database
 databaseConnect();
 

@@ -3,8 +3,9 @@
 import { Header } from "@/components/header"
 import { SidebarNav } from "@/components/sidebar-nav"
 import { getUserDetails } from "@/lib/SessionManager"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { ProductGrid } from "@/components/data-grid"
+import { useLocalStorage } from 'usehooks-ts'
 import {
   FaLaptop,
   FaTshirt,
@@ -27,7 +28,6 @@ import {
 } from "react-icons/fa"
 import { ServiceCard } from "@/components/product-card"
 import { ProductCard } from "@/components/product-card"
-import { useLocalStorage } from "@uidotdev/usehooks"
 import { ArrowLeft, Sparkles } from "lucide-react"
 
 const productCategories = [
@@ -58,10 +58,53 @@ export default function DashboardPage() {
   const [userDetails, setUserDetails] = useState(getUserDetails())
   const userId = userDetails?.userId || null
   const [type, setType] = useLocalStorage("type", "buyer")
-
+  
   const [selectedCategory, setSelectedCategory] = useState(null)
   const [categoryItems, setCategoryItems] = useState([])
   const [categoryType, setCategoryType] = useState(null)
+
+  // Listen for storage changes to update the type immediately
+  useEffect(() => {
+    const handleStorageChange = (e) => {
+      if (e.key === 'type') {
+        setType(e.newValue || 'buyer');
+      }
+    };
+    
+    window.addEventListener('storage', handleStorageChange);
+    
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, [setType]);
+  
+  // Also listen for the custom event from header
+  useEffect(() => {
+    const handleTypeChange = (e) => {
+      setType(e.detail.type);
+    };
+    
+    window.addEventListener('user-type-changed', handleTypeChange);
+    
+    return () => {
+      window.removeEventListener('user-type-changed', handleTypeChange);
+    };
+  }, [setType]);
+
+  const handleTypeChange = (newType) => {
+    setType(newType)
+    
+    // Update localStorage
+    if (typeof window !== "undefined") {
+      localStorage.setItem("type", newType)
+      
+      // Dispatch a custom event to notify other components
+      const event = new CustomEvent('user-type-changed', { 
+        detail: { type: newType } 
+      })
+      window.dispatchEvent(event)
+    }
+  }
 
   const fetchProductsByCategory = async (category) => {
     try {

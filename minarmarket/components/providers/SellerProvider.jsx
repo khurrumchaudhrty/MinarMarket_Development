@@ -1,13 +1,13 @@
 "use client";
 
-import { useLocalStorage } from "@uidotdev/usehooks";
+import { useLocalStorage } from 'usehooks-ts';
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export const SellerProvider = ({ children }) => {
     const router = useRouter()
     const [loading,setLoading] = useState(true);
-    const [type,setType] = useLocalStorage ('type','buyer')
+    const [type,setType] = useLocalStorage('type','buyer')
 
     
     useEffect(() => {

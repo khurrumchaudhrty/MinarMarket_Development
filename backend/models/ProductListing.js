@@ -27,6 +27,11 @@ const productListingSchema = new mongoose.Schema({
     },
     required: true,
   },
+  embedding: {
+    type: [Number],
+    index: true,
+    sparse: true,
+  },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
   listerId: {

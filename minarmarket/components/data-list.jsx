@@ -7,7 +7,7 @@ import { useQuery } from "@tanstack/react-query"
 import { getMyServiceRequirements } from "@/lib/api/service"
 import { useState, useEffect } from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
-import { useLocalStorage } from "@uidotdev/usehooks"
+import { useLocalStorage } from 'usehooks-ts'
 import { motion } from "framer-motion"
 
 export function AdminProductsList() {}

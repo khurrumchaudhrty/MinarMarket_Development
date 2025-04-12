@@ -39,6 +39,11 @@ const serviceListingSchema = new mongoose.Schema({
       "Other",
     ],
   },
+  embedding: {
+    type: [Number],
+    index: true,
+    sparse: true,
+  },
   rate: {
     type: Number,
     required: true,
