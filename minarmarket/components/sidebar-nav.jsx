@@ -105,15 +105,15 @@ function SidebarNavComponent() {
                     className={`flex items-center rounded-lg px-3 py-2 transition-all duration-300 ${
                       isActive
                         ? type === "buyer"
-                          ? "bg-[#1995AD]/30 text-[#1995AD]"
-                          : "bg-[#A1D6E2]/30 text-[#A1D6E2]"
-                        : "text-gray-700 hover:bg-black/5 hover:text-gray-900"
+                          ? "bg-violet-100 text-[#872CE4]"
+                          : "bg-orange-100 text-[#F58014]"
+                        : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
                     }`}
                   >
                     <motion.div className="flex items-center" whileHover={{ x: 3 }} transition={{ duration: 0.2 }}>
                       <route.icon
                         className={`mr-3 h-4 w-4 ${
-                          isActive ? (type === "buyer" ? "text-[#1995AD]" : "text-[#A1D6E2]") : "text-gray-600"
+                          isActive ? (type === "buyer" ? "text-[#872CE4]" : "text-[#F58014]") : "text-gray-600"
                         }`}
                       />
                       <span className="text-sm">{route.label[type]}</span>
@@ -129,17 +129,17 @@ function SidebarNavComponent() {
                                 className={`flex items-center w-full pl-6 py-2 text-sm rounded-lg transition-all duration-300 ${
                                   pathname === href
                                     ? type === "buyer"
-                                      ? "bg-[#1995AD]/30 text-[#1995AD]"
-                                      : "bg-[#A1D6E2]/30 text-[#A1D6E2]"
-                                    : "text-gray-700 hover:bg-black/5 hover:text-gray-900"
+                                      ? "bg-violet-100 text-[#872CE4]"
+                                      : "bg-orange-100 text-[#F58014]"
+                                    : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
                                 }`}
                               >
                                 <div
                                   className={`w-1 h-1 rounded-full mr-2 ${
                                     pathname === href
                                       ? type === "buyer"
-                                        ? "bg-[#1995AD]"
-                                        : "bg-[#A1D6E2]"
+                                        ? "bg-[#872CE4]"
+                                        : "bg-[#F58014]"
                                       : "bg-gray-400"
                                   }`}
                                 />
@@ -154,18 +154,14 @@ function SidebarNavComponent() {
                                 className={`flex items-center w-full pl-6 py-2 text-sm rounded-lg transition-all duration-300 ${
                                   pathname === href
                                     ? type === "buyer"
-                                      ? "bg-[#1995AD]/30 text-[#1995AD]"
-                                      : "bg-[#A1D6E2]/30 text-[#A1D6E2]"
-                                    : "text-gray-700 hover:bg-black/5 hover:text-gray-900"
+                                      ? "bg-violet-100 text-[#872CE4]"
+                                      : "bg-orange-100 text-[#F58014]"
+                                    : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
                                 }`}
                               >
                                 <div
                                   className={`w-1 h-1 rounded-full mr-2 ${
-                                    pathname === href
-                                      ? type === "buyer"
-                                        ? "bg-[#1995AD]"
-                                        : "bg-[#A1D6E2]"
-                                      : "bg-gray-400"
+                                    pathname === href ? "bg-[#872CE4]" : "bg-gray-400"
                                   }`}
                                 />
                                 {label}
@@ -182,14 +178,14 @@ function SidebarNavComponent() {
                     className={`flex items-center py-2 px-3 rounded-lg transition-all duration-300 ${
                       isActive
                         ? type === "buyer"
-                          ? "bg-[#1995AD]/30 text-[#1995AD]"
-                          : "bg-[#A1D6E2]/30 text-[#A1D6E2]"
-                        : "text-gray-700 hover:bg-black/5 hover:text-gray-900"
+                          ? "bg-violet-100 text-[#872CE4]"
+                          : "bg-orange-100 text-[#F58014]"
+                        : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
                     }`}
                   >
                     <route.icon
                       className={`mr-3 h-4 w-4 ${
-                        isActive ? (type === "buyer" ? "text-[#1995AD]" : "text-[#A1D6E2]") : "text-gray-600"
+                        isActive ? (type === "buyer" ? "text-[#872CE4]" : "text-[#F58014]") : "text-gray-600"
                       }`}
                     />
                     <span className="text-sm">{route.label[type]}</span>
@@ -215,12 +211,12 @@ export function SidebarNav() {
   if (!mounted) return null
 
   return (
-    <aside className="fixed top-16 z-30 -ml-2 h-[calc(100vh-4rem)] w-full shrink-0 overflow-y-auto md:sticky md:block transition-all duration-500 bg-gray-50 border-r border-gray-200">
-      <ScrollArea className="py-6 pr-6 relative z-10">
+    <aside className="fixed left-0 top-16 z-30 h-[calc(100vh-4rem)] w-[250px] shrink-0 overflow-y-auto md:sticky md:block bg-white/80 backdrop-blur-sm border-r border-violet-100 rounded-r-xl">
+      <ScrollArea className="py-6 pr-6 relative z-10 h-full">
         <div className="flex items-center mb-8 pl-5">
-          <div className={`h-8 w-1 rounded-r-full mr-3 ${type === "buyer" ? "bg-[#1995AD]" : "bg-[#A1D6E2]"}`} />
+          <div className={`h-8 w-1 rounded-r-full mr-3 ${type === "buyer" ? "bg-[#872CE4]" : "bg-[#F58014]"}`} />
           <h1
-            className={`text-xl font-semibold tracking-tight ${type === "buyer" ? "text-[#1995AD]" : "text-[#A1D6E2]"}`}
+            className={`text-xl font-semibold tracking-tight ${type === "buyer" ? "text-[#872CE4]" : "text-[#F58014]"}`}
           >
             {type === "buyer" ? "Buyer " : "Seller "}
             <span className="text-gray-600 font-normal">Dashboard</span>
