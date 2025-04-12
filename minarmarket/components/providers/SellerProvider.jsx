@@ -1,6 +1,6 @@
 "use client";
 
-import { useLocalStorage } from "@uidotdev/usehooks";
+import { useLocalStorage } from 'usehooks-ts';
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 

@@ -12,16 +12,19 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { useRouter } from "next/navigation"
-import { useState, useEffect } from "react"
+import { useState, useEffect, Suspense } from "react"
 import { SearchBar } from "@/components/search-bar"
-import { useLocalStorage } from "@uidotdev/usehooks"
+import { useLocalStorage } from 'usehooks-ts'
+import { getUserDetails } from "@/lib/SessionManager"
 
-export function Header() {
-  const [token, setToken] = useState(null)
+function HeaderComponent() {
+  // const [token, setToken] = useState(null)
+  // const [token] = useLocalStorage('token', null)
   const [type,setType] = useLocalStorage("type", "buyer")
   const router = useRouter()
   const [mounted, setMounted] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const userdetail = getUserDetails()
 
   // Initialize type from localStorage after component mounts
   // useEffect(() => {
@@ -37,17 +40,17 @@ export function Header() {
   // }, [])
 
   // Subscribe to type-change events from other components
-  useEffect(() => {
-    const handleTypeChange = (e) => {
-      setType(e.detail.type)
-    }
+  // useEffect(() => {
+  //   const handleTypeChange = (e) => {
+  //     setType(e.detail.type)
+  //   }
     
-    window.addEventListener('user-type-changed', handleTypeChange)
+  //   window.addEventListener('user-type-changed', handleTypeChange)
     
-    return () => {
-      window.removeEventListener('user-type-changed', handleTypeChange)
-    }
-  }, [])
+  //   return () => {
+  //     window.removeEventListener('user-type-changed', handleTypeChange)
+  //   }
+  // }, [])
 
   // Update localStorage when type changes
   // useEffect(() => {
@@ -129,25 +132,16 @@ export function Header() {
         </div>
 
         <div className="flex items-center gap-4">
-          <div className="relative hidden md:block">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-            <Input
-              type="search"
-              placeholder="Search for products..."
-              className="w-[300px] lg:w-[500px] pl-10 bg-white border-violet-200 text-gray-800 placeholder:text-gray-400 focus:border-violet-300 focus:ring-violet-200"
-            />
-          </div>
-
           <Button
             onClick={() => handleTypeChange(type === "buyer" ? "seller" : "buyer")}
             className={`hidden md:flex border-0 text-white ${
               type === "buyer" ? "bg-[#872CE4] hover:bg-[#872CE4]/90" : "bg-[#F58014] hover:bg-[#F58014]/90"
-            } rounded-full`}
+            } rounded-md`}
           >
             Switch to {type === "buyer" ? "Selling" : "Buying"}
           </Button>
 
-          {token ? (
+          {userdetail ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
@@ -168,7 +162,6 @@ export function Header() {
                 <DropdownMenuItem className="hover:bg-violet-50 hover:text-[#872CE4] rounded-lg my-1 cursor-pointer">
                   Settings
                 </DropdownMenuItem>
-                <DropdownMenuSeparator className="bg-violet-100" />
                 <DropdownMenuItem className="hover:bg-violet-50 hover:text-[#872CE4] rounded-lg my-1 cursor-pointer">
                   <Button
                     onClick={() => {
@@ -233,19 +226,14 @@ export function Header() {
                 About Us
               </Link>
             </nav>
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-              <Input
-                type="search"
-                placeholder="Search for products..."
-                className="w-full pl-10 bg-white border-violet-200 text-gray-800 placeholder:text-gray-400 focus:border-violet-300"
-              />
+            <div className="relative mb-6">
+              <SearchBar className="w-full" />
             </div>
             <Button
               onClick={() => handleTypeChange(type === "buyer" ? "seller" : "buyer")}
               className={`w-full text-white ${
                 type === "buyer" ? "bg-[#872CE4] hover:bg-[#872CE4]/90" : "bg-[#F58014] hover:bg-[#F58014]/90"
-              } rounded-full`}
+              } rounded-md`}
             >
               Switch to {type === "buyer" ? "Selling" : "Buying"}
             </Button>
@@ -256,3 +244,9 @@ export function Header() {
   )
 }
 
+export function Header() {
+  return (
+    // <Suspense fallback={<div className="h-16" />}>
+      <HeaderComponent />
+      // </Suspense>
+  )}

@@ -6,7 +6,7 @@ import { Search } from "lucide-react";
 import { useDebouncedCallback } from "use-debounce";
 import Link from "next/link";
 
-export function SearchBar({ className }) {
+export function SearchBar({ className, onSearch }) {
   const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -73,7 +73,11 @@ export function SearchBar({ className }) {
   const handleSearch = (e) => {
     e.preventDefault();
     if (query.trim()) {
-      router.push(`/search?q=${encodeURIComponent(query)}`);
+      if (onSearch) {
+        onSearch(query);
+      } else {
+        router.push(`/search?q=${encodeURIComponent(query)}`);
+      }
       setShowSuggestions(false);
     }
   };
@@ -81,43 +85,41 @@ export function SearchBar({ className }) {
   return (
     <div className={`relative ${className}`} ref={searchRef}>
       <form onSubmit={handleSearch} className="flex items-center">
-        <div className="relative w-full">
+        <div className="relative w-full flex items-center">
+          <Search className="absolute left-3 z-10 text-gray-400 h-4 w-4" />
           <input
             type="text"
             placeholder="Search products and services..."
             value={query}
             onChange={handleInputChange}
             onFocus={() => query.trim() && setShowSuggestions(true)}
-            className="w-full pl-10 pr-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:border-purple-400 focus:ring-1 focus:ring-purple-400"
+            className="w-full h-9 pl-10 pr-16 py-2 rounded-md border border-gray-300 focus:outline-none focus:border-purple-400 focus:ring-1 focus:ring-purple-400"
           />
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+          <button
+            type="submit"
+            className="absolute right-0 h-full bg-purple-600 hover:bg-purple-700 text-white px-4 rounded-r-md"
+          >
+            Search
+          </button>
         </div>
-        <button
-          type="submit"
-          className="ml-2 bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-full"
-        >
-          Search
-        </button>
       </form>
 
       {showSuggestions && suggestions.length > 0 && (
         <div className="absolute z-50 mt-1 w-full bg-white rounded-md shadow-lg max-h-60 overflow-y-auto">
           <ul className="py-1">
             {suggestions.map((suggestion) => (
-              <li key={`${suggestion.type}-${suggestion.id}`}>
+              <li key={suggestion}>
                 <Link
-                  href={`/search?q=${encodeURIComponent(suggestion.title)}`}
+                  href={`/search?q=${encodeURIComponent(suggestion)}`}
                   className="block px-4 py-2 hover:bg-purple-50 cursor-pointer text-sm"
                   onClick={() => {
-                    setQuery(suggestion.title);
+                    setQuery(suggestion);
                     setShowSuggestions(false);
                   }}
                 >
                   <div className="flex items-center">
-                    <span className="flex-1">{suggestion.title}</span>
-                    <span className="text-xs text-gray-500 capitalize">
-                      {suggestion.type}
-                    </span>
+                    <span className="flex-1">{suggestion}</span>
+                    
                   </div>
                 </Link>
               </li>

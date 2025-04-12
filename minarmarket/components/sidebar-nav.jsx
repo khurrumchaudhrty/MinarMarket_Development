@@ -7,7 +7,7 @@ import { useState, useEffect } from "react"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { ScrollArea } from "./ui/scroll-area"
 import { motion } from "framer-motion"
-import { useLocalStorage } from "@uidotdev/usehooks"
+import { useLocalStorage } from 'usehooks-ts'
 
 function SidebarNavComponent() {
   const pathname = usePathname()

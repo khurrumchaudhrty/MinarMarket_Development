@@ -2,7 +2,7 @@
 import { Header } from "@/components/header";
 import { SidebarNav } from "@/components/sidebar-nav";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { useLocalStorage } from "@uidotdev/usehooks";
+import { useLocalStorage } from 'usehooks-ts';
 import { ProposalForm } from "@/components/service-proposal-form"; // Ensure this component exists
 
 export default function ServiceProposal() {

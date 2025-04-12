@@ -3,12 +3,13 @@ import { useState, useEffect } from "react"
 import { Header } from "@/components/header"
 import { SidebarNav } from "@/components/sidebar-nav"
 import { ProductList } from "@/components/data-list"
-import { useLocalStorage } from "@uidotdev/usehooks"
+import { useLocalStorage } from 'usehooks-ts'
 import Link from "next/link"
 import { Search, Filter, ChevronDown } from 'lucide-react'
 import { motion } from "framer-motion"
 import { PlusCircle } from 'lucide-react'
 import { Button } from "@/components/ui/button"
+import { SearchBar } from "@/components/search-bar"
 
 export default function MyProductPage() {
   const [type] = useLocalStorage("type", "seller")
@@ -53,17 +54,9 @@ export default function MyProductPage() {
             <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
               {/* Search Bar */}
               <div className="relative w-full md:w-64">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                <input
-                  type="text"
-                  placeholder="Search products..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 rounded-full border border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-0 text-sm"
-                  style={{
-                    boxShadow: "0 2px 5px rgba(0,0,0,0.05)",
-                    focusRing: primaryColor,
-                  }}
+                <SearchBar 
+                  className="w-full" 
+                  onSearch={(value) => setSearchQuery(value)}
                 />
               </div>
 

@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { UserCircle } from 'lucide-react'
 import { useRouter } from "next/navigation"
-import { useLocalStorage } from "@uidotdev/usehooks"
+import { useLocalStorage } from 'usehooks-ts'
 
 export function AdminHeader() {
   const token = localStorage.getItem('token')
