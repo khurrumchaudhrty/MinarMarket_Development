@@ -18,8 +18,8 @@ import { useLocalStorage } from 'usehooks-ts'
 import { getUserDetails } from "@/lib/SessionManager"
 
 function HeaderComponent() {
-  // const [token, setToken] = useState(null)
-  // const [token] = useLocalStorage('token', null)
+  // For storing auth token
+  const [token, setToken] = useLocalStorage('token', null)
   const [type,setType] = useLocalStorage("type", "buyer")
   const router = useRouter()
   const [mounted, setMounted] = useState(false)
