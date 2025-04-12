@@ -6,6 +6,7 @@ import { Search, Menu, X, UserCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { useRouter } from "next/navigation"
+import { SearchBar } from "@/components/search-bar"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -90,11 +91,7 @@ export function SiteHeader() {
 
             {/* Search Bar - Desktop */}
             <div className="relative hidden lg:block w-full max-w-md ml-4">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-              <Input
-                placeholder="Search for products..."
-                className="pl-10 border-gray-200 focus:border-[#872CE4] focus:ring-[#872CE4] w-full"
-              />
+              <SearchBar className="w-full" />
             </div>
 
             {/* Auth Buttons/User Controls based on auth state */}
@@ -199,8 +196,7 @@ export function SiteHeader() {
 
             {/* Search Bar - Mobile */}
             <div className="relative mb-6">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-              <Input placeholder="Search for products..." className="pl-10 border-gray-200 w-full" />
+              <SearchBar className="w-full" />
             </div>
 
             {/* Auth Buttons/User Controls for Mobile */}
