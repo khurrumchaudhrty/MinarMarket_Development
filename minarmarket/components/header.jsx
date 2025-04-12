@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { useRouter } from "next/navigation"
 import { useState, useEffect } from "react"
+import { SearchBar } from "@/components/search-bar"
 
 export function Header() {
   const [token, setToken] = useState(null)
@@ -120,6 +121,10 @@ export function Header() {
               </Link>
             </nav>
           </div>
+        </div>
+
+        <div className="hidden lg:flex flex-1 items-center justify-center">
+          <SearchBar className="max-w-md w-full" />
         </div>
 
         <div className="flex items-center gap-4">
