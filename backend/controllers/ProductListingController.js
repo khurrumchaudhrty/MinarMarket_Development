@@ -1,5 +1,6 @@
 const ProductListing = require("../models/ProductListing"); // Import the ProductListing model
 const mongoose = require("mongoose");
+const { addEmbeddingToDocument } = require("../utils/embeddingService");
 
 // Controller to handle adding a new product listing
 exports.addProductListing = async (req, res) => {
@@ -30,15 +31,34 @@ exports.addProductListing = async (req, res) => {
       });
     }
 
-    // Create a new product listing
-    const newProduct = new ProductListing({
+    // Create a new product listing (with embedding if middleware added it)
+    const productData = {
       title,
       description,
       price,
       category,
       images,
       listerId: userId,
-    });
+    };
+
+    // If embedding middleware was successful, it will be in req.body
+    if (req.body.embedding) {
+      productData.embedding = req.body.embedding;
+    } else {
+      // If middleware failed, try to generate embedding here as fallback
+      try {
+        const docWithEmbedding = await addEmbeddingToDocument(productData);
+        if (docWithEmbedding.embedding) {
+          productData.embedding = docWithEmbedding.embedding;
+        }
+      } catch (embeddingError) {
+        console.error("Fallback embedding generation failed:", embeddingError);
+        // Continue without embedding if generation fails
+      }
+    }
+
+    // Create new product with the data including embedding if available
+    const newProduct = new ProductListing(productData);
 
     // Save to the database
     await newProduct.save();
@@ -208,17 +228,40 @@ exports.updateProductListing = async (req, res) => {
       });
     }
 
+    // Prepare update data
+    const updateData = {
+      title,
+      description,
+      price,
+      category,
+      images,
+      status: "Pending",
+    };
+
+    // If embedding middleware was successful, add it to the update
+    if (req.body.embedding) {
+      updateData.embedding = req.body.embedding;
+    } else {
+      // If middleware failed, try to generate embedding here as fallback
+      try {
+        const docWithEmbedding = await addEmbeddingToDocument({
+          title,
+          description,
+          category,
+        });
+        if (docWithEmbedding.embedding) {
+          updateData.embedding = docWithEmbedding.embedding;
+        }
+      } catch (embeddingError) {
+        console.error("Fallback embedding generation failed:", embeddingError);
+        // Continue without updating embedding if generation fails
+      }
+    }
+
     // Find the product by ID and update its details
     const updatedProduct = await ProductListing.findByIdAndUpdate(
       objectId,
-      {
-        title,
-        description,
-        price,
-        category,
-        images,
-        status: "Pending",
-      },
+      updateData,
       { new: true } // Return the updated document
     );
 

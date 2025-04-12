@@ -14,26 +14,27 @@ import {
 import { useRouter } from "next/navigation"
 import { useState, useEffect } from "react"
 import { SearchBar } from "@/components/search-bar"
+import { useLocalStorage } from "@uidotdev/usehooks"
 
 export function Header() {
   const [token, setToken] = useState(null)
-  const [type, setType] = useState("buyer") // Default value
+  const [type,setType] = useLocalStorage("type", "buyer")
   const router = useRouter()
   const [mounted, setMounted] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   // Initialize type from localStorage after component mounts
-  useEffect(() => {
-    setMounted(true)
-    // Get localStorage values only after component is mounted on client
-    if (typeof window !== "undefined") {
-      const storedType = localStorage.getItem("type")
-      if (storedType) {
-        setType(storedType)
-      }
-      setToken(localStorage.getItem("token"))
-    }
-  }, [])
+  // useEffect(() => {
+  //   setMounted(true)
+  //   // Get localStorage values only after component is mounted on client
+  //   if (typeof window !== "undefined") {
+  //     const storedType = localStorage.getItem("type")
+  //     if (storedType) {
+  //       setType(storedType)
+  //     }
+  //     setToken(localStorage.getItem("token"))
+  //   }
+  // }, [])
 
   // Subscribe to type-change events from other components
   useEffect(() => {
@@ -49,30 +50,30 @@ export function Header() {
   }, [])
 
   // Update localStorage when type changes
-  useEffect(() => {
-    if (mounted && typeof window !== "undefined") {
-      localStorage.setItem("type", type)
-    }
-  }, [type, mounted])
+  // useEffect(() => {
+  //   if (mounted && typeof window !== "undefined") {
+  //     localStorage.setItem("type", type)
+  //   }
+  // }, [type, mounted])
 
   const handleTypeChange = (newType) => {
     setType(newType)
     
-    // Update localStorage
-    if (typeof window !== "undefined") {
-      localStorage.setItem("type", newType)
+    // // Update localStorage
+    // if (typeof window !== "undefined") {
+    //   localStorage.setItem("type", newType)
       
-      // Dispatch a custom event to notify other components
-      const event = new CustomEvent('user-type-changed', { 
-        detail: { type: newType } 
-      })
-      window.dispatchEvent(event)
-    }
+    //   // Dispatch a custom event to notify other components
+    //   const event = new CustomEvent('user-type-changed', { 
+    //     detail: { type: newType } 
+    //   })
+    //   window.dispatchEvent(event)
+    // }
   }
 
-  if (!mounted) {
-    return null
-  }
+  // if (!mounted) {
+  //   return null
+  // }
 
   return (
     <header

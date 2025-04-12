@@ -11,10 +11,11 @@ const {
   fetchLandingPageServices,
   fetchCategoryLandingPage
 } = require("../controllers/ServiceListingController");
+const { addEmbedding } = require('../middlewares/embeddingMiddleware');
 
 
 // Route to add a new service listing
-router.post("/", addServiceListing);
+router.post("/", addEmbedding, addServiceListing);
 
 // Route to show all approved service listings
 router.get("/", showServiceListings);
@@ -25,7 +26,7 @@ router.get("/my-listings", showMyServiceListings);
 router.get("/fetch-service-details/:serviceId", fetchServiceListing);
 
 // Route to update a specific service listing
-router.put("/updateService/:serviceId", updateServiceListing);
+router.put("/updateService/:serviceId", addEmbedding, updateServiceListing);
 
 router.post('/fetch-category/:category', fetchServiceCategoryListings);
 

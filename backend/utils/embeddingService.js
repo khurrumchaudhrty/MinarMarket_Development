@@ -8,11 +8,14 @@ let extractor = null;
 
 async function createEmbedding(text) {
   try {
+    console.log('Creating embedding for text:', text.substring(0, 50) + '...');
+    
     // Initialize the pipeline only once
     if (!extractor) {
+      console.log('Initializing feature extraction pipeline...');
       // Use a lightweight model suitable for CPU inference
       extractor = await pipeline('feature-extraction', 'Xenova/all-MiniLM-L6-v2');
-      console.log('Feature extraction pipeline loaded.');
+      console.log('Feature extraction pipeline loaded successfully.');
     }
 
     // Generate embedding
@@ -20,13 +23,13 @@ async function createEmbedding(text) {
 
     // The output contains the embedding vector in output.data
     // Convert Float32Array to a regular array if necessary for storage/compatibility
-    console.log('Embedding created successfully.');
+    console.log('Embedding created successfully. Dimensions:', output.data.length);
     return Array.from(output.data);
     
   } catch (error) {
-    console.error('Error creating embedding locally:', error);
-    // Consider if returning null or throwing the error is better
-    // Returning null might mask issues, throwing might stop processes that depend on embeddings
+    console.error('Error creating embedding locally:', error.message);
+    console.error('Error stack:', error.stack);
+    // Return null so the application can fall back to text search
     return null;
   }
 }

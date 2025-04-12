@@ -57,43 +57,38 @@ export default function DashboardPage() {
   const [userDetails, setUserDetails] = useState(getUserDetails())
   const userId = userDetails?.userId || null
   const [type, setType] = useState("buyer") // Default value
-  const [mounted, setMounted] = useState(false)
+  // const [mounted, setMounted] = useState(false)
 
   const [selectedCategory, setSelectedCategory] = useState(null)
   const [categoryItems, setCategoryItems] = useState([])
   const [categoryType, setCategoryType] = useState(null)
 
   // Initialize type from localStorage after component mounts
-  useEffect(() => {
-    setMounted(true)
-    // Get localStorage values only after component is mounted on client
-    if (typeof window !== "undefined") {
-      const storedType = localStorage.getItem("type")
-      if (storedType) {
-        setType(storedType)
-      }
-    }
-  }, [])
+  // useEffect(() => {
+  //   setMounted(true)
+  //   // Get localStorage values only after component is mounted on client
+  //   if (typeof window !== "undefined") {
+  //     const storedType = localStorage.getItem("type")
+  //     if (storedType) {
+  //       setType(storedType)
+  //     }
+  //   }
+  // }, [])
 
-  // Subscribe to type-change events from other components
-  useEffect(() => {
-    const handleTypeChange = (e) => {
-      setType(e.detail.type)
-    }
+  // // Subscribe to type-change events from other components
+  // useEffect(() => {
+  //   const handleTypeChange = (e) => {
+  //     setType(e.detail.type)
+  //   }
     
-    window.addEventListener('user-type-changed', handleTypeChange)
+  //   window.addEventListener('user-type-changed', handleTypeChange)
     
-    return () => {
-      window.removeEventListener('user-type-changed', handleTypeChange)
-    }
-  }, [])
+  //   return () => {
+  //     window.removeEventListener('user-type-changed', handleTypeChange)
+  //   }
+  // }, [])
 
-  // Update localStorage when type changes
-  useEffect(() => {
-    if (mounted && typeof window !== "undefined") {
-      localStorage.setItem("type", type)
-    }
-  }, [type, mounted])
+  
 
   const handleTypeChange = (newType) => {
     setType(newType)
@@ -160,9 +155,9 @@ export default function DashboardPage() {
   const lightBgClass = type === "buyer" ? "from-violet-50 to-white" : "from-orange-50 to-white"
   const accentBgClass = type === "buyer" ? "bg-violet-100" : "bg-orange-100"
 
-  if (!mounted) {
-    return null;
-  }
+  // if (!mounted) {
+  //   return null;
+  // }
 
   return (
     <div className={`min-h-screen bg-gradient-to-br ${lightBgClass}`}>
