@@ -3,7 +3,7 @@
 import { Header } from "@/components/header"
 import { SidebarNav } from "@/components/sidebar-nav"
 import { getUserDetails } from "@/lib/SessionManager"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { ProductGrid } from "@/components/data-grid"
 import {
   FaLaptop,
@@ -27,7 +27,6 @@ import {
 } from "react-icons/fa"
 import { ServiceCard } from "@/components/product-card"
 import { ProductCard } from "@/components/product-card"
-import { useLocalStorage } from "@uidotdev/usehooks"
 import { ArrowLeft, Sparkles } from "lucide-react"
 
 const productCategories = [
@@ -57,11 +56,59 @@ const serviceCategories = [
 export default function DashboardPage() {
   const [userDetails, setUserDetails] = useState(getUserDetails())
   const userId = userDetails?.userId || null
-  const [type, setType] = useLocalStorage("type", "buyer")
+  const [type, setType] = useState("buyer") // Default value
+  const [mounted, setMounted] = useState(false)
 
   const [selectedCategory, setSelectedCategory] = useState(null)
   const [categoryItems, setCategoryItems] = useState([])
   const [categoryType, setCategoryType] = useState(null)
+
+  // Initialize type from localStorage after component mounts
+  useEffect(() => {
+    setMounted(true)
+    // Get localStorage values only after component is mounted on client
+    if (typeof window !== "undefined") {
+      const storedType = localStorage.getItem("type")
+      if (storedType) {
+        setType(storedType)
+      }
+    }
+  }, [])
+
+  // Subscribe to type-change events from other components
+  useEffect(() => {
+    const handleTypeChange = (e) => {
+      setType(e.detail.type)
+    }
+    
+    window.addEventListener('user-type-changed', handleTypeChange)
+    
+    return () => {
+      window.removeEventListener('user-type-changed', handleTypeChange)
+    }
+  }, [])
+
+  // Update localStorage when type changes
+  useEffect(() => {
+    if (mounted && typeof window !== "undefined") {
+      localStorage.setItem("type", type)
+    }
+  }, [type, mounted])
+
+  const handleTypeChange = (newType) => {
+    setType(newType)
+    
+    // Update localStorage
+    if (typeof window !== "undefined") {
+      localStorage.setItem("type", newType)
+      
+      // Dispatch a custom event to notify other components
+      const event = new CustomEvent('user-type-changed', { 
+        detail: { type: newType } 
+      })
+      window.dispatchEvent(event)
+    }
+  }
 
   const fetchProductsByCategory = async (category) => {
     try {
@@ -112,6 +159,10 @@ export default function DashboardPage() {
   const secondaryColor = type === "buyer" ? "#9F5AE5" : "#FF9D4D"
   const lightBgClass = type === "buyer" ? "from-violet-50 to-white" : "from-orange-50 to-white"
   const accentBgClass = type === "buyer" ? "bg-violet-100" : "bg-orange-100"
+
+  if (!mounted) {
+    return null;
+  }
 
   return (
     <div className={`min-h-screen bg-gradient-to-br ${lightBgClass}`}>

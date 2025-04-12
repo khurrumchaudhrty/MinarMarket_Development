@@ -5,19 +5,46 @@ import { usePathname } from "next/navigation"
 import { Settings, ShoppingBag, MessageCircle, Store, ClipboardList, Send, Inbox } from "lucide-react"
 import { useState, useEffect } from "react"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import { useLocalStorage } from "@uidotdev/usehooks"
 import { ScrollArea } from "./ui/scroll-area"
 import { motion } from "framer-motion"
 
 function SidebarNavComponent() {
   const pathname = usePathname()
   const [openDropdown, setOpenDropdown] = useState(null)
-  const [type] = useLocalStorage("type", "buyer")
+  const [type, setType] = useState("buyer") // Default value
   const [mounted, setMounted] = useState(false)
 
+  // Initialize type from localStorage after component mounts
   useEffect(() => {
     setMounted(true)
+    // Get localStorage values only after component is mounted on client
+    if (typeof window !== "undefined") {
+      const storedType = localStorage.getItem("type")
+      if (storedType) {
+        setType(storedType)
+      }
+    }
   }, [])
+
+  // Subscribe to type-change events from other components
+  useEffect(() => {
+    const handleTypeChange = (e) => {
+      setType(e.detail.type)
+    }
+    
+    window.addEventListener('user-type-changed', handleTypeChange)
+    
+    return () => {
+      window.removeEventListener('user-type-changed', handleTypeChange)
+    }
+  }, [])
+
+  // Update localStorage when type changes
+  useEffect(() => {
+    if (mounted && typeof window !== "undefined") {
+      localStorage.setItem("type", type)
+    }
+  }, [type, mounted])
 
   const routes = [
     {
@@ -201,12 +228,55 @@ function SidebarNavComponent() {
 }
 
 export function SidebarNav() {
-  const [type] = useLocalStorage("type", "buyer")
+  const [type, setType] = useState("buyer") // Default value
   const [mounted, setMounted] = useState(false)
 
+  // Initialize type from localStorage after component mounts
   useEffect(() => {
     setMounted(true)
+    // Get localStorage values only after component is mounted on client
+    if (typeof window !== "undefined") {
+      const storedType = localStorage.getItem("type")
+      if (storedType) {
+        setType(storedType)
+      }
+    }
   }, [])
+
+  // Subscribe to type-change events from other components
+  useEffect(() => {
+    const handleTypeChange = (e) => {
+      setType(e.detail.type)
+    }
+    
+    window.addEventListener('user-type-changed', handleTypeChange)
+    
+    return () => {
+      window.removeEventListener('user-type-changed', handleTypeChange)
+    }
+  }, [])
+
+  // Update localStorage when type changes
+  useEffect(() => {
+    if (mounted && typeof window !== "undefined") {
+      localStorage.setItem("type", type)
+    }
+  }, [type, mounted])
+
+  const handleTypeChange = (newType) => {
+    setType(newType)
+    
+    // Update localStorage
+    if (typeof window !== "undefined") {
+      localStorage.setItem("type", newType)
+      
+      // Dispatch a custom event to notify other components
+      const event = new CustomEvent('user-type-changed', { 
+        detail: { type: newType } 
+      })
+      window.dispatchEvent(event)
+    }
+  }
 
   if (!mounted) return null
 
