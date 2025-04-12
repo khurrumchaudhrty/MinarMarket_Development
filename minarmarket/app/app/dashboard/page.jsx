@@ -5,6 +5,7 @@ import { SidebarNav } from "@/components/sidebar-nav"
 import { getUserDetails } from "@/lib/SessionManager"
 import { useState, useEffect } from "react"
 import { ProductGrid } from "@/components/data-grid"
+import { useLocalStorage } from 'usehooks-ts'
 import {
   FaLaptop,
   FaTshirt,
@@ -56,39 +57,39 @@ const serviceCategories = [
 export default function DashboardPage() {
   const [userDetails, setUserDetails] = useState(getUserDetails())
   const userId = userDetails?.userId || null
-  const [type, setType] = useState("buyer") // Default value
-  // const [mounted, setMounted] = useState(false)
-
+  const [type, setType] = useLocalStorage("type", "buyer")
+  
   const [selectedCategory, setSelectedCategory] = useState(null)
   const [categoryItems, setCategoryItems] = useState([])
   const [categoryType, setCategoryType] = useState(null)
 
-  // Initialize type from localStorage after component mounts
-  // useEffect(() => {
-  //   setMounted(true)
-  //   // Get localStorage values only after component is mounted on client
-  //   if (typeof window !== "undefined") {
-  //     const storedType = localStorage.getItem("type")
-  //     if (storedType) {
-  //       setType(storedType)
-  //     }
-  //   }
-  // }, [])
-
-  // // Subscribe to type-change events from other components
-  // useEffect(() => {
-  //   const handleTypeChange = (e) => {
-  //     setType(e.detail.type)
-  //   }
+  // Listen for storage changes to update the type immediately
+  useEffect(() => {
+    const handleStorageChange = (e) => {
+      if (e.key === 'type') {
+        setType(e.newValue || 'buyer');
+      }
+    };
     
-  //   window.addEventListener('user-type-changed', handleTypeChange)
+    window.addEventListener('storage', handleStorageChange);
     
-  //   return () => {
-  //     window.removeEventListener('user-type-changed', handleTypeChange)
-  //   }
-  // }, [])
-
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, [setType]);
   
+  // Also listen for the custom event from header
+  useEffect(() => {
+    const handleTypeChange = (e) => {
+      setType(e.detail.type);
+    };
+    
+    window.addEventListener('user-type-changed', handleTypeChange);
+    
+    return () => {
+      window.removeEventListener('user-type-changed', handleTypeChange);
+    };
+  }, [setType]);
 
   const handleTypeChange = (newType) => {
     setType(newType)
@@ -154,10 +155,6 @@ export default function DashboardPage() {
   const secondaryColor = type === "buyer" ? "#9F5AE5" : "#FF9D4D"
   const lightBgClass = type === "buyer" ? "from-violet-50 to-white" : "from-orange-50 to-white"
   const accentBgClass = type === "buyer" ? "bg-violet-100" : "bg-orange-100"
-
-  // if (!mounted) {
-  //   return null;
-  // }
 
   return (
     <div className={`min-h-screen bg-gradient-to-br ${lightBgClass}`}>

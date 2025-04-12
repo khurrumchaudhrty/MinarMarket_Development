@@ -62,16 +62,13 @@ function HeaderComponent() {
   const handleTypeChange = (newType) => {
     setType(newType)
     
-    // // Update localStorage
-    // if (typeof window !== "undefined") {
-    //   localStorage.setItem("type", newType)
-      
-    //   // Dispatch a custom event to notify other components
-    //   const event = new CustomEvent('user-type-changed', { 
-    //     detail: { type: newType } 
-    //   })
-    //   window.dispatchEvent(event)
-    // }
+    // Dispatch a custom event to notify other components
+    if (typeof window !== "undefined") {
+      const event = new CustomEvent('user-type-changed', { 
+        detail: { type: newType } 
+      })
+      window.dispatchEvent(event)
+    }
   }
 
   // if (!mounted) {
