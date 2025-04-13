@@ -11,7 +11,7 @@ const {
   fetchLandingPageServices,
   fetchCategoryLandingPage
 } = require("../controllers/ServiceListingController");
-const { addEmbedding } = require('../middlewares/embeddingMiddleware');
+const { addEmbedding } = require('../middleware/embeddingMiddleware');
 
 
 // Route to add a new service listing

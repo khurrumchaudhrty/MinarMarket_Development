@@ -236,8 +236,31 @@ async function combinedSearch(queryText, limit = 20) {
       searchServices(queryText, serviceLimit),
     ]);
 
-    // Combine and return results
+    // Add a type field to differentiate between products and services
+    const productsWithType = products.map(product => ({
+      ...product,
+      itemType: 'product'
+    }));
+    
+    const servicesWithType = services.map(service => ({
+      ...service,
+      itemType: 'service'
+    }));
+
+    // Combine all results
+    const combinedResults = [...productsWithType, ...servicesWithType];
+    
+    // Sort by similarity score (higher scores are better)
+    const sortedResults = combinedResults.sort((a, b) => {
+      return (b.score || 0) - (a.score || 0);
+    });
+
+    // Limit to the requested number of results
+    const limitedResults = sortedResults.slice(0, limit);
+
+    // Return both combined results and separate arrays for backward compatibility
     return {
+      combined: limitedResults,
       products,
       services,
     };

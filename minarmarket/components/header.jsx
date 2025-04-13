@@ -19,7 +19,7 @@ import { getUserDetails } from "@/lib/SessionManager"
 
 function HeaderComponent() {
   // For storing auth token
-  const [token, setToken] = useLocalStorage('token', null)
+  // const [token, setToken] = useLocalStorage('token', null)
   const [type,setType] = useLocalStorage("type", "buyer")
   const router = useRouter()
   const [mounted, setMounted] = useState(false)
@@ -62,13 +62,13 @@ function HeaderComponent() {
   const handleTypeChange = (newType) => {
     setType(newType)
     
-    // Dispatch a custom event to notify other components
-    if (typeof window !== "undefined") {
-      const event = new CustomEvent('user-type-changed', { 
-        detail: { type: newType } 
-      })
-      window.dispatchEvent(event)
-    }
+    // // Dispatch a custom event to notify other components
+    // if (typeof window !== "undefined") {
+    //   const event = new CustomEvent('user-type-changed', { 
+    //     detail: { type: newType } 
+    //   })
+    //   window.dispatchEvent(event)
+    // }
   }
 
   // if (!mounted) {
@@ -129,14 +129,16 @@ function HeaderComponent() {
         </div>
 
         <div className="flex items-center gap-4">
-          <Button
-            onClick={() => handleTypeChange(type === "buyer" ? "seller" : "buyer")}
-            className={`hidden md:flex border-0 text-white ${
-              type === "buyer" ? "bg-[#872CE4] hover:bg-[#872CE4]/90" : "bg-[#F58014] hover:bg-[#F58014]/90"
-            } rounded-md`}
-          >
-            Switch to {type === "buyer" ? "Selling" : "Buying"}
-          </Button>
+          {userdetail && (
+            <Button
+              onClick={() => handleTypeChange(type === "buyer" ? "seller" : "buyer")}
+              className={`hidden md:flex border-0 text-white ${
+                type === "buyer" ? "bg-[#872CE4] hover:bg-[#872CE4]/90" : "bg-[#F58014] hover:bg-[#F58014]/90"
+              } rounded-md`}
+            >
+              Switch to {type === "buyer" ? "Selling" : "Buying"}
+            </Button>
+          )}
 
           {userdetail ? (
             <DropdownMenu>
@@ -163,7 +165,7 @@ function HeaderComponent() {
                   <Button
                     onClick={() => {
                       localStorage.removeItem("token")
-                      setToken(null)
+                      // setToken(null)
                       router.push("/signin")
                     }}
                     variant="ghost"

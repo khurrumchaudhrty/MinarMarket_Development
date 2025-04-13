@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Search } from "lucide-react";
 import { useDebouncedCallback } from "use-debounce";
 import Link from "next/link";
+import { useLocalStorage } from "usehooks-ts"; // Import useLocalStorage
 
 export function SearchBar({ className, onSearch }) {
   const [query, setQuery] = useState("");
@@ -13,6 +14,13 @@ export function SearchBar({ className, onSearch }) {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const router = useRouter();
   const searchRef = useRef(null);
+  const [type] = useLocalStorage("type", "buyer"); // Get user type
+
+  // Define colors based on type
+  const primaryColorHex = type === "buyer" ? "#872CE4" : "#F58014"; // Hex for inline style
+  const primaryHoverColorHex = type === "buyer" ? "#7324c2" : "#d97012"; // Hex for inline style hover
+  const focusRingColor = type === "buyer" ? "focus:border-purple-400 focus:ring-purple-400" : "focus:border-orange-400 focus:ring-orange-400";
+  const suggestionHoverBg = type === "buyer" ? "hover:bg-purple-50" : "hover:bg-orange-50";
 
   // Debounce the search to prevent too many API calls
   const debouncedSearch = useDebouncedCallback(async (searchQuery) => {
@@ -93,11 +101,14 @@ export function SearchBar({ className, onSearch }) {
             value={query}
             onChange={handleInputChange}
             onFocus={() => query.trim() && setShowSuggestions(true)}
-            className="w-full h-9 pl-10 pr-16 py-2 rounded-md border border-gray-300 focus:outline-none focus:border-purple-400 focus:ring-1 focus:ring-purple-400"
+            className={`w-full h-9 pl-10 pr-16 py-2 rounded-md border border-gray-300 focus:outline-none ${focusRingColor} focus:ring-1`} // Apply dynamic focus color
           />
           <button
             type="submit"
-            className="absolute right-0 h-full bg-purple-600 hover:bg-purple-700 text-white px-4 rounded-r-md"
+            style={{ backgroundColor: primaryColorHex }} // Apply dynamic background color via inline style
+            className={`absolute right-0 h-full text-white px-4 rounded-r-md`} // Removed bg and hover classes
+            onMouseOver={(e) => e.currentTarget.style.backgroundColor = primaryHoverColorHex} // Apply dynamic hover color
+            onMouseOut={(e) => e.currentTarget.style.backgroundColor = primaryColorHex} // Revert to primary color
           >
             Search
           </button>
@@ -111,7 +122,7 @@ export function SearchBar({ className, onSearch }) {
               <li key={suggestion}>
                 <Link
                   href={`/search?q=${encodeURIComponent(suggestion)}`}
-                  className="block px-4 py-2 hover:bg-purple-50 cursor-pointer text-sm"
+                  className={`block px-4 py-2 ${suggestionHoverBg} cursor-pointer text-sm`} // Apply dynamic suggestion hover color
                   onClick={() => {
                     setQuery(suggestion);
                     setShowSuggestions(false);
@@ -119,7 +130,6 @@ export function SearchBar({ className, onSearch }) {
                 >
                   <div className="flex items-center">
                     <span className="flex-1">{suggestion}</span>
-                    
                   </div>
                 </Link>
               </li>

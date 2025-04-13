@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const {addProductListing,showProductListings, showMyProductListings, fetchProductListing, updateProductListing, showProductCategoryListings, fetchLandingPageProducts, fetchCategoryLandingPage} = require('../controllers/ProductListingController');
-const { addEmbedding } = require('../middlewares/embeddingMiddleware');
+const { addEmbedding } = require('../middleware/embeddingMiddleware');
 
 // console.log("ITHAY AAN");
 router.post('/', addEmbedding, addProductListing);

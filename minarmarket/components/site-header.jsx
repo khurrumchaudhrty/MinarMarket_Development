@@ -6,6 +6,7 @@ import { Search, Menu, X, UserCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { useRouter } from "next/navigation"
+import { SearchBar } from "@/components/search-bar"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,44 +14,46 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { useLocalStorage } from 'usehooks-ts'
+import { getUserDetails } from "@/lib/SessionManager"
 
 export function SiteHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [mounted, setMounted] = useState(false)
-  const [type, setType] = useState("buyer") // Default value
+  const [type, setType] = useLocalStorage("type","buyer") // Default value
   const router = useRouter()
-  const [token, setToken] = useState(null)
+  const userdetail = getUserDetails()
 
   // Initialize type from localStorage after component mounts
-  useEffect(() => {
-    setMounted(true)
-    // Get localStorage values only after component is mounted on client
-    if (typeof window !== "undefined") {
-      const storedType = localStorage.getItem("type")
-      if (storedType) {
-        setType(storedType)
-      }
-      setToken(localStorage.getItem("token"))
-    }
-  }, [])
+  // useEffect(() => {
+  //   setMounted(true)
+  //   // Get localStorage values only after component is mounted on client
+  //   if (typeof window !== "undefined") {
+  //     const storedType = localStorage.getItem("type")
+  //     if (storedType) {
+  //       setType(storedType)
+  //     }
+  //     setToken(localStorage.getItem("token"))
+  //   }
+  // }, [])
 
-  // Update localStorage when type changes
-  useEffect(() => {
-    if (mounted && typeof window !== "undefined") {
-      localStorage.setItem("type", type)
-    }
-  }, [type, mounted])
+  // // Update localStorage when type changes
+  // useEffect(() => {
+  //   if (mounted && typeof window !== "undefined") {
+  //     localStorage.setItem("type", type)
+  //   }
+  // }, [type, mounted])
 
-  if (!mounted) {
-    return null
-  }
+  // if (!mounted) {
+  //   return null
+  // }
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-white shadow-sm">
       <div className="max-w-[1800px] mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link href="/" className={`text-2xl font-bold ${token ? (type === "buyer" ? "text-[#872CE4]" : "text-[#F58014]") : "text-[#872CE4]"} tracking-tight mr-8`}>
+          <Link href="/" className={`text-2xl font-bold ${userdetail ? (type === "buyer" ? "text-[#872CE4]" : "text-[#F58014]") : "text-[#872CE4]"} tracking-tight mr-8`}>
             MINAR MARKET
           </Link>
 
@@ -90,16 +93,12 @@ export function SiteHeader() {
 
             {/* Search Bar - Desktop */}
             <div className="relative hidden lg:block w-full max-w-md ml-4">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-              <Input
-                placeholder="Search for products..."
-                className="pl-10 border-gray-200 focus:border-[#872CE4] focus:ring-[#872CE4] w-full"
-              />
+              <SearchBar className="w-full" />
             </div>
 
             {/* Auth Buttons/User Controls based on auth state */}
             <div className="flex items-center gap-3 ml-auto">
-              {token ? (
+              {userdetail ? (
                 <>
                   <Button
                     onClick={() => setType(type === "buyer" ? "seller" : "buyer")}
@@ -137,7 +136,6 @@ export function SiteHeader() {
                         <Button
                           onClick={() => {
                             localStorage.removeItem("token")
-                            setToken(null)
                             router.push("/signin")
                           }}
                           variant="ghost"
@@ -199,12 +197,11 @@ export function SiteHeader() {
 
             {/* Search Bar - Mobile */}
             <div className="relative mb-6">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-              <Input placeholder="Search for products..." className="pl-10 border-gray-200 w-full" />
+              <SearchBar className="w-full" />
             </div>
 
             {/* Auth Buttons/User Controls for Mobile */}
-            {token ? (
+            {userdetail ? (
               <div className="space-y-3">
                 <Button
                   onClick={() => setType(type === "buyer" ? "seller" : "buyer")}
@@ -225,7 +222,7 @@ export function SiteHeader() {
                 <Button
                   onClick={() => {
                     localStorage.removeItem("token")
-                    setToken(null)
+                    // setToken(null)
                     router.push("/signin")
                   }}
                   variant="ghost"

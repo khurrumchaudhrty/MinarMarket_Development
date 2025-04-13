@@ -61,7 +61,8 @@ export const getUserDetails = () => {
   if (!isLocalStorageAvailable()) return null;
 
   const token = localStorage.getItem("token");
-  if (!token) return null;
+
+  if (!!!token ) return null;
 
   const decoded = jwtDecode(token);
   return {
