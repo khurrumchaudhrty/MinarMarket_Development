@@ -1,6 +1,7 @@
 const Visit = require("../models/Visit");
 const BuyerMessage = require("../models/BuyerMessages");
 const Proposal = require('../models/Proposal'); // Adjust the path if needed
+const ProductInteraction = require("../models/productInteractions");
 
 
 // Utility function to get IP address
@@ -267,3 +268,116 @@ exports.adVisits = async (req, res) => {
         });
     }
 };
+
+
+// exports.recordProd = async (req, res) => {
+//   try {
+//     const { userId, productId } = req.body;
+    
+
+//     if (!userId || !productId) {
+//       return res.status(400).json({
+//         success: false,
+//         message: "userId and productId are required.",
+//       });
+//     }
+
+//     // Find the most recent interaction of the user
+//     const latestInteraction = await ProductInteraction.findOne({ userId })
+//       .sort({ time: -1 }) // Sort by time in descending order (most recent first)
+//       .limit(1);
+
+//     // Check if the most recent interaction is of the same product
+//     if (latestInteraction && latestInteraction.productId === productId) {
+//       // console.log(userId, productId);
+//       return res.status(200).json({
+//         success: false,
+//         message: "Most recent interaction is already for this product. No new record added.",
+//       });
+//     }
+
+//     // Save the new interaction if it's a different product
+//     const interaction = new ProductInteraction({
+//       userId,
+//       productId,
+//       time: new Date(),
+//     });
+
+//     await interaction.save();
+
+//     return res.status(200).json({
+//       success: true,
+//       message: "Product interaction recorded successfully.",
+//     });
+//   } catch (error) {
+//     console.error("Error recording product interaction:", error);
+//     return res.status(500).json({
+//       success: false,
+//       message: "An error occurred while recording the interaction.",
+//     });
+//   }
+// };
+
+
+const { spawn } = require("child_process");
+const User = require("../models/User");
+
+exports.recordProd = async (req, res) => {
+  try {
+    const { userId, productId } = req.body;
+
+    if (!userId || !productId) {
+      return res.status(400).json({
+        success: false,
+        message: "userId and productId are required.",
+      });
+    }
+
+    // Get most recent interaction
+    const lastInteraction = await ProductInteraction.findOne({ userId })
+      .sort({ time: -1 });
+
+    if (lastInteraction && lastInteraction.productId.toString() === productId) {
+      return res.status(200).json({
+        success: false,
+        message: "Same product already recorded recently.",
+      });
+    }
+
+    // Save new interaction
+    const interaction = new ProductInteraction({
+      userId,
+      productId,
+      time: new Date(),
+    });
+
+    await interaction.save();
+    console.log("going in")
+    // 🔥 Trigger inference after interaction
+    const python = spawn("python3", ["python/infer_and_update.py", userId]);
+    
+    python.stdout.on("data", (data) => {
+      console.log(`Python output: ${data}`);
+    });
+
+    python.stderr.on("data", (data) => {
+      console.error(`Python error: ${data}`);
+    });
+
+    python.on("close", (code) => {
+      console.log(`Python process exited with code ${code}`);
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "Product interaction recorded and recommendation triggered.",
+    });
+  } catch (error) {
+    console.error("Error recording product interaction:", error);
+    return res.status(500).json({
+      success: false,
+      message: "An error occurred while recording the interaction.",
+    });
+  }
+};
+

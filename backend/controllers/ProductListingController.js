@@ -1,6 +1,7 @@
 const ProductListing = require("../models/ProductListing"); // Import the ProductListing model
 const mongoose = require("mongoose");
 const { addEmbeddingToDocument } = require("../utils/embeddingService");
+const User = require("../models/User"); 
 
 // Controller to handle adding a new product listing
 exports.addProductListing = async (req, res) => {
@@ -412,6 +413,67 @@ exports.fetchCategoryLandingPage = async (req, res) => {
       success: false,
       message:
         "An error occurred while retrieving product listing for specified category on the landing page.",
+    });
+  }
+};
+
+
+
+
+
+
+exports.getRecommendedProducts = async (req, res) => {
+  try {
+    const { userId } = req.body;
+ // Assuming userId is passed as a parameter
+
+    if (!userId) {
+      return res.status(400).json({
+        success: false,
+        message: "User ID is required.",
+      });
+    }
+
+    // Fetch the user document based on userId
+    const user = await User.findById(userId);
+
+    // Check if the user exists
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found.",
+      });
+    }
+
+    // Get the recommended product IDs from the user document
+    const recommendedProductIds = user.recommendedProducts; // Assuming recommendedProducts is an array of product IDs
+
+    // Check if there are recommended products
+    if (!recommendedProductIds || recommendedProductIds.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "No recommended products found for this user.",
+      });
+    }
+
+    // Fetch the product listings based on the recommended product IDs
+    const recommendedProducts = await ProductListing.find({
+      _id: { $in: recommendedProductIds },
+      isActive: true, // Ensure the product is active
+      status: "Approved", // Ensure the product is approved
+    });
+
+    // Return the recommended products to the frontend
+    return res.status(200).json({
+      success: true,
+      message: "Recommended products fetched successfully.",
+      data: recommendedProducts,
+    });
+  } catch (error) {
+    console.error("Error fetching recommended products:", error);
+    return res.status(500).json({
+      success: false,
+      message: "An error occurred while fetching recommended products.",
     });
   }
 };

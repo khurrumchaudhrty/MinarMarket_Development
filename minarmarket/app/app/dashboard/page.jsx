@@ -64,6 +64,10 @@ export default function DashboardPage() {
   const [categoryItems, setCategoryItems] = useState([])
   const [categoryType, setCategoryType] = useState(null)
 
+  const [recommendedProducts, setRecommendedProducts] = useState([]);
+  const [loadingRecommended, setLoadingRecommended] = useState(true);
+  const [errorRecommended, setErrorRecommended] = useState(null);
+
   // Listen for storage changes to update the type immediately
   useEffect(() => {
     const handleStorageChange = (e) => {
@@ -106,6 +110,38 @@ export default function DashboardPage() {
       window.dispatchEvent(event)
     }
   }
+
+  const fetchRecommendedProducts = async () => {
+    if (!userId) return;
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/product-listings/recommendedproducts`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userId }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setRecommendedProducts(data.data);
+      } else {
+        setErrorRecommended(data.message || "Failed to fetch recommended products.");
+      }
+    } catch (error) {
+      console.error("Error fetching recommended products:", error);
+      setErrorRecommended("An error occurred while fetching recommended products.");
+    } finally {
+      setLoadingRecommended(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchRecommendedProducts();
+  }, [userId]);
+
+
 
   const fetchProductsByCategory = async (category) => {
     try {
@@ -180,6 +216,11 @@ export default function DashboardPage() {
                 ></div>
               </section>
 
+
+
+
+
+
               {/* Product Categories */}
               <section>
                 <div className="flex items-center mb-8">
@@ -219,6 +260,46 @@ export default function DashboardPage() {
                   secondaryColor={secondaryColor}
                 />
               </section>
+
+
+              {/* Display Recommended Products */}
+              {type === "buyer" && (
+                <section className="pb-12">
+                  <div className="flex items-center mb-8 mt-12">
+                    <h2 className="text-2xl font-bold text-gray-800 mr-3">Top Product Picks For You</h2>
+                    <div
+                      className="h-px flex-grow bg-gradient-to-r opacity-30 rounded-full"
+                      style={{ backgroundImage: `linear-gradient(to right, ${primaryColor}, transparent)` }}
+                    ></div>
+                    <Sparkles className="ml-2 h-5 w-5" style={{ color: primaryColor }} />
+                  </div>
+
+                  {loadingRecommended ? (
+                    <p>Loading...</p>
+                  ) : errorRecommended ? (
+                    <p className="text-red-500">{errorRecommended}</p>
+                  ) : recommendedProducts.length > 0 ? (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                      {recommendedProducts.map((product) => (
+                        <div
+                          key={product._id}
+                          className="border rounded-2xl shadow-md p-4 hover:shadow-lg transition duration-200"
+                        >
+                          <img
+                            src={product.images?.[0]}
+                            alt={product.title}
+                            className="w-full h-40 object-cover rounded-xl mb-4"
+                          />
+                          <h3 className="text-lg font-semibold text-gray-800">{product.title}</h3>
+                          <p className="text-sm text-gray-600 mt-1 line-clamp-2">{product.description}</p>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-gray-600">No recommended products found.</p>
+                  )}
+                </section>
+                )}
 
               {/* Default Product Grid */}
               <section className="pb-12">

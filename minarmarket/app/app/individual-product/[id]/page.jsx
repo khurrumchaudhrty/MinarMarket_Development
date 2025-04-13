@@ -1,4 +1,4 @@
-
+"use client"
 import { Header } from '@/components/header';
 import { SidebarNav } from '@/components/sidebar-nav';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
@@ -7,6 +7,7 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { getUserDetails } from "@/lib/SessionManager"
 import ContactSellerButton from '@/components/ContactSellerButton';
+import { useEffect } from 'react';
 
 
 // const user = getUserDetails()
@@ -30,6 +31,38 @@ async function getProduct(id) {
 export default async function IndividualProductPage({ params }) {
   const { id } = params; // Get product ID from URL
   let product;
+  const recordVisit = async () => {
+    try {
+      const token = localStorage.getItem("token")
+      let userId = null
+      if (token) {
+        const payload = JSON.parse(atob(token.split(".")[1]))
+        userId = payload.id
+      }
+
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/webvisits/prodvisits`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId: userId || null,
+          productId: id
+
+        }),
+      })
+
+      const data = await response.json()
+      if (!response.ok) throw new Error(data.message)
+
+      console.log("Interaction recorded successfully:", data)
+    } catch (error) {
+      console.error("Error recording interaction:", error)
+    }
+  }
+
+  useEffect(() => {
+    recordVisit()
+  }, [])
+  
 
   try {
     product = await getProduct(id);
@@ -94,3 +127,4 @@ export default async function IndividualProductPage({ params }) {
     </div>
   );
 }
+

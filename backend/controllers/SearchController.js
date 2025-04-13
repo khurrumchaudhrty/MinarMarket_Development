@@ -1,5 +1,7 @@
 const { searchProducts, searchServices, combinedSearch, quickSearch } = require('../utils/vectorSearch');
 const Search = require('../models/Search');
+const { spawn } = require("child_process");
+const User = require("../models/User");
 
 // Helper function to store search query for logged-in users
 const storeUserSearch = async (userId, query) => {
@@ -9,6 +11,24 @@ const storeUserSearch = async (userId, query) => {
         userid: userId,
         search_query: query
       });
+
+      console.log("going in 4")
+    // Trigger inference after interaction
+    const python = spawn("python3", ["python/infer_and_update.py", userId]);
+    
+    python.stdout.on("data", (data) => {
+      console.log(`Python output: ${data}`);
+    });
+
+    python.stderr.on("data", (data) => {
+      console.error(`Python error: ${data}`);
+    });
+
+    python.on("close", (code) => {
+      console.log(`Python process exited with code ${code}`);
+    });
+
+
     } catch (error) {
       console.error('Error storing search query:', error);
       // Just log the error without affecting the search response
