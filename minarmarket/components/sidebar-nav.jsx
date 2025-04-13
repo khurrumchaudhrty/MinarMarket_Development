@@ -8,44 +8,13 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { ScrollArea } from "./ui/scroll-area"
 import { motion } from "framer-motion"
 import { useLocalStorage } from 'usehooks-ts'
+import { FaQuestion } from "react-icons/fa"
 
 function SidebarNavComponent() {
   const pathname = usePathname()
   const [openDropdown, setOpenDropdown] = useState(null)
   const [type, setType] = useLocalStorage("type", "buyer") // Default value
   const [mounted, setMounted] = useState(false)
-
-  // Initialize type from localStorage after component mounts
-  // useEffect(() => {
-  //   setMounted(true)
-  //   // Get localStorage values only after component is mounted on client
-  //   if (typeof window !== "undefined") {
-  //     const storedType = localStorage.getItem("type")
-  //     if (storedType) {
-  //       setType(storedType)
-  //     }
-  //   }
-  // }, [])
-
-  // // Subscribe to type-change events from other components
-  // useEffect(() => {
-  //   const handleTypeChange = (e) => {
-  //     setType(e.detail.type)
-  //   }
-    
-  //   window.addEventListener('user-type-changed', handleTypeChange)
-    
-  //   return () => {
-  //     window.removeEventListener('user-type-changed', handleTypeChange)
-  //   }
-  // }, [])
-
-  // // Update localStorage when type changes
-  // useEffect(() => {
-  //   if (mounted && typeof window !== "undefined") {
-  //     localStorage.setItem("type", type)
-  //   }
-  // }, [type, mounted])
 
   const routes = [
     {
@@ -99,20 +68,28 @@ function SidebarNavComponent() {
         Sent: "/app/seller/sent-proposal",
       },
     },
+    // {
+    //   label: {
+    //     seller: "Settings",
+    //     buyer: "Settings",
+    //   },
+    //   icon: Settings,
+    //   href: "/app/admin",
+    // },
     {
       label: {
-        seller: "Settings",
-        buyer: "Settings",
+        seller: "Buyer Queries",
       },
-      icon: Settings,
-      href: "/app/admin",
+      icon: FaQuestion,
+      href: "/app/seller/buyers-messages",
     },
     {
       label: {
-        seller: "Message Received",
+        seller: "Chat",
+        buyer: "Chat",
       },
       icon: MessageCircle,
-      href: "/app/seller/buyers-messages",
+      href: "/app/messages",
     },
   ]
 
@@ -230,44 +207,7 @@ function SidebarNavComponent() {
 
 export function SidebarNav() {
   const [type, setType] = useLocalStorage("type", "buyer") // Default value
-  // const [mounted, setMounted] = useState(false)
-
-  // Initialize type from localStorage after component mounts
-  // useEffect(() => {
-  //   setMounted(true)
-  //   // Get localStorage values only after component is mounted on client
-  //   if (typeof window !== "undefined") {
-  //     const storedType = localStorage.getItem("type")
-  //     if (storedType) {
-  //       setType(storedType)
-  //     }
-  //   }
-  // }, [])
-
-  // // Subscribe to type-change events from other components
-  // useEffect(() => {
-  //   const handleTypeChange = (e) => {
-  //     setType(e.detail.type)
-  //   }
-    
-  //   window.addEventListener('user-type-changed', handleTypeChange)
-    
-  //   return () => {
-  //     window.removeEventListener('user-type-changed', handleTypeChange)
-  //   }
-  // }, [])
-
-  // // Update localStorage when type changes
-  // useEffect(() => {
-  //   if (mounted && typeof window !== "undefined") {
-  //     localStorage.setItem("type", type)
-  //   }
-  // }, [type, mounted])
-
- 
-
-  // if (!mounted) return null
-
+  
   return (
     <aside className="fixed left-0 top-16 z-30 h-[calc(100vh-4rem)] w-[250px] shrink-0 overflow-y-auto md:sticky md:block bg-white/80 backdrop-blur-sm border-r border-violet-100 rounded-r-xl">
       <ScrollArea className="py-6 pr-6 relative z-10 h-full">

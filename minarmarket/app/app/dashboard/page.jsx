@@ -6,6 +6,8 @@ import { getUserDetails } from "@/lib/SessionManager"
 import { useState, useEffect } from "react"
 import { ProductGrid } from "@/components/data-grid"
 import { useLocalStorage } from 'usehooks-ts'
+import Link from "next/link"
+
 import {
   FaLaptop,
   FaTshirt,
@@ -202,19 +204,34 @@ export default function DashboardPage() {
           {/* Show Categories Only When No Category Is Selected */}
           {!selectedCategory ? (
             <>
+            
+
               {/* Welcome Section */}
-              <section className="mb-12">
+              <section >
                 <h1 className="text-4xl md:text-5xl font-bold text-gray-800">
                   <span className="text-[#872CE4]" style={{ color: primaryColor }}>
                     {type === "buyer" ? "Buyer" : "Seller"}
                   </span>{" "}
                   Dashboard
                 </h1>
-                <div
+                            {type === "buyer" && (
+              <div className="flex justify-end mb-6">
+                <button
+                  onClick={() => window.location.href = "/app/buyer/search-by-image"}
+                  className="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-4 rounded-xl shadow-md transition duration-200"
+                >
+                  🔍 Search by Image
+                </button>
+              </div>
+            )}
+                
+                {/* <div
                   className="h-1 w-20 bg-gradient-to-r rounded-full mt-4"
                   style={{ backgroundImage: `linear-gradient(to right, ${primaryColor}, ${secondaryColor})` }}
-                ></div>
+                ></div> */}
               </section>
+              
+              
 
 
 
@@ -249,7 +266,7 @@ export default function DashboardPage() {
                     className="h-px flex-grow bg-gradient-to-r opacity-30 rounded-full"
                     style={{ backgroundImage: `linear-gradient(to right, ${primaryColor}, transparent)` }}
                   ></div>
-                  <Sparkles className="ml-2 h-5 w-5" style={{ color: primaryColor }} />
+                  {/* <Sparkles className="ml-2 h-5 w-5" style={{ color: primaryColor }} /> */}
                 </div>
                 
                 {/* Replace the grid with the carousel */}
@@ -281,10 +298,8 @@ export default function DashboardPage() {
                   ) : recommendedProducts.length > 0 ? (
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                       {recommendedProducts.map((product) => (
-                        <div
-                          key={product._id}
-                          className="border rounded-2xl shadow-md p-4 hover:shadow-lg transition duration-200"
-                        >
+                        <Link href={`/app/individual-product/${product._id}`} key={product._id} className="block">
+                        <div className="border rounded-2xl shadow-md p-4 hover:shadow-lg transition duration-200 hover:scale-[1.01]">
                           <img
                             src={product.images?.[0]}
                             alt={product.title}
@@ -293,6 +308,8 @@ export default function DashboardPage() {
                           <h3 className="text-lg font-semibold text-gray-800">{product.title}</h3>
                           <p className="text-sm text-gray-600 mt-1 line-clamp-2">{product.description}</p>
                         </div>
+                      </Link>
+                      
                       ))}
                     </div>
                   ) : (
@@ -311,7 +328,7 @@ export default function DashboardPage() {
                     className="h-px flex-grow bg-gradient-to-r opacity-30 rounded-full"
                     style={{ backgroundImage: `linear-gradient(to right, ${primaryColor}, transparent)` }}
                   ></div>
-                  <Sparkles className="ml-2 h-5 w-5" style={{ color: primaryColor }} />
+                  {/* <Sparkles className="ml-2 h-5 w-5" style={{ color: primaryColor }} /> */}
                 </div>
                 <ProductGrid userId={userId} />
               </section>
@@ -427,4 +444,5 @@ export default function DashboardPage() {
     </div>
   )
 }
+
 

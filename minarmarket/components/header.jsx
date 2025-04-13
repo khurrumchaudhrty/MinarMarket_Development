@@ -129,18 +129,18 @@ function HeaderComponent() {
                 align="end"
                 className="w-56 bg-white border border-violet-100 text-gray-700 rounded-xl shadow-lg"
               >
-                <DropdownMenuItem className="hover:bg-violet-50 hover:text-[#872CE4] rounded-lg my-1 cursor-pointer">
+                {/* <DropdownMenuItem className="hover:bg-violet-50 hover:text-[#872CE4] rounded-lg my-1 cursor-pointer">
                   Profile
                 </DropdownMenuItem>
                 <DropdownMenuItem className="hover:bg-violet-50 hover:text-[#872CE4] rounded-lg my-1 cursor-pointer">
                   Settings
-                </DropdownMenuItem>
+                </DropdownMenuItem> */}
                 <DropdownMenuItem className="hover:bg-violet-50 hover:text-[#872CE4] rounded-lg my-1 cursor-pointer">
                   <Button
                     onClick={() => {
                       localStorage.removeItem("token")
                       // setToken(null)
-                      router.push("/signin")
+                      router.push("/")
                     }}
                     variant="ghost"
                     className="text-gray-700 hover:text-[#872CE4] p-0 w-full justify-start"

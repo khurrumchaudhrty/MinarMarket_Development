@@ -148,6 +148,8 @@ exports.getAllServicesRequirementListings = async (req, res) => {
 
 
 
+const ProductEmbedding = require("../models/productEmbedding");
+const { spawn } = require("child_process");
 
 exports.getUpdateProductListings = async (req, res) => {
     const { itemIds, newStatus } = req.body;
@@ -175,6 +177,37 @@ exports.getUpdateProductListings = async (req, res) => {
             });
         }
 
+
+        if (newStatus === "Approved") {
+            const approvedProducts = await ProductListing.find({ _id: { $in: itemIds } });
+            console.log(approvedProducts)
+            for (const product of approvedProducts) {
+                if (!product.images || product.images.length === 0) continue;
+
+                for (const imageUrl of product.images) {
+                    try {
+                        // Check if embedding already exists for this image
+                        const exists = await ProductEmbedding.findOne({ productId: product._id, imageUrl: imageUrl.url });
+                        if (exists) continue;
+                        
+
+                        const embedding = await computeImageEmbedding(imageUrl.url);
+
+                        await ProductEmbedding.create({
+                            productId: product._id,
+                            imageUrl: imageUrl.url,
+                            embedding,
+                        });
+
+                        console.log(`Saved embedding for product ${product._id}, image ${imageUrl}`);
+                    } catch (err) {
+                        console.error(`Failed to process image for product ${product._id}:`, err);
+                    }
+                }
+            }
+        }
+
+
         return res.status(200).json({
             success: true,
             message: `Listings updated to ${newStatus} successfully.`,
@@ -188,6 +221,42 @@ exports.getUpdateProductListings = async (req, res) => {
         });
     }
 };
+
+
+async function computeImageEmbedding(imageUrl) {
+    return new Promise((resolve, reject) => {
+        const python = spawn("python3", ["embed_image.py", imageUrl]);
+
+        let data = "";
+        let errorOutput = "";
+
+        python.stdout.on("data", (chunk) => {
+            data += chunk.toString();
+        });
+
+        python.stderr.on("data", (err) => {
+            errorOutput += err.toString();
+        });
+
+        python.on("close", (code) => {
+            if (code !== 0) {
+                console.error("Python script error:", errorOutput);
+                return reject("Python script failed with error: " + errorOutput);
+            }
+
+            try {
+                const embedding = JSON.parse(data);
+                if (!Array.isArray(embedding) || embedding.length === 0) {
+                    return reject("Embedding is empty or invalid");
+                }
+                resolve(embedding);
+            } catch (err) {
+                console.error("Failed to parse embedding JSON:", data);
+                reject("Failed to parse embedding JSON");
+            }
+        });
+    });
+}
 
 
 
@@ -313,3 +382,4 @@ exports.updateServicesRequirementListings = async (req, res) => {
         });
     }
 };
+
