@@ -598,7 +598,7 @@ export default function MessagingPage() {
                       <div
                         className={`px-4 py-2 rounded-2xl max-w-xs shadow-sm ${
                           msg.senderId === myId
-                            ? "bg-purple-500 text-white rounded-tr-none"
+                            ? "bg-orange-500 text-white rounded-tr-none"
                             : "bg-white rounded-tl-none"
                         }`}
                       >

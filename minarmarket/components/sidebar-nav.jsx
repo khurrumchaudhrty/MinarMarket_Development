@@ -8,6 +8,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { ScrollArea } from "./ui/scroll-area"
 import { motion } from "framer-motion"
 import { useLocalStorage } from 'usehooks-ts'
+import { FaQuestion } from "react-icons/fa"
 
 function SidebarNavComponent() {
   const pathname = usePathname()
@@ -109,10 +110,18 @@ function SidebarNavComponent() {
     },
     {
       label: {
-        seller: "Message Received",
+        seller: "Buyer Queries",
+      },
+      icon: FaQuestion,
+      href: "/app/seller/buyers-messages",
+    },
+    {
+      label: {
+        seller: "Chat",
+        buyer: "Chat",
       },
       icon: MessageCircle,
-      href: "/app/seller/buyers-messages",
+      href: "/app/messages",
     },
   ]
 
