@@ -8,7 +8,7 @@ import Link from "next/link";
 import { useLocalStorage } from "usehooks-ts"; // Import useLocalStorage
 import { getUserDetails } from "@/lib/SessionManager"; // Import getUserDetails
 
-export function SearchBar({ className, onSearch }) {
+export function SearchBar({ className, onSearch, forcePurple }) {
   const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -18,11 +18,17 @@ export function SearchBar({ className, onSearch }) {
   const [type] = useLocalStorage("type", "buyer"); // Get user type
   const userDetails = getUserDetails(); // Get user details
 
-  // Define colors based on type
-  const primaryColorHex = type === "buyer" ? "#872CE4" : "#F58014"; // Hex for inline style
-  const primaryHoverColorHex = type === "buyer" ? "#7324c2" : "#d97012"; // Hex for inline style hover
-  const focusRingColor = type === "buyer" ? "focus:border-purple-400 focus:ring-purple-400" : "focus:border-orange-400 focus:ring-orange-400";
-  const suggestionHoverBg = type === "buyer" ? "hover:bg-purple-50" : "hover:bg-orange-50";
+  // Check if we're on the landing page or forcePurple is true to always use purple
+  const useFixedPurpleTheme = typeof window !== 'undefined' && 
+    (window.location.pathname === '/' || forcePurple);
+
+  // Define colors based on type and page location
+  const primaryColorHex = useFixedPurpleTheme ? "#872CE4" : (type === "buyer" ? "#872CE4" : "#F58014"); 
+  const primaryHoverColorHex = useFixedPurpleTheme ? "#7324c2" : (type === "buyer" ? "#7324c2" : "#d97012");
+  const focusRingColor = useFixedPurpleTheme ? "focus:border-purple-400 focus:ring-purple-400" : 
+    (type === "buyer" ? "focus:border-purple-400 focus:ring-purple-400" : "focus:border-orange-400 focus:ring-orange-400");
+  const suggestionHoverBg = useFixedPurpleTheme ? "hover:bg-purple-50" : 
+    (type === "buyer" ? "hover:bg-purple-50" : "hover:bg-orange-50");
 
   // Debounce the search to prevent too many API calls
   const debouncedSearch = useDebouncedCallback(async (searchQuery) => {

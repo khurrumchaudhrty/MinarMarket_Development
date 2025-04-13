@@ -82,22 +82,22 @@ exports.showProductListings = async (req, res) => {
   try {
     const userId = req.query.userId?.toString();
 
-    if (!userId) {
-      return res.status(400).json({
-        success: false,
-        message: "User ID is required",
-      });
-    }
-
-    const productListings = await ProductListing.find({
+    // Build the query filter
+    const filter = {
       status: "Approved",
       isActive: true,
-      listerId: { $ne: userId },
       $or: [
         { listerAccountStatus: "Active" }, // Include explicitly "Active"
         { listerAccountStatus: { $exists: false } }, // Include documents where listerAccountStatus is missing
       ],
-    });
+    };
+
+    // Only add the listerId exclusion if userId is valid
+    if (userId && userId !== "null" && userId !== "undefined" && mongoose.Types.ObjectId.isValid(userId)) {
+      filter.listerId = { $ne: new mongoose.Types.ObjectId(userId) };
+    }
+
+    const productListings = await ProductListing.find(filter);
 
     return res.status(200).json({
       success: true,
@@ -119,10 +119,18 @@ exports.showMyProductListings = async (req, res) => {
     // Extract the id from the request body
     const { id } = req.body;
 
-    if (!id) {
+    if (!id || id === "null" || id === "undefined") {
       return res.status(400).json({
         success: false,
-        message: "Lister ID is required.",
+        message: "Valid Lister ID is required.",
+      });
+    }
+
+    // Verify this is a valid ObjectId before trying to convert
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid Lister ID format.",
       });
     }
 
@@ -309,22 +317,27 @@ exports.showProductCategoryListings = async (req, res) => {
       });
     }
 
-    // Find approved and active product listings of the category specified excluding user's own listings
-    const productListings = await ProductListing.find({
+    // Build the filter
+    const filter = {
       status: "Approved",
       isActive: true,
-      listerId: { $ne: userId }, // Exclude products listed by the user
       category: category,
       $or: [
         { listerAccountStatus: "Active" }, // Include explicitly "Active"
         { listerAccountStatus: { $exists: false } }, // Include documents where listerAccountStatus is missing
       ],
-    });
+    };
+
+    // Only add the listerId exclusion if userId is valid
+    if (userId && userId !== "null" && userId !== "undefined" && mongoose.Types.ObjectId.isValid(userId)) {
+      filter.listerId = { $ne: new mongoose.Types.ObjectId(userId) };
+    }
+
+    const productListings = await ProductListing.find(filter);
 
     return res.status(200).json({
       success: true,
-      message:
-        "Product listings of the specified category retrieved successfully.",
+      message: "Product listings of the specified category retrieved successfully.",
       data: productListings,
     });
   } catch (error) {

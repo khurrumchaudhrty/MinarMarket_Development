@@ -20,60 +20,15 @@ import { getUserDetails } from "@/lib/SessionManager"
 function HeaderComponent() {
   // For storing auth token
   // const [token, setToken] = useLocalStorage('token', null)
-  const [type,setType] = useLocalStorage("type", "buyer")
+  const [type, setType] = useLocalStorage("type", "buyer")
   const router = useRouter()
   const [mounted, setMounted] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const userdetail = getUserDetails()
 
-  // Initialize type from localStorage after component mounts
-  // useEffect(() => {
-  //   setMounted(true)
-  //   // Get localStorage values only after component is mounted on client
-  //   if (typeof window !== "undefined") {
-  //     const storedType = localStorage.getItem("type")
-  //     if (storedType) {
-  //       setType(storedType)
-  //     }
-  //     setToken(localStorage.getItem("token"))
-  //   }
-  // }, [])
-
-  // Subscribe to type-change events from other components
-  // useEffect(() => {
-  //   const handleTypeChange = (e) => {
-  //     setType(e.detail.type)
-  //   }
-    
-  //   window.addEventListener('user-type-changed', handleTypeChange)
-    
-  //   return () => {
-  //     window.removeEventListener('user-type-changed', handleTypeChange)
-  //   }
-  // }, [])
-
-  // Update localStorage when type changes
-  // useEffect(() => {
-  //   if (mounted && typeof window !== "undefined") {
-  //     localStorage.setItem("type", type)
-  //   }
-  // }, [type, mounted])
-
   const handleTypeChange = (newType) => {
     setType(newType)
-    
-    // // Dispatch a custom event to notify other components
-    // if (typeof window !== "undefined") {
-    //   const event = new CustomEvent('user-type-changed', { 
-    //     detail: { type: newType } 
-    //   })
-    //   window.dispatchEvent(event)
-    // }
   }
-
-  // if (!mounted) {
-  //   return null
-  // }
 
   return (
     <header
@@ -96,18 +51,37 @@ function HeaderComponent() {
           </Link>
           <div className="hidden md:block">
             <nav className="flex items-center gap-4 lg:gap-6">
-              <Link
-                href="/products"
-                className="text-sm font-medium text-gray-600 hover:text-[#872CE4] transition-colors"
-              >
-                Products
-              </Link>
-              <Link
-                href="/services"
-                className="text-sm font-medium text-gray-600 hover:text-[#872CE4] transition-colors"
-              >
-                Services
-              </Link>
+              {userdetail ? (
+                <>
+                  <Link
+                    href="/app/products"
+                    className="text-sm font-medium text-gray-600 hover:text-[#872CE4] transition-colors"
+                  >
+                    Products
+                  </Link>
+                  <Link
+                    href="/app/services"
+                    className="text-sm font-medium text-gray-600 hover:text-[#872CE4] transition-colors"
+                  >
+                    Services
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Link
+                    href="/products"
+                    className="text-sm font-medium text-gray-600 hover:text-[#872CE4] transition-colors"
+                  >
+                    Products
+                  </Link>
+                  <Link
+                    href="/services"
+                    className="text-sm font-medium text-gray-600 hover:text-[#872CE4] transition-colors"
+                  >
+                    Services
+                  </Link>
+                </>
+              )}
               <Link
                 href="/contactus"
                 className="text-sm font-medium text-gray-600 hover:text-[#872CE4] transition-colors"
@@ -196,20 +170,41 @@ function HeaderComponent() {
         <div className="md:hidden border-t border-violet-100 bg-white">
           <div className="container py-4 space-y-4">
             <nav className="flex flex-col gap-4 mb-6">
-              <Link
-                href="/products"
-                className="text-sm font-medium text-gray-600 hover:text-[#872CE4]"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Products
-              </Link>
-              <Link
-                href="/services"
-                className="text-sm font-medium text-gray-600 hover:text-[#872CE4]"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Services
-              </Link>
+              {userdetail ? (
+                <>
+                  <Link
+                    href="/app/products"
+                    className="text-sm font-medium text-gray-600 hover:text-[#872CE4]"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Products
+                  </Link>
+                  <Link
+                    href="/app/services"
+                    className="text-sm font-medium text-gray-600 hover:text-[#872CE4]"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Services
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Link
+                    href="/products"
+                    className="text-sm font-medium text-gray-600 hover:text-[#872CE4]"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Products
+                  </Link>
+                  <Link
+                    href="/services"
+                    className="text-sm font-medium text-gray-600 hover:text-[#872CE4]"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Services
+                  </Link>
+                </>
+              )}
               <Link
                 href="/contactus"
                 className="text-sm font-medium text-gray-600 hover:text-[#872CE4]"
@@ -228,14 +223,16 @@ function HeaderComponent() {
             <div className="relative mb-6">
               <SearchBar className="w-full" />
             </div>
-            <Button
-              onClick={() => handleTypeChange(type === "buyer" ? "seller" : "buyer")}
-              className={`w-full text-white ${
-                type === "buyer" ? "bg-[#872CE4] hover:bg-[#872CE4]/90" : "bg-[#F58014] hover:bg-[#F58014]/90"
-              } rounded-md`}
-            >
-              Switch to {type === "buyer" ? "Selling" : "Buying"}
-            </Button>
+            {userdetail && (
+              <Button
+                onClick={() => handleTypeChange(type === "buyer" ? "seller" : "buyer")}
+                className={`w-full text-white ${
+                  type === "buyer" ? "bg-[#872CE4] hover:bg-[#872CE4]/90" : "bg-[#F58014] hover:bg-[#F58014]/90"
+                } rounded-md`}
+              >
+                Switch to {type === "buyer" ? "Selling" : "Buying"}
+              </Button>
+            )}
           </div>
         </div>
       )}
