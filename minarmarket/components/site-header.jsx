@@ -66,13 +66,13 @@ export function SiteHeader() {
           <div className="hidden md:flex items-center gap-4 lg:gap-6 flex-1">
             <nav className="flex items-center gap-4 lg:gap-6">
               <Link
-                href="/products"
+                href="/app/products"
                 className="text-sm font-medium text-gray-600 hover:text-[#872CE4] transition-colors"
               >
                 Products
               </Link>
               <Link
-                href="/services"
+                href="/app/services"
                 className="text-sm font-medium text-gray-600 hover:text-[#872CE4] transition-colors"
               >
                 Services
