@@ -68,14 +68,14 @@ function SidebarNavComponent() {
         Sent: "/app/seller/sent-proposal",
       },
     },
-    {
-      label: {
-        seller: "Settings",
-        buyer: "Settings",
-      },
-      icon: Settings,
-      href: "/app/admin",
-    },
+    // {
+    //   label: {
+    //     seller: "Settings",
+    //     buyer: "Settings",
+    //   },
+    //   icon: Settings,
+    //   href: "/app/admin",
+    // },
     {
       label: {
         seller: "Buyer Queries",
