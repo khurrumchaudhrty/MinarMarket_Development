@@ -229,7 +229,7 @@ export default function DashboardPage() {
                     className="h-px flex-grow bg-gradient-to-r opacity-30 rounded-full"
                     style={{ backgroundImage: `linear-gradient(to right, ${primaryColor}, transparent)` }}
                   ></div>
-                  <Sparkles className="ml-2 h-5 w-5" style={{ color: primaryColor }} />
+                  {/* <Sparkles className="ml-2 h-5 w-5" style={{ color: primaryColor }} /> */}
                 </div>
                 
                 {/* Replace the grid with the carousel */}
