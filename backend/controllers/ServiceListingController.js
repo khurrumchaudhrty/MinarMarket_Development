@@ -4,11 +4,27 @@ const User = require("../models/User");
 const { addEmbeddingToDocument } = require("../utils/embeddingService");
 
 exports.showMyServiceListings = async (req, res) => {
- 
   try {
     const userId = req.query.listerId;
+    
+    // Validate userId is present and valid
+    if (!userId || userId === "null" || userId === "undefined") {
+      return res.status(400).json({
+        success: false,
+        message: "Valid Lister ID is required.",
+      });
+    }
+
+    // Verify this is a valid ObjectId before trying to convert
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid Lister ID format.",
+      });
+    }
+
     const serviceListings = await ServiceListing.find({
-      listerId: userId,
+      listerId: new mongoose.Types.ObjectId(userId),
     });
 
     return res.status(200).json({
@@ -244,22 +260,22 @@ exports.showServiceListings = async (req, res) => {
   try {
     const userId = req.query.userId?.toString();
 
-    if (!userId) {
-      return res.status(400).json({
-        success: false,
-        message: "User ID is required",
-      });
-    }
-
-    const serviceListings = await ServiceListing.find({
+    // Build the query filter
+    const filter = {
       status: "Approved",
       isActive: true,
-      listerId: { $ne: userId },
       $or: [
         { listerAccountStatus: "Active" }, // Include explicitly "Active"
         { listerAccountStatus: { $exists: false } }, // Include documents where listerAccountStatus is missing
       ],
-    });
+    };
+
+    // Only add the listerId exclusion if userId is valid
+    if (userId && userId !== "null" && userId !== "undefined" && mongoose.Types.ObjectId.isValid(userId)) {
+      filter.listerId = { $ne: new mongoose.Types.ObjectId(userId) };
+    }
+
+    const serviceListings = await ServiceListing.find(filter);
 
     return res.status(200).json({
       success: true,
@@ -287,16 +303,23 @@ exports.fetchServiceCategoryListings = async (req, res) => {
       });
     }
 
-    const serviceListings = await ServiceListing.find({
+    // Build the filter
+    const filter = {
       status: "Approved",
       isActive: true,
-      listerId: { $ne: userId },
       category: category,
       $or: [
         { listerAccountStatus: "Active" }, // Include explicitly "Active"
         { listerAccountStatus: { $exists: false } }, // Include documents where listerAccountStatus is missing
       ],
-    });
+    };
+
+    // Only add the listerId exclusion if userId is valid
+    if (userId && userId !== "null" && userId !== "undefined" && mongoose.Types.ObjectId.isValid(userId)) {
+      filter.listerId = { $ne: new mongoose.Types.ObjectId(userId) };
+    }
+
+    const serviceListings = await ServiceListing.find(filter);
 
     return res.status(200).json({
       success: true,
