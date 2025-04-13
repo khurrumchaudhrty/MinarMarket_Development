@@ -83,22 +83,22 @@ exports.showProductListings = async (req, res) => {
   try {
     const userId = req.query.userId?.toString();
 
-    // Build the query filter
-    const filter = {
+    if (!userId) {
+      return res.status(400).json({
+        success: false,
+        message: "User ID is required",
+      });
+    }
+
+    const productListings = await ProductListing.find({
       status: "Approved",
       isActive: true,
+      listerId: { $ne: userId },
       $or: [
         { listerAccountStatus: "Active" }, // Include explicitly "Active"
         { listerAccountStatus: { $exists: false } }, // Include documents where listerAccountStatus is missing
       ],
-    };
-
-    // Only add the listerId exclusion if userId is valid
-    if (userId && userId !== "null" && userId !== "undefined" && mongoose.Types.ObjectId.isValid(userId)) {
-      filter.listerId = { $ne: new mongoose.Types.ObjectId(userId) };
-    }
-
-    const productListings = await ProductListing.find(filter);
+    });
 
     return res.status(200).json({
       success: true,
@@ -120,18 +120,10 @@ exports.showMyProductListings = async (req, res) => {
     // Extract the id from the request body
     const { id } = req.body;
 
-    if (!id || id === "null" || id === "undefined") {
+    if (!id) {
       return res.status(400).json({
         success: false,
-        message: "Valid Lister ID is required.",
-      });
-    }
-
-    // Verify this is a valid ObjectId before trying to convert
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid Lister ID format.",
+        message: "Lister ID is required.",
       });
     }
 
@@ -318,27 +310,22 @@ exports.showProductCategoryListings = async (req, res) => {
       });
     }
 
-    // Build the filter
-    const filter = {
+    // Find approved and active product listings of the category specified excluding user's own listings
+    const productListings = await ProductListing.find({
       status: "Approved",
       isActive: true,
+      listerId: { $ne: userId }, // Exclude products listed by the user
       category: category,
       $or: [
         { listerAccountStatus: "Active" }, // Include explicitly "Active"
         { listerAccountStatus: { $exists: false } }, // Include documents where listerAccountStatus is missing
       ],
-    };
-
-    // Only add the listerId exclusion if userId is valid
-    if (userId && userId !== "null" && userId !== "undefined" && mongoose.Types.ObjectId.isValid(userId)) {
-      filter.listerId = { $ne: new mongoose.Types.ObjectId(userId) };
-    }
-
-    const productListings = await ProductListing.find(filter);
+    });
 
     return res.status(200).json({
       success: true,
-      message: "Product listings of the specified category retrieved successfully.",
+      message:
+        "Product listings of the specified category retrieved successfully.",
       data: productListings,
     });
   } catch (error) {
@@ -477,3 +464,93 @@ exports.getRecommendedProducts = async (req, res) => {
     });
   }
 };
+
+
+
+
+
+const fs = require("fs");
+const axios = require("axios");
+const { spawn } = require("child_process");
+const tmp = require("tmp");
+const ProductEmbedding = require("../models/productEmbedding");
+// Utility: cosine similarity
+function cosineSimilarity(a, b) {
+  const dotProduct = a.reduce((sum, val, i) => sum + val * b[i], 0);
+  const magnitudeA = Math.sqrt(a.reduce((sum, val) => sum + val * val, 0));
+  const magnitudeB = Math.sqrt(b.reduce((sum, val) => sum + val * val, 0));
+  return dotProduct / (magnitudeA * magnitudeB);
+}
+
+exports.getEmbedding = async (req, res) => {
+  const { imageUrl } = req.body;
+  
+
+  if (!imageUrl) {
+    return res.status(400).json({ error: "Image URL not provided." });
+  }
+
+  try {
+    // Fetch the image from Cloudinary URL
+    const response = await axios({
+      url: imageUrl,
+      responseType: "arraybuffer",
+    });
+
+    // Create a temporary file to store the downloaded image
+    const tempFile = tmp.fileSync({ postfix: ".jpg" });
+    fs.writeFileSync(tempFile.name, response.data);
+
+    // Run Python script to get the image embedding
+    const python = spawn("python3", ["getEmbeddingFromLocal.py", tempFile.name]);
+
+    let output = "";
+    python.stdout.on("data", (data) => {
+      output += data.toString();
+    });
+
+    python.stderr.on("data", (data) => {
+      console.error("Python stderr:", data.toString());
+    });
+
+    python.on("close", async () => {
+      fs.unlinkSync(tempFile.name); // Clean up temporary file
+
+      let uploadedEmbedding;
+      try {
+        uploadedEmbedding = JSON.parse(output);
+      } catch (err) {
+        return res.status(500).json({ error: "Embedding parse error." });
+      }
+
+      try {
+        const allEmbeddings = await ProductEmbedding.find({});
+        const matches = [];
+       
+        
+        for (let record of allEmbeddings) {
+          const similarity = cosineSimilarity(uploadedEmbedding, record.embedding);
+          if (similarity > 0.2) {
+            const product = await ProductListing.findById(record.productId);
+            if (product?.isActive && product.status === "Approved") {
+              if (!matches.some(match => match.product._id.toString() === product._id.toString())) {
+                matches.push({ product, similarity });
+            }
+            }
+          }
+        }
+
+        matches.sort((a, b) => b.similarity - a.similarity);
+        console.log(matches)
+        return res.json({ matches });
+      } catch (dbErr) {
+        console.error("Database error:", dbErr);
+        return res.status(500).json({ error: "Database error." });
+      }
+    });
+  } catch (err) {
+    console.error("Server error:", err);
+    return res.status(500).json({ error: "Server error." });
+  }
+};
+
