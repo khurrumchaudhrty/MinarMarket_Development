@@ -6,6 +6,7 @@ import { Search } from "lucide-react";
 import { useDebouncedCallback } from "use-debounce";
 import Link from "next/link";
 import { useLocalStorage } from "usehooks-ts"; // Import useLocalStorage
+import { getUserDetails } from "@/lib/SessionManager"; // Import getUserDetails
 
 export function SearchBar({ className, onSearch }) {
   const [query, setQuery] = useState("");
@@ -15,6 +16,7 @@ export function SearchBar({ className, onSearch }) {
   const router = useRouter();
   const searchRef = useRef(null);
   const [type] = useLocalStorage("type", "buyer"); // Get user type
+  const userDetails = getUserDetails(); // Get user details
 
   // Define colors based on type
   const primaryColorHex = type === "buyer" ? "#872CE4" : "#F58014"; // Hex for inline style
@@ -31,10 +33,14 @@ export function SearchBar({ className, onSearch }) {
 
     setIsLoading(true);
     try {
+      // Include userId parameter if user is logged in
+      const userId = userDetails?.userId;
+      const userIdParam = userId ? `&userId=${userId}` : '';
+      
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/search/quick-search?q=${encodeURIComponent(
           searchQuery
-        )}`
+        )}${userIdParam}`
       );
       const data = await response.json();
 
@@ -84,7 +90,10 @@ export function SearchBar({ className, onSearch }) {
       if (onSearch) {
         onSearch(query);
       } else {
-        router.push(`/search?q=${encodeURIComponent(query)}`);
+        // Include userId parameter in search URL if user is logged in
+        const userId = userDetails?.userId;
+        const userIdParam = userId ? `&userId=${userId}` : '';
+        router.push(`/search?q=${encodeURIComponent(query)}${userIdParam}`);
       }
       setShowSuggestions(false);
     }
@@ -121,7 +130,7 @@ export function SearchBar({ className, onSearch }) {
             {suggestions.map((suggestion) => (
               <li key={suggestion}>
                 <Link
-                  href={`/search?q=${encodeURIComponent(suggestion)}`}
+                  href={`/search?q=${encodeURIComponent(suggestion)}${userDetails?.userId ? `&userId=${userDetails.userId}` : ''}`}
                   className={`block px-4 py-2 ${suggestionHoverBg} cursor-pointer text-sm`} // Apply dynamic suggestion hover color
                   onClick={() => {
                     setQuery(suggestion);

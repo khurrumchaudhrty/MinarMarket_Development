@@ -1,7 +1,7 @@
-const { pipeline } = require('@xenova/transformers');
-const dotenv = require('dotenv');
+import { pipeline } from '@xenova/transformers';
+import { config } from 'dotenv';
 
-dotenv.config();
+config();
 
 // Cache the pipeline instance
 let extractor = null;
@@ -58,7 +58,7 @@ async function addEmbeddingToDocument(doc) {
   }
 }
 
-module.exports = {
+export default {
   createEmbedding,
   addEmbeddingToDocument
 };

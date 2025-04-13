@@ -1,15 +1,37 @@
 const { searchProducts, searchServices, combinedSearch, quickSearch } = require('../utils/vectorSearch');
+const Search = require('../models/Search');
+
+// Helper function to store search query for logged-in users
+const storeUserSearch = async (userId, query) => {
+  if (userId) {
+    try {
+      await Search.create({
+        userid: userId,
+        search_query: query
+      });
+    } catch (error) {
+      console.error('Error storing search query:', error);
+      // Just log the error without affecting the search response
+    }
+  }
+};
 
 // Handler for combined search (both products and services)
 exports.search = async (req, res) => {
   try {
     const { q, limit = 20 } = req.query;
+    const userId = req.user?.id || req.query.userId || null;
     
     if (!q) {
       return res.status(400).json({ 
         success: false, 
         message: 'Search query is required' 
       });
+    }
+
+    // Store search query if user is logged in
+    if (userId) {
+      await storeUserSearch(userId, q);
     }
 
     const results = await combinedSearch(q, parseInt(limit));
@@ -32,12 +54,18 @@ exports.search = async (req, res) => {
 exports.quickSearch = async (req, res) => {
   try {
     const { q, limit = 5 } = req.query;
+    const userId = req.user?.id || req.query.userId || null;
     
     if (!q) {
       return res.status(400).json({ 
         success: false, 
         message: 'Search query is required' 
       });
+    }
+
+    // Store search query if user is logged in
+    if (userId) {
+      await storeUserSearch(userId, q);
     }
 
     const suggestions = await quickSearch(q, parseInt(limit));
@@ -60,12 +88,18 @@ exports.quickSearch = async (req, res) => {
 exports.searchProducts = async (req, res) => {
   try {
     const { q, limit = 10 } = req.query;
+    const userId = req.user?.id || req.query.userId || null;
     
     if (!q) {
       return res.status(400).json({ 
         success: false, 
         message: 'Search query is required' 
       });
+    }
+
+    // Store search query if user is logged in
+    if (userId) {
+      await storeUserSearch(userId, q);
     }
 
     const products = await searchProducts(q, parseInt(limit));
@@ -88,12 +122,18 @@ exports.searchProducts = async (req, res) => {
 exports.searchServices = async (req, res) => {
   try {
     const { q, limit = 10 } = req.query;
+    const userId = req.user?.id || req.query.userId || null;
     
     if (!q) {
       return res.status(400).json({ 
         success: false, 
         message: 'Search query is required' 
       });
+    }
+
+    // Store search query if user is logged in
+    if (userId) {
+      await storeUserSearch(userId, q);
     }
 
     const services = await searchServices(q, parseInt(limit));
