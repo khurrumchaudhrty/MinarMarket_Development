@@ -114,13 +114,13 @@ export function ProductsContent({ userId, type = "buyer" }) {
 
   return (
     <motion.main
-      className="flex w-full flex-col gap-8 p-4 md:p-0"
+      className="flex w-full flex-col gap-8 px-4" // Adjusted padding
       initial="hidden"
       animate="visible"
       variants={containerVariants}
     >
       {/* Header Section */}
-      <motion.div variants={itemVariants} className="flex flex-col gap-2">
+      <motion.div  className="flex flex-col gap-2">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <h1 className="text-3xl font-bold text-gray-800">Products</h1>

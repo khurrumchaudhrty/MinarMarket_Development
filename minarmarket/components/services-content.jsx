@@ -127,7 +127,7 @@ export function ServicesContent({ userId, type = "buyer" }) {
 
   return (
     <motion.main
-      className="flex w-full flex-col gap-8 p-4 md:p-0"
+      className="flex w-full flex-col gap-8 px-4" // Adjusted padding
       initial="hidden"
       animate="visible"
       variants={containerVariants}
