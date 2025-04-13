@@ -228,7 +228,7 @@ export default function DashboardPage() {
                     className="h-px flex-grow bg-gradient-to-r opacity-30 rounded-full"
                     style={{ backgroundImage: `linear-gradient(to right, ${primaryColor}, transparent)` }}
                   ></div>
-                  <Sparkles className="ml-2 h-5 w-5" style={{ color: primaryColor }} />
+                  {/* <Sparkles className="ml-2 h-5 w-5" style={{ color: primaryColor }} /> */}
                 </div>
                 <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-8">
                   {productCategories.map((category, index) => {
@@ -262,7 +262,7 @@ export default function DashboardPage() {
                     className="h-px flex-grow bg-gradient-to-r opacity-30 rounded-full"
                     style={{ backgroundImage: `linear-gradient(to right, ${primaryColor}, transparent)` }}
                   ></div>
-                  <Sparkles className="ml-2 h-5 w-5" style={{ color: primaryColor }} />
+                  {/* <Sparkles className="ml-2 h-5 w-5" style={{ color: primaryColor }} /> */}
                 </div>
                 <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-8">
                   {serviceCategories.map((category, index) => {
@@ -338,7 +338,7 @@ export default function DashboardPage() {
                     className="h-px flex-grow bg-gradient-to-r opacity-30 rounded-full"
                     style={{ backgroundImage: `linear-gradient(to right, ${primaryColor}, transparent)` }}
                   ></div>
-                  <Sparkles className="ml-2 h-5 w-5" style={{ color: primaryColor }} />
+                  {/* <Sparkles className="ml-2 h-5 w-5" style={{ color: primaryColor }} /> */}
                 </div>
                 <ProductGrid userId={userId} />
               </section>
