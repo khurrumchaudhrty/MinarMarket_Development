@@ -50,10 +50,10 @@ export default function ServicesPage() {
   return (
     <div className={`min-h-screen bg-gradient-to-br ${lightBgClass}`}>
       <Header />
-      {/* <div className="container flex-1 items-start md:grid md:grid-cols-[250px_1fr] md:gap-8 md:py-8">
+      <div className="container flex-1 items-start md:grid md:grid-cols-[250px_1fr] md:gap-8 md:py-8">
         <SidebarNav />
         <ServicesContent userId={userId} type={type} />
-      </div> */}
+      </div>
 
       {/* Add blob animations similar to dashboard page */}
       <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">

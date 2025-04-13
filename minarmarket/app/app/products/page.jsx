@@ -50,13 +50,14 @@ export default function ProductsPage() {
   return (
     <div className={`min-h-screen bg-gradient-to-br ${lightBgClass}`}>
       <Header />
-      {/* <div className="container flex-1 items-start md:grid md:grid-cols-[250px_1fr] md:gap-8 md:py-8">
-        <SidebarNav />
-        <ProductsContent userId={userId} type={type} />
-      </div> */}
+      
+      <div className="container flex-1 items-start md:grid md:grid-cols-[250px_1fr] md:gap-8 md:py-8">
+      <SidebarNav />  
+      <ProductsContent userId={userId} type={type} />
+      </div>
 
       {/* Add blob animations similar to dashboard page */}
-      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
+      {/* <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
         <div
           className="absolute top-1/4 left-1/4 w-[500px] h-[500px] rounded-full blur-3xl animate-blob opacity-[0.03]"
           style={{ backgroundColor: primaryColor }}
@@ -95,7 +96,7 @@ export default function ProductsPage() {
         .animation-delay-4000 {
           animation-delay: 4s;
         }
-      `}</style>
+      `}</style> */}
     </div>
   )
 }

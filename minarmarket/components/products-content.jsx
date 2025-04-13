@@ -8,6 +8,7 @@ import { ArrowLeft, ArrowDownUp, Sparkles } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { SearchBar } from "@/components/search-bar"
 import { ProductOnlyGrid } from "@/components/data-grid"
+import { CategoryCarousel } from "@/components/category-carousel"
 
 const productCategories = [
   { name: "Electronics", icon: <FaLaptop /> },
@@ -113,13 +114,13 @@ export function ProductsContent({ userId, type = "buyer" }) {
 
   return (
     <motion.main
-      className="flex w-full flex-col gap-8 p-4 md:p-0"
+      className="flex w-full flex-col gap-8 px-4" // Adjusted padding
       initial="hidden"
       animate="visible"
       variants={containerVariants}
     >
       {/* Header Section */}
-      <motion.div variants={itemVariants} className="flex flex-col gap-2">
+      <motion.div  className="flex flex-col gap-2">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <h1 className="text-3xl font-bold text-gray-800">Products</h1>
@@ -144,28 +145,14 @@ export function ProductsContent({ userId, type = "buyer" }) {
                 style={{ backgroundImage: `linear-gradient(to right, ${primaryColor}, transparent)` }}
               ></div>
             </div>
-            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-              {productCategories.map((category, index) => (
-                <motion.div
-                  key={index}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="flex aspect-square flex-col items-center justify-center gap-3 rounded-xl overflow-hidden cursor-pointer shadow-sm"
-                  onClick={() => handleCategoryClick(category.name)}
-                  style={{
-                    background:
-                      index % 2 === 0
-                        ? `linear-gradient(135deg, ${primaryColor}, ${secondaryColor})`
-                        : `linear-gradient(135deg, ${secondaryColor}, ${primaryColor})`,
-                  }}
-                >
-                  <div className="relative flex items-center justify-center w-12 h-12 text-3xl text-white">
-                    {category.icon}
-                  </div>
-                  <span className="text-sm text-white font-medium">{category.name}</span>
-                </motion.div>
-              ))}
-            </div>
+            
+            {/* Replace the grid with the carousel */}
+            <CategoryCarousel 
+              categories={productCategories} 
+              onCategoryClick={handleCategoryClick}
+              primaryColor={primaryColor}
+              secondaryColor={secondaryColor}
+            />
           </motion.section>
 
           {/* Products Only Grid */}
