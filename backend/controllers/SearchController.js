@@ -63,10 +63,10 @@ exports.quickSearch = async (req, res) => {
       });
     }
 
-    // Store search query if user is logged in
-    if (userId) {
-      await storeUserSearch(userId, q);
-    }
+    // // Store search query if user is logged in
+    // if (userId) {
+    //   await storeUserSearch(userId, q);
+    // }
 
     const suggestions = await quickSearch(q, parseInt(limit));
     
