@@ -62,6 +62,7 @@ exports.login = catchAsyncErrors(async (req, res, next) => {
   return res.status(200).json({ success: true, token });
 });
 
+
 exports.signup = catchAsyncErrors(async (req, res, next) => {
   console.log("Received signup request");
 
@@ -183,6 +184,22 @@ exports.signup_post = async (req, res, next) => {
       password, // Store hashed password
     });
 
+    console.log("going in 3")
+    const python = spawn("python3", ["python/infer_and_update.py", newUser._id]);
+    
+    python.stdout.on("data", (data) => {
+    console.log(`Python output: ${data}`);
+    });
+
+    python.stderr.on("data", (data) => {
+    console.error(`Python error: ${data}`);
+    });
+
+    python.on("close", (code) => {
+    console.log(`Python process exited with code ${code}`);
+    });
+
+
     return res.status(201).json({
       success: true,
       message: "User registered successfully!",
@@ -195,5 +212,8 @@ exports.signup_post = async (req, res, next) => {
       });
     }
   }
+
+
+
 
 
