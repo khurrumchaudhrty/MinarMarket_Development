@@ -158,7 +158,7 @@ export default function Careers() {
               <section className="text-center space-y-6 animate-fade-in">
                 <h1 className="text-4xl md:text-5xl font-bold text-white/90">Join Our Team</h1>
                 <p className="text-xl text-white/70 max-w-3xl mx-auto">
-                  At MinarMarket, we're building the future of online marketplaces. Join us in our mission to connect
+                  At MinarMarket, we&apos;re building the future of online marketplaces. Join us in our mission to connect
                   buyers and sellers in a more personalized way.
                 </p>
               </section>

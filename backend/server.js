@@ -7,6 +7,8 @@ const initializeChatSocket = require('./sockets/chatSocket');
 
 dotEnv.config({ path: './config/config.env' });
 
+
+// Connect to the database
 databaseConnect();
 
 const server = http.createServer(app);

@@ -156,7 +156,7 @@ export default function SafetyCenter() {
                     <h2 className="text-2xl font-bold text-white/90">Emergency Contact</h2>
                   </div>
                   <p className="text-white/70 mb-6">
-                    If you're in immediate danger, please contact your local emergency services:
+                    If you&apos;re in immediate danger, please contact your local emergency services:
                   </p>
                   <div className="grid md:grid-cols-2 gap-4">
                     <div className="bg-white/10 rounded-lg p-4">
@@ -228,7 +228,7 @@ export default function SafetyCenter() {
                     <div className="bg-white/10 rounded-lg p-4">
                       <h3 className="text-lg font-medium text-white/90 mb-2">In-App Reporting</h3>
                       <p className="text-white/70">
-                        Use the "Report" button on any listing, message, or user profile to flag suspicious content.
+                        Use the &apos;Report&apos; button on any listing, message, or user profile to flag suspicious content.
                       </p>
                     </div>
                     <div className="bg-white/10 rounded-lg p-4">
@@ -323,8 +323,8 @@ export default function SafetyCenter() {
                       What should I do if I receive suspicious messages?
                     </h3>
                     <p className="text-white/70">
-                      Don't respond to the message, and report it immediately using the report button. Never share
-                      personal or financial information with someone you don't trust.
+                      Don&apos;t respond to the message, and report it immediately using the report button. Never share
+                      personal or financial information with someone you don&apos;t trust.
                     </p>
                   </div>
                   <div>
@@ -332,7 +332,7 @@ export default function SafetyCenter() {
                       How can I verify a seller is legitimate?
                     </h3>
                     <p className="text-white/70">
-                      Check their profile for reviews and ratings from other users, how long they've been on the
+                      Check their profile for reviews and ratings from other users, how long they&apos;ve been on the
                       platform, and their response rate. Be cautious of new accounts with no history.
                     </p>
                   </div>
@@ -341,7 +341,7 @@ export default function SafetyCenter() {
                       What payment methods are safest to use?
                     </h3>
                     <p className="text-white/70">
-                      Always use MinarMarket's secure payment system. It provides protection for both buyers and sellers
+                      Always use MinarMarket&apos;s secure payment system. It provides protection for both buyers and sellers
                       and allows us to help resolve disputes if necessary.
                     </p>
                   </div>

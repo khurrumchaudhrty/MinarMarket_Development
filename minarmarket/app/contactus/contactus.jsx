@@ -149,7 +149,7 @@ export default function ContactUsPage() {
             className="text-xl text-white/70 mb-12 leading-relaxed animate-fade-in"
             style={{ animationDuration: "2s", animationDelay: "0.5s" }}
           >
-            Have questions or feedback? We'd love to hear from you. Fill out the form below or use our contact
+            Have questions or feedback? We&apos;d love to hear from you. Fill out the form below or use our contact
             information to get in touch.
           </p>
 
@@ -179,7 +179,7 @@ export default function ContactUsPage() {
                   </div>
                   <h3 className="text-xl font-medium text-white/90 mb-2">Thank You!</h3>
                   <p className="text-white/70">
-                    Your message has been sent successfully. We'll get back to you as soon as possible.
+                    Your message has been sent successfully. We&apos;ll get back to you as soon as possible.
                   </p>
                   <Button
                     className="mt-6 bg-white/10 hover:bg-white/20 text-white"

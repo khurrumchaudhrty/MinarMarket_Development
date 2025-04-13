@@ -1,6 +1,7 @@
 const ServiceListing = require("../models/ServiceListing");
 const mongoose = require("mongoose");
 const User = require("../models/User");
+const { addEmbeddingToDocument } = require("../utils/embeddingService");
 
 exports.showMyServiceListings = async (req, res) => {
  
@@ -59,7 +60,9 @@ exports.addServiceListing = async (req, res) => {
         message: "You can upload a maximum of 6 images.",
       });
     }
-    const newService = new ServiceListing({
+
+    // Create service data object
+    const serviceData = {
       title,
       description,
       rate,
@@ -68,8 +71,29 @@ exports.addServiceListing = async (req, res) => {
       category,
       images,
       listerId: userId,
-    });
+    };
 
+    // If embedding middleware was successful, it will be in req.body
+    if (req.body.embedding) {
+      serviceData.embedding = req.body.embedding;
+    } else {
+      // If middleware failed, try to generate embedding here as fallback
+      try {
+        const docWithEmbedding = await addEmbeddingToDocument({
+          title,
+          description,
+          category
+        });
+        if (docWithEmbedding.embedding) {
+          serviceData.embedding = docWithEmbedding.embedding;
+        }
+      } catch (embeddingError) {
+        console.error("Fallback embedding generation failed:", embeddingError);
+        // Continue without embedding if generation fails
+      }
+    }
+
+    const newService = new ServiceListing(serviceData);
     await newService.save();
 
     return res.status(201).json({
@@ -156,18 +180,41 @@ exports.updateServiceListing = async (req, res) => {
       });
     }
 
+    // Prepare update data
+    const updateData = {
+      title,
+      description,
+      rate,
+      pricingModel,
+      city,
+      category,
+      images,
+      status: "Pending",
+    };
+
+    // If embedding middleware was successful, add it to the update
+    if (req.body.embedding) {
+      updateData.embedding = req.body.embedding;
+    } else {
+      // If middleware failed, try to generate embedding here as fallback
+      try {
+        const docWithEmbedding = await addEmbeddingToDocument({
+          title,
+          description,
+          category,
+        });
+        if (docWithEmbedding.embedding) {
+          updateData.embedding = docWithEmbedding.embedding;
+        }
+      } catch (embeddingError) {
+        console.error("Fallback embedding generation failed:", embeddingError);
+        // Continue without updating embedding if generation fails
+      }
+    }
+
     const updatedService = await ServiceListing.findByIdAndUpdate(
       objectId,
-      {
-        title,
-        description,
-        rate,
-        pricingModel,
-        city,
-        category,
-        images,
-        status: "Pending",
-      },
+      updateData,
       { new: true } // Return the updated document
     );
 

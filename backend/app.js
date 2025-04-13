@@ -29,6 +29,7 @@ const Visits = require('./routes/VisitRoutes');
 const BuyerMessagesToSellers = require("./routes/BuyerMessagesToSellers");
 const BuyerServiceRequirement = require('./routes/BuyerServiceRequirementRoutes');
 const ChatRoutes = require("./routes/chatRoutes");
+const SearchRoutes = require('./routes/SearchRoutes');
 const app = express();
 
 app.use(cors());
@@ -68,7 +69,8 @@ app.use('/buyer-listings/delete', BuyerRequirement);
 app.use('/buyer-listings/update', BuyerRequirement);
 app.use('/buyer-service-requirement', BuyerServiceRequirement);
 
-
+// Search API routes
+app.use('/api/search', SearchRoutes);
 
 app.use('/proposals', require('./routes/ProposalRoutes'));
 

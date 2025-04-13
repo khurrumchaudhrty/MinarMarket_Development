@@ -116,7 +116,7 @@ export default function AboutUsPage() {
             style={{ animationDuration: "2s", animationDelay: "0.5s" }}
           >
             MinarMarket is revolutionizing how buyers and sellers connect in the digital marketplace. Founded in 2024,
-            we've been on a mission to create a more personalized and efficient trading experience for everyone.
+            we&apos;ve been on a mission to create a more personalized and efficient trading experience for everyone.
           </p>
 
           {/* Section Navigation */}
@@ -162,7 +162,7 @@ export default function AboutUsPage() {
                   just available inventory.
                 </p>
                 <p className="text-white/70 leading-relaxed">
-                  We're building a platform where buyers can clearly articulate what they're looking for, and sellers
+                  We&apos;re building a platform where buyers can clearly articulate what they&apos;re looking for, and sellers
                   can respond with personalized offers that precisely match those needs. This approach eliminates wasted
                   time browsing through irrelevant listings and creates more meaningful connections between buyers and
                   sellers.
@@ -207,7 +207,7 @@ export default function AboutUsPage() {
                   <div className="bg-white/5 rounded-lg p-5">
                     <h3 className="text-lg font-medium text-white/90 mb-3">Innovation</h3>
                     <p className="text-white/70">
-                      We're constantly looking for new ways to improve the buying and selling experience through
+                      We&apos;re constantly looking for new ways to improve the buying and selling experience through
                       technology.
                     </p>
                   </div>
@@ -301,7 +301,7 @@ export default function AboutUsPage() {
                     <div className="absolute -left-10 mt-1.5 h-5 w-5 rounded-full bg-white/20"></div>
                     <h3 className="text-lg font-medium text-white/90">2025 - Looking Forward</h3>
                     <p className="text-white/70 mt-2">
-                      We're focused on expanding our user base and introducing new features to enhance the marketplace
+                      We&apos;re focused on expanding our user base and introducing new features to enhance the marketplace
                       experience.
                     </p>
                   </div>
