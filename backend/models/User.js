@@ -62,6 +62,19 @@ const UserSchema = mongoose.Schema({
 
   resetPasswordToken: String,
   resetPasswordExpire: Date,
+  complaints: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Complaint",
+    },
+  ],
+  recommendedProducts: [{ type: mongoose.Schema.Types.ObjectId, ref: "ProductListing" }],
+
+  accountStatus: {
+    type: String,
+    default: "Active",
+    enum: ["Active", "Suspended", "Banned"],
+  },
 });
 
 // Hash
