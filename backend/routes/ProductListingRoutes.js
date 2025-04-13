@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const {addProductListing,showProductListings, showMyProductListings, fetchProductListing, updateProductListing, showProductCategoryListings, fetchLandingPageProducts, fetchCategoryLandingPage, getRecommendedProducts} = require('../controllers/ProductListingController');
+const {addProductListing,showProductListings, showMyProductListings, fetchProductListing, updateProductListing, showProductCategoryListings, fetchLandingPageProducts, fetchCategoryLandingPage, getRecommendedProducts, getEmbedding} = require('../controllers/ProductListingController');
 const { addEmbedding } = require('../middleware/embeddingMiddleware');
 
 // console.log("ITHAY AAN");
@@ -15,6 +15,7 @@ router.get('/fetch-landing-page-products', fetchLandingPageProducts);
 router.get('/fetch-category-landing-page/:category', fetchCategoryLandingPage);
 
 router.post('/recommendedproducts',getRecommendedProducts )
+router.post('/images',getEmbedding)
 // router.post('/proposals', addProposal);
 // router.post('/proposals/buyer', getProposalsByBuyer);
 // router.post('/proposals/seller', getProposalsBySeller);
