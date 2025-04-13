@@ -1,10 +1,15 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import dynamic from 'next/dynamic' // Import dynamic
 import { Button } from "@/components/ui/button"
-import { SiteHeader } from "@/components/site-header"
-import { SiteFooter } from "@/components/site-footer"
-import { LandingPageProductGrid } from "@/components/data-grid"
+// Dynamically import components
+const SiteHeader = dynamic(() => import('@/components/site-header').then(mod => mod.SiteHeader))
+const SiteFooter = dynamic(() => import('@/components/site-footer').then(mod => mod.SiteFooter))
+const LandingPageProductGrid = dynamic(() => import('@/components/data-grid').then(mod => mod.LandingPageProductGrid))
+const ProductCard = dynamic(() => import('@/components/product-card').then(mod => mod.ProductCard))
+const ServiceCard = dynamic(() => import('@/components/product-card').then(mod => mod.ServiceCard))
+
 import {
   FaLaptop,
   FaGamepad,
@@ -26,9 +31,9 @@ import {
   FaBox,
 } from "react-icons/fa"
 import { ArrowLeft } from "lucide-react"
-import { ProductCard } from "@/components/product-card"
-import { ServiceCard } from "@/components/product-card"
 import Link from "next/link"
+import { useRouter } from "next/navigation" // Import useRouter
+import { getUserDetails } from "@/lib/SessionManager" // Import getUserDetails
 
 const productCategories = [
   { name: "Electronics", icon: <FaLaptop /> },
@@ -58,6 +63,18 @@ export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState(null)
   const [categoryItems, setCategoryItems] = useState([])
   const [categoryType, setCategoryType] = useState(null)
+  const [loading, setLoading] = useState(true) // Add loading state
+  const router = useRouter() // Get router instance
+
+  // Redirect logged-in users to dashboard or finish loading
+  useEffect(() => {
+    const user = getUserDetails()
+    if (user) {
+      router.push("/app/dashboard")
+    } else {
+      setLoading(false) // User is not logged in, finish loading
+    }
+  }, [router]) // Dependency array includes router
 
   const recordVisit = async () => {
     try {
@@ -85,9 +102,12 @@ export default function Home() {
     }
   }
 
+  // Record visit only after loading is complete and user is not logged in
   useEffect(() => {
-    recordVisit()
-  }, [])
+    if (!loading) {
+      recordVisit()
+    }
+  }, [loading]) // Depend on loading state
 
   const fetchProductsByCategory = async (category) => {
     try {
@@ -135,6 +155,11 @@ export default function Home() {
     setSelectedCategory(null)
     setCategoryItems([])
     setCategoryType(null)
+  }
+
+  // Render nothing while loading/redirecting
+  if (loading) {
+    return null // Or a loading spinner component
   }
 
   return (

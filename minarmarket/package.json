@@ -48,6 +48,7 @@
     "zod": "^3.24.1"
   },
   "devDependencies": {
+    "@playwright/test": "^1.51.1",
     "@types/node": "22.10.10",
     "@types/react": "19.0.8",
     "eslint": "^8",
