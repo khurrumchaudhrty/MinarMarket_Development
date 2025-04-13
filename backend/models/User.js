@@ -63,6 +63,7 @@ const UserSchema = mongoose.Schema({
       ref: "Complaint",
     },
   ],
+  recommendedProducts: [{ type: mongoose.Schema.Types.ObjectId, ref: "ProductListing" }],
 
   accountStatus: {
     type: String,
