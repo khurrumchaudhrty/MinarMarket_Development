@@ -19,24 +19,61 @@ import { getUserDetails } from "@/lib/SessionManager"
 
 function HeaderComponent() {
   // For storing auth token
-  const [token, setToken] = useLocalStorage('token', null)
+  // const [token, setToken] = useLocalStorage('token', null)
   const [type,setType] = useLocalStorage("type", "buyer")
   const router = useRouter()
   const [mounted, setMounted] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const userdetail = getUserDetails()
 
+  // Initialize type from localStorage after component mounts
+  // useEffect(() => {
+  //   setMounted(true)
+  //   // Get localStorage values only after component is mounted on client
+  //   if (typeof window !== "undefined") {
+  //     const storedType = localStorage.getItem("type")
+  //     if (storedType) {
+  //       setType(storedType)
+  //     }
+  //     setToken(localStorage.getItem("token"))
+  //   }
+  // }, [])
+
+  // Subscribe to type-change events from other components
+  // useEffect(() => {
+  //   const handleTypeChange = (e) => {
+  //     setType(e.detail.type)
+  //   }
+    
+  //   window.addEventListener('user-type-changed', handleTypeChange)
+    
+  //   return () => {
+  //     window.removeEventListener('user-type-changed', handleTypeChange)
+  //   }
+  // }, [])
+
+  // Update localStorage when type changes
+  // useEffect(() => {
+  //   if (mounted && typeof window !== "undefined") {
+  //     localStorage.setItem("type", type)
+  //   }
+  // }, [type, mounted])
+
   const handleTypeChange = (newType) => {
     setType(newType)
     
-    // Dispatch a custom event to notify other components
-    if (typeof window !== "undefined") {
-      const event = new CustomEvent('user-type-changed', { 
-        detail: { type: newType } 
-      })
-      window.dispatchEvent(event)
-    }
+    // // Dispatch a custom event to notify other components
+    // if (typeof window !== "undefined") {
+    //   const event = new CustomEvent('user-type-changed', { 
+    //     detail: { type: newType } 
+    //   })
+    //   window.dispatchEvent(event)
+    // }
   }
+
+  // if (!mounted) {
+  //   return null
+  // }
 
   return (
     <header
@@ -128,7 +165,7 @@ function HeaderComponent() {
                   <Button
                     onClick={() => {
                       localStorage.removeItem("token")
-                      setToken(null)
+                      // setToken(null)
                       router.push("/signin")
                     }}
                     variant="ghost"
@@ -191,16 +228,14 @@ function HeaderComponent() {
             <div className="relative mb-6">
               <SearchBar className="w-full" />
             </div>
-            {userdetail && (
-              <Button
-                onClick={() => handleTypeChange(type === "buyer" ? "seller" : "buyer")}
-                className={`w-full text-white ${
-                  type === "buyer" ? "bg-[#872CE4] hover:bg-[#872CE4]/90" : "bg-[#F58014] hover:bg-[#F58014]/90"
-                } rounded-md`}
-              >
-                Switch to {type === "buyer" ? "Selling" : "Buying"}
-              </Button>
-            )}
+            <Button
+              onClick={() => handleTypeChange(type === "buyer" ? "seller" : "buyer")}
+              className={`w-full text-white ${
+                type === "buyer" ? "bg-[#872CE4] hover:bg-[#872CE4]/90" : "bg-[#F58014] hover:bg-[#F58014]/90"
+              } rounded-md`}
+            >
+              Switch to {type === "buyer" ? "Selling" : "Buying"}
+            </Button>
           </div>
         </div>
       )}
