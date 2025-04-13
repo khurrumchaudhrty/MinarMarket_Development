@@ -29,6 +29,7 @@ import {
 import { ServiceCard } from "@/components/product-card"
 import { ProductCard } from "@/components/product-card"
 import { ArrowLeft, Sparkles } from "lucide-react"
+import { CategoryCarousel } from "@/components/category-carousel"
 
 const productCategories = [
   { name: "Electronics", icon: <FaLaptop /> },
@@ -189,28 +190,14 @@ export default function DashboardPage() {
                   ></div>
                   <Sparkles className="ml-2 h-5 w-5" style={{ color: primaryColor }} />
                 </div>
-                <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-8">
-                  {productCategories.map((category, index) => {
-                    return (
-                      <div
-                        key={index}
-                        className={`flex aspect-square flex-col items-center justify-center gap-3 rounded-xl overflow-hidden hover:scale-[1.02] transition-transform duration-300 cursor-pointer shadow-sm`}
-                        onClick={() => handleCategoryClick(category.name, "product")}
-                        style={{
-                          background:
-                            index % 2 === 0
-                              ? `linear-gradient(135deg, ${primaryColor}, ${secondaryColor})`
-                              : `linear-gradient(135deg, ${secondaryColor}, ${primaryColor})`,
-                        }}
-                      >
-                        <div className="relative flex items-center justify-center w-12 h-12 text-3xl text-white">
-                          {category.icon}
-                        </div>
-                        <span className="text-sm text-white font-medium">{category.name}</span>
-                      </div>
-                    )
-                  })}
-                </div>
+                
+                {/* Replace the grid with the carousel */}
+                <CategoryCarousel 
+                  categories={productCategories} 
+                  onCategoryClick={(category) => handleCategoryClick(category, "product")}
+                  primaryColor={primaryColor}
+                  secondaryColor={secondaryColor}
+                />
               </section>
 
               {/* Service Categories */}
@@ -223,28 +210,14 @@ export default function DashboardPage() {
                   ></div>
                   <Sparkles className="ml-2 h-5 w-5" style={{ color: primaryColor }} />
                 </div>
-                <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-8">
-                  {serviceCategories.map((category, index) => {
-                    return (
-                      <div
-                        key={index}
-                        className={`flex aspect-square flex-col items-center justify-center gap-3 rounded-xl overflow-hidden hover:scale-[1.02] transition-transform duration-300 cursor-pointer shadow-sm`}
-                        onClick={() => handleCategoryClick(category.name, "service")}
-                        style={{
-                          background:
-                            index % 2 === 0
-                              ? `linear-gradient(135deg, ${secondaryColor}, ${primaryColor})`
-                              : `linear-gradient(135deg, ${primaryColor}, ${secondaryColor})`,
-                        }}
-                      >
-                        <div className="relative flex items-center justify-center w-12 h-12 text-3xl text-white">
-                          {category.icon}
-                        </div>
-                        <span className="text-sm text-white font-medium">{category.name}</span>
-                      </div>
-                    )
-                  })}
-                </div>
+                
+                {/* Replace the grid with the carousel */}
+                <CategoryCarousel 
+                  categories={serviceCategories} 
+                  onCategoryClick={(category) => handleCategoryClick(category, "service")}
+                  primaryColor={primaryColor}
+                  secondaryColor={secondaryColor}
+                />
               </section>
 
               {/* Default Product Grid */}
