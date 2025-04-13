@@ -14,8 +14,8 @@ export function ProductCard({ _id, title, images, price, category, status }) {
   }
 
   return (
-    <Card className="group overflow-hidden border-0 rounded-xl bg-white shadow-sm hover:shadow-md transition-all duration-300">
-      <Link href={`/app/individual-product/${_id}`}>
+    <Card className="group overflow-hidden border-0 rounded-xl bg-white shadow-sm hover:shadow-md transition-all duration-300 h-full flex flex-col">
+      <Link href={`/app/individual-product/${_id}`} className="flex-shrink-0">
         <CardContent className="p-0 cursor-pointer">
           <Badge className="absolute m-3 z-10 bg-white/90 text-gray-800 hover:bg-white font-medium">{category}</Badge>
           <div className="relative">
@@ -61,9 +61,9 @@ export function ProductCard({ _id, title, images, price, category, status }) {
         </CardContent>
       </Link>
 
-      <CardFooter className="flex flex-col items-start gap-2 px-4 py-4">
-        <h3 className="font-medium text-gray-800 line-clamp-1 w-full">{title}</h3>
-        <div className="flex items-center gap-2 w-full justify-between">
+      <CardFooter className="flex flex-col items-start gap-2 px-4 py-4 flex-grow">
+        <h3 className="font-medium text-gray-800 line-clamp-2 w-full">{title}</h3>
+        <div className="flex items-center gap-2 w-full justify-between mt-auto">
           <span className="text-lg font-bold text-gray-900">Rs. {price}</span>
           <Badge variant="outline" className="bg-transparent border-gray-200 text-gray-500 hover:bg-gray-50">
             Product
@@ -81,8 +81,8 @@ export function ServiceCard({ _id, title, images, rate, category, pricingModel, 
   }
 
   return (
-    <Card className="group overflow-hidden border-0 rounded-xl bg-white shadow-sm hover:shadow-md transition-all duration-300">
-      <Link href={`/app/individual-service/${_id}`}>
+    <Card className="group overflow-hidden border-0 rounded-xl bg-white shadow-sm hover:shadow-md transition-all duration-300 h-full flex flex-col">
+      <Link href={`/app/individual-service/${_id}`} className="flex-shrink-0">
         <CardContent className="p-0">
           <Badge className="absolute m-3 z-10 bg-white/90 text-gray-800 hover:bg-white font-medium">{category}</Badge>
           <div className="relative">
@@ -128,9 +128,9 @@ export function ServiceCard({ _id, title, images, rate, category, pricingModel, 
         </CardContent>
       </Link>
 
-      <CardFooter className="flex flex-col items-start gap-2 px-4 py-4">
-        <h3 className="font-medium text-gray-800 line-clamp-1 w-full">{title}</h3>
-        <div className="flex items-center gap-2 w-full justify-between">
+      <CardFooter className="flex flex-col items-start gap-2 px-4 py-4 flex-grow">
+        <h3 className="font-medium text-gray-800 line-clamp-2 w-full">{title}</h3>
+        <div className="flex items-center gap-2 w-full justify-between mt-auto">
           <span className="text-lg font-bold text-gray-900">
             Rs. {rate} / {pricingModel}
           </span>

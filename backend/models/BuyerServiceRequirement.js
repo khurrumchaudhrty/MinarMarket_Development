@@ -31,6 +31,18 @@ const buyerServiceRequirementSchema = new mongoose.Schema({
   category: {
     type: String,
     required: true,
+    enum: [
+      "Haircut",
+      "Plumbing",
+      "Carpentry",
+      "Electrical",
+      "Gardening",
+      "Catering",
+      "House Help",
+      "Web Development",
+      "Design",
+      "Other",
+    ],
   },
   city: {
     type: String,

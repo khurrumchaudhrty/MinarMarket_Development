@@ -20,8 +20,16 @@ import { Toaster } from "./ui/toaster"
 import { ImageUploader } from "@/components/image-uploader"
 import { uploadImagesToCloudinary } from "@/lib/cloudinaryUtils"
 
-
-const categories = ['Electronics', 'Clothing', 'Books', 'Other']
+const categories = [
+  'Electronics', 
+  'Clothing', 
+  'Books', 
+  'Footwear', 
+  'Furniture', 
+  'Beauty and Personal Care', 
+  'Toys', 
+  'Other'
+]
 
 export function RequirementForm() {
   const { toast } = useToast()
