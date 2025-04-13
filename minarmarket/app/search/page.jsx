@@ -10,10 +10,12 @@ import { ProductCard } from "@/components/product-card";
 import { ServiceCard } from "@/components/product-card";
 import { Input } from "@/components/ui/input";
 import { Search, Loader2 } from "lucide-react";
+import { getUserDetails } from "@/lib/SessionManager"; // Import getUserDetails
 
 export default function SearchPage() {
   const searchParams = useSearchParams();
   const query = searchParams.get("q") || "";
+  const urlUserId = searchParams.get("userId") || null;
   const [searchResults, setSearchResults] = useState({ 
     combined: [],
     products: [], 
@@ -24,6 +26,15 @@ export default function SearchPage() {
   const [searchInput, setSearchInput] = useState(query);
   const [activeFilter, setActiveFilter] = useState("all");
   const [type] = useLocalStorage("type", "buyer"); // Get user type
+  
+  // Get user ID only once when component mounts or when URL userId changes
+  const [userId, setUserId] = useState(null);
+  
+  useEffect(() => {
+    // Only set the userId once on mount or when URL userId changes
+    const userDetails = getUserDetails();
+    setUserId(urlUserId || userDetails?.userId || null);
+  }, [urlUserId]);
 
   // Define colors based on type
   const primaryColor = type === "buyer" ? "#872CE4" : "#F58014";
@@ -41,8 +52,10 @@ export default function SearchPage() {
       setLoading(true);
       setError(null);
       try {
+        const userIdParam = userId ? `&userId=${userId}` : '';
+        
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/search/search?q=${encodeURIComponent(query)}`
+          `${process.env.NEXT_PUBLIC_API_URL}/api/search/search?q=${encodeURIComponent(query)}${userIdParam}`
         );
         const data = await response.json();
 
@@ -66,7 +79,7 @@ export default function SearchPage() {
     };
 
     fetchSearchResults();
-  }, [query]);
+  }, [query, userId]); // Only depend on query and userId, not userDetails
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -74,16 +87,24 @@ export default function SearchPage() {
 
     const url = new URL(window.location);
     url.searchParams.set("q", searchInput);
+    
+    // Include userId in URL if available
+    if (userId) {
+      url.searchParams.set("userId", userId);
+    }
+    
     window.history.pushState({}, "", url);
     
     const fetchSearchResults = async () => {
       setLoading(true);
       setError(null);
       try {
+        const userIdParam = userId ? `&userId=${userId}` : '';
+        
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/api/search/search?q=${encodeURIComponent(
             searchInput
-          )}`
+          )}${userIdParam}`
         );
         const data = await response.json();
 

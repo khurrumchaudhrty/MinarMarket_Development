@@ -1,4 +1,4 @@
-const { createEmbedding, EMBEDDING_DIMENSION } = require("./embeddingService");
+const { createEmbedding, EMBEDDING_DIMENSION } = require("./embeddingService").default;
 const ProductListing = require("../models/ProductListing");
 const ServiceListing = require("../models/ServiceListing");
 const mongoose = require("mongoose");
