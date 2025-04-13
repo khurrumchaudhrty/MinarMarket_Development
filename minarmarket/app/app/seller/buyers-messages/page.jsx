@@ -115,7 +115,7 @@ export default function MessageChat() {
       <div className="container flex-1 items-start md:grid md:grid-cols-[220px_1fr] md:gap-6 md:py-8">
         <SidebarNav />
 
-        <main className="space-y-6">
+        <main className="space-y-6 px-6">
           <div className="flex items-center justify-between">
             <h1 className="text-2xl font-bold tracking-tight">
               Buyer Messages
