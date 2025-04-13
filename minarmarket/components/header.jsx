@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import Link from "next/link"
 import { Search, UserCircle, Menu, X } from "lucide-react"
@@ -10,12 +10,12 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { useRouter } from "next/navigation"
+} from "@/components/ui/dropdown-menu";
+import { useRouter } from "next/navigation";
 import { useState, useEffect, Suspense } from "react"
-import { SearchBar } from "@/components/search-bar"
+import { SearchBar } from "@/components/search-bar";
 import { useLocalStorage } from 'usehooks-ts'
-import { getUserDetails } from "@/lib/SessionManager"
+import { getUserDetails } from "@/lib/SessionManager";
 
 function HeaderComponent() {
   // For storing auth token
@@ -240,7 +240,7 @@ function HeaderComponent() {
         </div>
       )}
     </header>
-  )
+  );
 }
 
 export function Header() {

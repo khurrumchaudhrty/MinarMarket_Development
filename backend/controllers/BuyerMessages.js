@@ -9,7 +9,7 @@ const User = require("../models/User");
 // Controller function to handle buyer messages for products and services
 exports.createBuyerMessage = async (req, res) => {
     try {
-        console.log("Buyer message request:", req.body);
+        // console.log("Buyer message request:", req.body);
         const { id_of_buyer, id_of_product, id_of_service } = req.body; 
 
         if (!id_of_buyer || (!id_of_product && !id_of_service)) {
@@ -21,6 +21,7 @@ exports.createBuyerMessage = async (req, res) => {
 
         let id_of_lister;
         let filter = { id_of_buyer };
+        let category
 
         if (id_of_product) {
             filter.id_of_product = id_of_product;
@@ -29,6 +30,7 @@ exports.createBuyerMessage = async (req, res) => {
                 return res.status(404).json({ success: false, message: "Product not found." });
             }
             id_of_lister = product.listerId;
+            category = "Product";
         } else {
             filter.id_of_service = id_of_service;
             const service = await ServiceListing.findById(id_of_service);
@@ -36,6 +38,7 @@ exports.createBuyerMessage = async (req, res) => {
                 return res.status(404).json({ success: false, message: "Service not found." });
             }
             id_of_lister = service.listerId;
+            category = "Service";
         }
 
         // Check if a message already exists
@@ -45,7 +48,7 @@ exports.createBuyerMessage = async (req, res) => {
         }
 
         // Create a new BuyerMessage document
-        const newMessage = new BuyerMessage({ id_of_buyer, id_of_lister, ...filter });
+        const newMessage = new BuyerMessage({ id_of_buyer, id_of_lister, category, ...filter });
         await newMessage.save();
         console.log("going in 2")
         const python = spawn("python3", ["python/infer_and_update.py", id_of_buyer]);

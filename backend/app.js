@@ -28,6 +28,7 @@ const BuyerMessages = require('./routes/BuyerMessages');
 const Visits = require('./routes/VisitRoutes');
 const BuyerMessagesToSellers = require("./routes/BuyerMessagesToSellers");
 const BuyerServiceRequirement = require('./routes/BuyerServiceRequirementRoutes');
+const ChatRoutes = require("./routes/chatRoutes");
 const SearchRoutes = require('./routes/SearchRoutes');
 const app = express();
 
@@ -74,7 +75,6 @@ app.use('/api/search', SearchRoutes);
 app.use('/proposals', require('./routes/ProposalRoutes'));
 
 app.use('/report', ComplaintRoutes);
-// console.log("App.js wala API: ", process.env.REACT_APP_API_URL+"/api/buyer-requirement")
 app.use('/buyer-messages', BuyerMessages);
 app.use('/buyer-messages/check', BuyerMessages);
 
@@ -82,5 +82,10 @@ app.use("/message-from-buyers", BuyerMessagesToSellers);
 app.use("/update-message-status", BuyerMessagesToSellers);
 
 app.use("/webvisits", Visits)
+
+
+
+//Routes for chatting
+app.use("/chat", ChatRoutes);
 module.exports = app;
 
