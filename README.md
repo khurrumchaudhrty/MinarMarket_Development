@@ -71,7 +71,7 @@ Adding a chat feature. When the seller accept the buyer query they can chat with
     *   Integrated embedding generation into Product/Service listing controllers and models (00234eb).
 
 *   *Project Maintenance & Integration:*
-    *   Managed dependencies (added socket.io-client, use-debounce, updated package-lock.json) (6d69ac1, 01b0a7f, e3e7fb3).
+    *   Managed dependencies (use-debounce, updated package-lock.json) (6d69ac1, 01b0a7f, e3e7fb3).
     *   Performed housekeeping tasks (removed tsconfig.json, possibly updated .gitignore for node_modules) (5142f2d, d473c1e).
     *   Resolved merge conflicts (01b0a7f).
     *   Merged numerous pull requests and branches, integrating features like the chat implementation, NLP search, and various bug fixes (d02e340, 344bc5a, dcc0ea2, c4b7696, 20ff218, cfd1751, 376991f, aba80a1, d2c3560, f22232a, c0ef50d, 4774629).
