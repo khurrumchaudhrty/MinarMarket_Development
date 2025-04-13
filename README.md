@@ -47,9 +47,9 @@ Revamping the UI/UX of whole website
 Adding an AI recommendation system. The user is shown the categories according to their searches.
 Adding a chat feature. When the seller accept the buyer query they can chat with them. Chat is through sockets and is a realtime chat
 
-*Key Contributions -Aniqa:*
+*Key Contributions*
 
-*   *NLP & Vector Search Implementation (Major focus in April):*
+*   *NLP & Vector Search Implementation:*
     *   Implemented core features for vector search, including embedding generation for products and services using a transformer model (00234eb, e3e7fb3).
     *   Created backend components: SearchController, embeddingMiddleware, embeddingService, vectorSearch utility (e3e7fb3).
     *   Developed frontend components: SearchPage, SearchBar with debouncing (e3e7fb3).
