@@ -157,11 +157,11 @@ export default function DashboardPage() {
   const accentBgClass = type === "buyer" ? "bg-violet-100" : "bg-orange-100"
 
   return (
-    <div className={`min-h-screen bg-gradient-to-br ${lightBgClass}`}>
+    <div className={`min-h-screen bg-gradient-to-br ${lightBgClass} overflow-x-hidden`}>
       <Header />
-      <div className="container flex-1 items-start md:grid md:grid-cols-[250px_1fr] md:gap-8 md:py-8">
+      <div className="container max-w-full px-4 mx-auto flex-1 items-start md:grid md:grid-cols-[250px_1fr] md:gap-8 md:py-8">
         <SidebarNav />
-        <main className="flex w-full flex-col gap-8 p-4 md:p-0">
+        <main className="flex w-full flex-col gap-8 p-4 md:p-0 overflow-hidden">
           {/* Show Categories Only When No Category Is Selected */}
           {!selectedCategory ? (
             <>
@@ -286,7 +286,7 @@ export default function DashboardPage() {
                   ></div>
                   <Sparkles className="ml-2 h-5 w-5" style={{ color: primaryColor }} />
                 </div>
-                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                <div className="grid grid-cols-1 gap-4 md:gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 w-full">
                   {categoryItems.length > 0 ? (
                     categoryItems.map((item, index) =>
                       categoryType === "product" ? (
@@ -327,20 +327,25 @@ export default function DashboardPage() {
       {/* Add blob animations similar to home page */}
       <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
         <div
-          className="absolute top-1/4 left-1/4 w-[500px] h-[500px] rounded-full blur-3xl animate-blob opacity-[0.03]"
+          className="absolute top-1/4 left-1/4 w-[40vw] max-w-[500px] h-[40vw] max-h-[500px] rounded-full blur-3xl animate-blob opacity-[0.03]"
           style={{ backgroundColor: primaryColor }}
         ></div>
         <div
-          className="absolute top-3/4 right-1/4 w-[500px] h-[500px] rounded-full blur-3xl animate-blob animation-delay-2000 opacity-[0.03]"
+          className="absolute top-3/4 right-1/4 w-[40vw] max-w-[500px] h-[40vw] max-h-[500px] rounded-full blur-3xl animate-blob animation-delay-2000 opacity-[0.03]"
           style={{ backgroundColor: secondaryColor }}
         ></div>
         <div
-          className="absolute bottom-1/4 left-1/3 w-[500px] h-[500px] rounded-full blur-3xl animate-blob animation-delay-4000 opacity-[0.03]"
+          className="absolute bottom-1/4 left-1/3 w-[40vw] max-w-[500px] h-[40vw] max-h-[500px] rounded-full blur-3xl animate-blob animation-delay-4000 opacity-[0.03]"
           style={{ backgroundColor: type === "buyer" ? "rgb(216, 180, 254)" : "rgb(255, 207, 159)" }}
         ></div>
       </div>
 
       <style jsx global>{`
+        html, body {
+          overflow-x: hidden;
+          max-width: 100%;
+        }
+        
         @keyframes blob {
           0% {
             transform: translate(0px, 0px) scale(1);
