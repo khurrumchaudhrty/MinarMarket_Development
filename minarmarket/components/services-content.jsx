@@ -266,14 +266,14 @@ export function ServicesContent({ userId, type = "buyer" }) {
               </div>
             ) : (
               <motion.div
-                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 auto-rows-fr"
                 variants={containerVariants}
                 initial="hidden"
                 animate="visible"
               >
                 {sortedItems && sortedItems.length > 0 ? (
                   sortedItems.map((item, index) => (
-                    <motion.div key={item._id || index} variants={itemVariants}>
+                    <motion.div key={item._id || index} variants={itemVariants} className="h-full flex">
                       <ServiceCard
                         _id={item._id}
                         title={item.title}
