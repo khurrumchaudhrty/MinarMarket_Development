@@ -28,7 +28,7 @@ async function getProduct(id) {
 }
 
 
-export default async function IndividualProductPage({ params }) {
+export default  function IndividualProductPage({ params }) {
   const { id } = params; // Get product ID from URL
   let product;
   const recordVisit = async () => {
@@ -65,7 +65,7 @@ export default async function IndividualProductPage({ params }) {
   
 
   try {
-    product = await getProduct(id);
+    product = getProduct(id);
   } catch (error) {
     return <div className="text-center text-red-500">Error loading product</div>;
   }

@@ -153,7 +153,7 @@ export default function MessageChat() {
               <MessageSquare className="h-12 w-12 text-gray-400" />
               <h3 className="mt-4 text-lg font-semibold">No messages yet</h3>
               <p className="mt-2 text-sm text-gray-500">
-                When buyers contact you about your listings, they'll appear
+                When buyers contact you about your listings, they&apos;ll appear
                 here.
               </p>
             </div>
